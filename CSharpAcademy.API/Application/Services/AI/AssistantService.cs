@@ -3,9 +3,7 @@ using System.Text.Json;
 using CSharpAcademy.API.Domain;
 using CSharpAcademy.API.Domain.AI;
 using CSharpAcademy.API.DTOs.AI;
-using CSharpAcademy.API.Infrastructure.Data;
 using CSharpAcademy.API.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace CSharpAcademy.API.Application.Services.AI;
 
@@ -15,7 +13,8 @@ public class AssistantService(
     IChatMessageRepository chatRepo,
     IAssistantFAQRepository faqRepo,
     IAssistantFeedbackRepository feedbackRepo,
-    AppDbContext ctx,
+    IUsuarioRepository usuarioRepo,
+    ILicaoRepository licaoRepo,
     ILogger<AssistantService> logger) : IAssistantService
 {
     public async Task<ChatResponseDto> ResponderPerguntaAsync(int usuarioId, ChatRequestDto request)
@@ -25,31 +24,18 @@ public class AssistantService(
             // 1. Validar segurança
             var perguntaValida = await mistral.ValidarRespostaSeguraAsync(request.Pergunta);
             if (perguntaValida == null)
-            {
-                return new ChatResponseDto
-                {
-                    Sucesso = false,
-                    Mensagem = "Desculpe, não posso responder essa pergunta.",
-                    Tipo = "erro_seguranca"
-                };
-            }
+                return new ChatResponseDto { Sucesso = false, Mensagem = "Desculpe, não posso responder essa pergunta.", Tipo = "erro_seguranca" };
 
-            // 2. Carregar contexto
-            var usuario = await ctx.Usuarios
-                .Include(u => u.Progressos)
-                .FirstOrDefaultAsync(u => u.Id == usuarioId);
-
+            // 2. Carregar contexto via repositories (sem AppDbContext direto)
+            var usuario = await usuarioRepo.ObterPorIdAsync(usuarioId);
             if (usuario == null)
                 return new ChatResponseDto { Sucesso = false, Mensagem = "Usuário não encontrado.", Tipo = "erro_interno" };
 
-            var licao = await ctx.Licoes
-                .Include(l => l.Modulo)
-                .FirstOrDefaultAsync(l => l.Id == request.LicaoId);
-
+            var licao = await licaoRepo.ObterPorIdAsync(request.LicaoId);
             if (licao == null)
                 return new ChatResponseDto { Sucesso = false, Mensagem = "Lição não encontrada.", Tipo = "erro_interno" };
 
-            // 3. Buscar histórico (últimas 10)
+            // 3. Histórico das últimas 10 mensagens
             var historico = (await chatRepo.GetPorLicaoAsync(usuarioId, request.LicaoId, ultimasN: 10)).ToList();
 
             // 4. Verificar FAQ cache
@@ -71,16 +57,15 @@ public class AssistantService(
             }
             else
             {
-                // 5. Chamar Groq/Mistral
-                var prompt = promptBuilder.ConstruirPromptAssistente(
-                    usuario, licao, request.Pergunta, historico);
+                // 5. Chamar Groq/Mistral com prompt dinâmico
+                var prompt = promptBuilder.ConstruirPromptAssistente(usuario, licao, request.Pergunta, historico);
 
                 var sw = Stopwatch.StartNew();
                 resposta = await mistral.ExecutarPromptAsync(prompt);
                 sw.Stop();
                 tempoMs = (int)sw.ElapsedMilliseconds;
 
-                // 6. Promover para FAQ se pergunta recorrente
+                // 6. Promover para FAQ se pergunta recorrente (>= 2x)
                 var vezesRepetida = historico.Count(h =>
                     h.PerguntaUsuario.Equals(request.Pergunta, StringComparison.OrdinalIgnoreCase));
 
@@ -102,7 +87,7 @@ public class AssistantService(
                 }
             }
 
-            // 7. Salvar mensagem
+            // 7. Salvar mensagem no histórico
             var novaMensagem = new ChatMessage
             {
                 UsuarioId = usuarioId,
@@ -141,8 +126,7 @@ public class AssistantService(
 
     public async Task<List<ChatMessageDto>> GetHistoricoAsync(int usuarioId, int licaoId, int pagina = 1)
     {
-        var mensagens = await chatRepo.GetPorLicaoAsync(
-            usuarioId, licaoId, skip: (pagina - 1) * 20, take: 20);
+        var mensagens = await chatRepo.GetPorLicaoAsync(usuarioId, licaoId, skip: (pagina - 1) * 20, take: 20);
 
         return mensagens.Select(m => new ChatMessageDto
         {
@@ -183,7 +167,7 @@ public class AssistantService(
     public async Task<CustomExerciseDto> GerarExercicioCustomizadoAsync(
         int usuarioId, int licaoId, string topicoPergunta)
     {
-        var usuario = await ctx.Usuarios.FindAsync(usuarioId);
+        var usuario = await usuarioRepo.ObterPorIdAsync(usuarioId);
         var nivel = (NivelDificuldade)(usuario?.NivelAtual ?? 1);
 
         var jsonResposta = await mistral.GerarExercicioAsync(topicoPergunta, nivel, "pt-BR");

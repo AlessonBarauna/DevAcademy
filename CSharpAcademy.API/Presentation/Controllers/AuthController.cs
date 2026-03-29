@@ -3,21 +3,20 @@ using System.Security.Claims;
 using System.Text;
 using CSharpAcademy.API.Domain;
 using CSharpAcademy.API.DTOs;
-using CSharpAcademy.API.Infrastructure.Data;
+using CSharpAcademy.API.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CSharpAcademy.API.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(AppDbContext ctx, IConfiguration config) : ControllerBase
+public class AuthController(IUsuarioRepository usuarioRepo, IConfiguration config) : ControllerBase
 {
     [HttpPost("registrar")]
     public async Task<IActionResult> Registrar([FromBody] RegistrarUsuarioDto dto)
     {
-        if (await ctx.Usuarios.AnyAsync(u => u.Email == dto.Email))
+        if (await usuarioRepo.ExisteEmailAsync(dto.Email))
             return BadRequest(new { mensagem = "E-mail já cadastrado." });
 
         var usuario = new Usuario
@@ -30,42 +29,36 @@ public class AuthController(AppDbContext ctx, IConfiguration config) : Controlle
             DataCadastro = DateTime.UtcNow
         };
 
-        ctx.Usuarios.Add(usuario);
-        await ctx.SaveChangesAsync();
+        await usuarioRepo.AdicionarAsync(usuario);
+        await usuarioRepo.SalvarAsync();
 
-        return Ok(new UsuarioResponseDto
-        {
-            Id = usuario.Id,
-            Nome = usuario.Nome,
-            Email = usuario.Email,
-            NivelAtual = usuario.NivelAtual,
-            XP = usuario.XP,
-            Token = GerarToken(usuario)
-        });
+        return Ok(MapParaDto(usuario));
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
-        var usuario = await ctx.Usuarios.FirstOrDefaultAsync(u => u.Email == dto.Email);
+        var usuario = await usuarioRepo.ObterPorEmailAsync(dto.Email);
 
         if (usuario == null || !BCrypt.Net.BCrypt.Verify(dto.Senha, usuario.SenhaHash))
             return Unauthorized(new { mensagem = "E-mail ou senha inválidos." });
 
-        return Ok(new UsuarioResponseDto
-        {
-            Id = usuario.Id,
-            Nome = usuario.Nome,
-            Email = usuario.Email,
-            NivelAtual = usuario.NivelAtual,
-            XP = usuario.XP,
-            Token = GerarToken(usuario)
-        });
+        return Ok(MapParaDto(usuario));
     }
+
+    private UsuarioResponseDto MapParaDto(Usuario usuario) => new()
+    {
+        Id = usuario.Id,
+        Nome = usuario.Nome,
+        Email = usuario.Email,
+        NivelAtual = usuario.NivelAtual,
+        XP = usuario.XP,
+        Token = GerarToken(usuario)
+    };
 
     private string GerarToken(Usuario usuario)
     {
-        var jwtKey = config["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured.");
+        var jwtKey = config["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key não configurada.");
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

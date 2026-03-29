@@ -39,7 +39,15 @@ builder.Services.AddHttpClient<IMistralService, MistralService>(client =>
     client.Timeout = TimeSpan.FromSeconds(60);
 });
 
-// Repositories
+// Repositories — domínio principal
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IModuloRepository, ModuloRepository>();
+builder.Services.AddScoped<ILicaoRepository, LicaoRepository>();
+builder.Services.AddScoped<IExercicioRepository, ExercicioRepository>();
+builder.Services.AddScoped<IProgressoRepository, ProgressoRepository>();
+builder.Services.AddScoped<IRespostaRepository, RespostaRepository>();
+
+// Repositories — IA
 builder.Services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
 builder.Services.AddScoped<IAssistantFAQRepository, AssistantFAQRepository>();
 builder.Services.AddScoped<IAssistantFeedbackRepository, AssistantFeedbackRepository>();

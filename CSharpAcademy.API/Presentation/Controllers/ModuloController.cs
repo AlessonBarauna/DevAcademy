@@ -1,34 +1,28 @@
 using System.Security.Claims;
 using CSharpAcademy.API.DTOs;
-using CSharpAcademy.API.Infrastructure.Data;
+using CSharpAcademy.API.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CSharpAcademy.API.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class ModuloController(AppDbContext ctx) : ControllerBase
+public class ModuloController(
+    IModuloRepository moduloRepo,
+    IProgressoRepository progressoRepo) : ControllerBase
 {
     private int UsuarioId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
+    /// <summary>Lista todos os módulos com progresso do usuário</summary>
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> ObterTodos()
     {
-        var progressos = await ctx.Progressos
-            .Where(p => p.UsuarioId == UsuarioId && p.Completada)
-            .Select(p => p.LicaoId)
-            .ToListAsync();
+        var licoesConcluidas = (await progressoRepo.ObterLicoesConcluidasAsync(UsuarioId)).ToList();
+        var modulos = await moduloRepo.ObterTodosAsync();
 
-        var modulos = await ctx.Modulos
-            .Include(m => m.Licoes)
-            .Where(m => m.Ativo)
-            .OrderBy(m => m.Ordem)
-            .ToListAsync();
-
-        var result = modulos.Select(m => new ModuloDto
+        var resultado = modulos.Select(m => new ModuloDto
         {
             Id = m.Id,
             Titulo = m.Titulo,
@@ -36,39 +30,30 @@ public class ModuloController(AppDbContext ctx) : ControllerBase
             Ordem = m.Ordem,
             NivelMinimo = m.NivelMinimo.ToString(),
             TotalLicoes = m.Licoes.Count,
-            LicoesCompletadas = m.Licoes.Count(l => progressos.Contains(l.Id))
+            LicoesCompletadas = m.Licoes.Count(l => licoesConcluidas.Contains(l.Id))
         });
 
-        return Ok(result);
+        return Ok(resultado);
     }
 
-    [HttpGet("{id:int}/licoes")]
-    public async Task<IActionResult> GetLicoes(int id)
+    /// <summary>Obtém um módulo pelo Id</summary>
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> ObterPorId(int id)
     {
-        var progressos = await ctx.Progressos
-            .Where(p => p.UsuarioId == UsuarioId && p.Completada)
-            .Select(p => p.LicaoId)
-            .ToListAsync();
+        var modulo = await moduloRepo.ObterPorIdAsync(id);
+        if (modulo == null) return NotFound();
 
-        var licoes = await ctx.Licoes
-            .Where(l => l.ModuloId == id && l.Ativo)
-            .OrderBy(l => l.Ordem)
-            .ToListAsync();
+        var licoesConcluidas = (await progressoRepo.ObterLicoesConcluidasAsync(UsuarioId)).ToList();
 
-        if (licoes.Count == 0) return NotFound();
-
-        var result = licoes.Select(l => new LicaoDto
+        return Ok(new ModuloDto
         {
-            Id = l.Id,
-            ModuloId = l.ModuloId,
-            Titulo = l.Titulo,
-            Descricao = l.Descricao,
-            ConteudoTeoricoMarkdown = l.ConteudoTeoricoMarkdown,
-            Ordem = l.Ordem,
-            XPRecompensa = l.XPRecompensa,
-            Completada = progressos.Contains(l.Id)
+            Id = modulo.Id,
+            Titulo = modulo.Titulo,
+            Descricao = modulo.Descricao,
+            Ordem = modulo.Ordem,
+            NivelMinimo = modulo.NivelMinimo.ToString(),
+            TotalLicoes = modulo.Licoes.Count,
+            LicoesCompletadas = modulo.Licoes.Count(l => licoesConcluidas.Contains(l.Id))
         });
-
-        return Ok(result);
     }
 }
