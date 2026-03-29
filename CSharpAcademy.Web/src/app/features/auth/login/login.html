@@ -1,0 +1,24 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">🎓</div>
+    <h1>C# Academy</h1>
+    <p class="subtitle">Aprenda C# do jeito certo</p>
+
+    <div class="error-msg" *ngIf="erro">{{ erro }}</div>
+
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" [(ngModel)]="email" placeholder="seu@email.com" (keyup.enter)="entrar()" />
+    </div>
+    <div class="form-group">
+      <label>Senha</label>
+      <input type="password" [(ngModel)]="senha" placeholder="••••••••" (keyup.enter)="entrar()" />
+    </div>
+
+    <button (click)="entrar()" [disabled]="carregando" class="btn-primary">
+      {{ carregando ? 'Entrando...' : 'Entrar' }}
+    </button>
+
+    <p class="link-text">Não tem conta? <a routerLink="/registrar">Criar conta</a></p>
+  </div>
+</div>

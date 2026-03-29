@@ -1,0 +1,21 @@
+# .NET
+bin/
+obj/
+*.user
+*.db
+*.db-shm
+*.db-wal
+.vs/
+*.DotSettings.user
+
+# Secrets (nunca commitar)
+appsettings.Development.json
+
+# Angular
+CSharpAcademy.Web/node_modules/
+CSharpAcademy.Web/dist/
+CSharpAcademy.Web/.angular/
+
+# OS
+.DS_Store
+Thumbs.db

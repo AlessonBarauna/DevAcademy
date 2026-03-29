@@ -1,0 +1,119 @@
+<!-- Botão flutuante -->
+<button class="btn-floating" (click)="abrirChat()" *ngIf="!mostrarChat" title="Professor Assistente">
+  🤖
+  <span class="tooltip">Professor Assistente</span>
+</button>
+
+<!-- Overlay -->
+<div class="modal-overlay" *ngIf="mostrarChat" (click)="fecharChat()">
+  <div class="modal-container" [class.dark]="tema === 'dark'" (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <h2>🤖 Professor Assistente</h2>
+      <div class="header-actions">
+        <select [(ngModel)]="idioma">
+          <option value="pt-BR">🇧🇷 Português</option>
+          <option value="en-US">🇺🇸 English</option>
+        </select>
+        <button (click)="trocarTema()" class="btn-icon" title="Alternar tema">
+          {{ tema === 'light' ? '🌙' : '☀️' }}
+        </button>
+        <button (click)="fecharChat()" class="btn-icon btn-close-x">✕</button>
+      </div>
+    </div>
+
+    <!-- Chat area -->
+    <div class="chat-container" #chatContainer>
+
+      <div class="welcome" *ngIf="mensagens.length === 0 && !carregando">
+        <p>👋 Olá! Sou seu professor assistente de C#.</p>
+        <p>Faça uma pergunta sobre a lição atual!</p>
+      </div>
+
+      <div *ngFor="let msg of mensagens" class="mensagem-grupo">
+
+        <!-- Pergunta -->
+        <div class="mensagem usuario">
+          <span class="bubble">{{ msg.pergunta }}</span>
+          <span class="badge-cache" *ngIf="msg.usouCache">⚡ cache</span>
+        </div>
+
+        <!-- Resposta -->
+        <div class="mensagem assistente">
+          <div class="bubble resposta">{{ msg.resposta }}</div>
+        </div>
+
+        <!-- Avaliação -->
+        <div class="feedback-area">
+          <div class="stars" *ngIf="msg.estrelas === null">
+            <span
+              *ngFor="let i of estrelaRange"
+              class="star"
+              (click)="avaliarResposta(msg.id, i)"
+              title="{{i}} estrela(s)">☆</span>
+          </div>
+          <div class="stars-filled" *ngIf="msg.estrelas !== null">
+            <span *ngFor="let i of estrelaRange" [class.filled]="i <= (msg.estrelas ?? 0)">★</span>
+          </div>
+          <button
+            class="btn-exercise"
+            (click)="gerarExercicio(msg.pergunta)"
+            title="Gerar exercício sobre este tópico">
+            📝 Gerar exercício
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Digitando... -->
+      <div class="digitando" *ngIf="carregando">
+        <span>🤖</span>
+        <div class="typing-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Input -->
+    <div class="input-area">
+      <textarea
+        [(ngModel)]="pergunta"
+        (keydown)="handleKeydown($event)"
+        [disabled]="carregando"
+        placeholder="Faça uma pergunta sobre C#... (Enter para enviar)"
+        rows="2"></textarea>
+      <button
+        (click)="enviarPergunta()"
+        [disabled]="carregando || !pergunta.trim()"
+        class="btn-send">
+        {{ carregando ? '⏳' : '➤' }}
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal Exercício Customizado -->
+<div class="exercise-overlay" *ngIf="mostrarExercicioModal" (click)="fecharExercicioModal()">
+  <div class="exercise-modal" (click)="$event.stopPropagation()">
+    <div class="exercise-header">
+      <h3>📝 Exercício Customizado</h3>
+      <button (click)="fecharExercicioModal()">✕</button>
+    </div>
+    <div class="exercise-body" *ngIf="exercicioModal">
+      <p class="enunciado">{{ exercicioModal.enunciado }}</p>
+      <div *ngIf="exercicioModal.opcoes.length > 0" class="opcoes">
+        <div *ngFor="let opcao of exercicioModal.opcoes" class="opcao">
+          {{ opcao }}
+        </div>
+      </div>
+      <details class="gabarito">
+        <summary>Ver resposta</summary>
+        <p><strong>{{ exercicioModal.respostaCorreta }}</strong></p>
+        <p class="explicacao">{{ exercicioModal.explicacao }}</p>
+      </details>
+    </div>
+  </div>
+</div>

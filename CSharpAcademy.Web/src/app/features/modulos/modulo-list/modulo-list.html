@@ -1,0 +1,23 @@
+<div class="page">
+  <header class="page-header">
+    <h1>🎓 C# Academy</h1>
+    <p>Aprenda C# do nível iniciante ao especialista</p>
+  </header>
+
+  <div class="loading" *ngIf="carregando">Carregando módulos...</div>
+
+  <div class="modulos-grid" *ngIf="!carregando">
+    <div class="modulo-card" *ngFor="let m of modulos" [routerLink]="['/modulos', m.id, 'licoes']">
+      <div class="modulo-header">
+        <span class="nivel-badge nivel-{{m.nivelMinimo?.toLowerCase()}}">{{ m.nivelMinimo }}</span>
+        <span class="xp-badge">{{ m.totalLicoes }} lições</span>
+      </div>
+      <h2>{{ m.titulo }}</h2>
+      <p>{{ m.descricao }}</p>
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="progresso(m)"></div>
+      </div>
+      <span class="progress-text">{{ m.licoesCompletadas }}/{{ m.totalLicoes }} completadas</span>
+    </div>
+  </div>
+</div>
