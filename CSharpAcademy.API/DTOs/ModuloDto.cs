@@ -22,3 +22,11 @@ public class LicaoDto
     public int XPRecompensa { get; set; }
     public bool Completada { get; set; }
 }
+
+public class ConcluirLicaoResponseDto
+{
+    public int XpGanho { get; set; }
+    public int NovoNivel { get; set; }
+    public int XpTotal { get; set; }
+    public bool JaConcluidaAntes { get; set; }
+}

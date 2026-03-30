@@ -4,6 +4,7 @@ using System.Text;
 using CSharpAcademy.API.Domain;
 using CSharpAcademy.API.DTOs;
 using CSharpAcademy.API.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -13,6 +14,18 @@ namespace CSharpAcademy.API.Presentation.Controllers;
 [Route("api/[controller]")]
 public class AuthController(IUsuarioRepository usuarioRepo, IConfiguration config) : ControllerBase
 {
+    private int UsuarioId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+    /// <summary>Retorna os dados atualizados do usuário autenticado (XP, nível)</summary>
+    [HttpGet("perfil")]
+    [Authorize]
+    public async Task<IActionResult> Perfil()
+    {
+        var usuario = await usuarioRepo.ObterPorIdAsync(UsuarioId);
+        if (usuario == null) return NotFound();
+        return Ok(new { usuario.Id, usuario.Nome, usuario.Email, usuario.NivelAtual, usuario.XP });
+    }
+
     [HttpPost("registrar")]
     public async Task<IActionResult> Registrar([FromBody] RegistrarUsuarioDto dto)
     {

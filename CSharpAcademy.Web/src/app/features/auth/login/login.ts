@@ -20,7 +20,7 @@ export class Login {
     this.erro = '';
     this.carregando = true;
     this.auth.login({ email: this.email, senha: this.senha }).subscribe({
-      next: () => this.router.navigate(['/modulos']),
+      next: () => this.router.navigate(['/dashboard']),
       error: () => {
         this.erro = 'E-mail ou senha inválidos.';
         this.carregando = false;

@@ -63,15 +63,24 @@ public class LicaoController(
 
     /// <summary>Marca uma lição como concluída e concede XP ao usuário</summary>
     [HttpPost("{licaoId:int}/concluir")]
-    public async Task<IActionResult> Concluir(int licaoId, IUsuarioRepository usuarioRepo)
+    public async Task<IActionResult> Concluir(int licaoId, [FromServices] IUsuarioRepository usuarioRepo)
     {
         var licao = await licaoRepo.ObterPorIdAsync(licaoId);
         if (licao == null) return NotFound();
 
+        var usuario = await usuarioRepo.ObterPorIdAsync(UsuarioId);
+        if (usuario == null) return NotFound();
+
         var progresso = await progressoRepo.ObterAsync(UsuarioId, licaoId);
 
         if (progresso != null && progresso.Completada)
-            return BadRequest(new { mensagem = "Lição já concluída." });
+            return Ok(new ConcluirLicaoResponseDto
+            {
+                XpGanho = 0,
+                NovoNivel = usuario.NivelAtual,
+                XpTotal = usuario.XP,
+                JaConcluidaAntes = true
+            });
 
         if (progresso == null)
         {
@@ -93,23 +102,23 @@ public class LicaoController(
             await progressoRepo.AtualizarAsync(progresso);
         }
 
-        // Atualiza XP do usuário
-        var usuario = await usuarioRepo.ObterPorIdAsync(UsuarioId);
-        if (usuario != null)
+        usuario.XP += licao.XPRecompensa;
+        usuario.NivelAtual = usuario.XP switch
         {
-            usuario.XP += licao.XPRecompensa;
-            usuario.NivelAtual = usuario.XP switch
-            {
-                < 100 => 1,
-                < 300 => 2,
-                < 700 => 3,
-                _ => 4
-            };
-            await usuarioRepo.AtualizarAsync(usuario);
-        }
-
+            < 100 => 1,
+            < 300 => 2,
+            < 700 => 3,
+            _ => 4
+        };
+        await usuarioRepo.AtualizarAsync(usuario);
         await progressoRepo.SalvarAsync();
 
-        return Ok(new { xpGanho = licao.XPRecompensa, xpTotal = usuario?.XP, nivel = usuario?.NivelAtual });
+        return Ok(new ConcluirLicaoResponseDto
+        {
+            XpGanho = licao.XPRecompensa,
+            NovoNivel = usuario.NivelAtual,
+            XpTotal = usuario.XP,
+            JaConcluidaAntes = false
+        });
     }
 }

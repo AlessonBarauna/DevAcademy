@@ -3,6 +3,7 @@ using CSharpAcademy.API.Application.Services.AI;
 using CSharpAcademy.API.DTOs.AI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace CSharpAcademy.API.Presentation.Controllers;
 
@@ -15,6 +16,7 @@ public class AssistantController(IAssistantService assistantService) : Controlle
 
     /// <summary>Faz uma pergunta ao Professor Assistente</summary>
     [HttpPost("perguntar")]
+    [EnableRateLimiting("ai")]
     public async Task<IActionResult> Perguntar([FromBody] ChatRequestDto request)
     {
         if (string.IsNullOrWhiteSpace(request.Pergunta))
@@ -45,6 +47,7 @@ public class AssistantController(IAssistantService assistantService) : Controlle
 
     /// <summary>Gera um exercício customizado por IA</summary>
     [HttpPost("gerar-exercicio")]
+    [EnableRateLimiting("ai")]
     public async Task<IActionResult> GerarExercicio([FromBody] GerarExercicioRequestDto request)
     {
         if (string.IsNullOrWhiteSpace(request.TopicoPergunta))
