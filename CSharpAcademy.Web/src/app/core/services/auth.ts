@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { LoginDto, RegistrarUsuarioDto, UsuarioResponseDto } from '../models/auth.model';
 
-const API = 'http://localhost:5080/api';
+const API = '/api';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

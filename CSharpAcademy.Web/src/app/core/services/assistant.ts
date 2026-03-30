@@ -10,7 +10,7 @@ import {
   GerarExercicioRequestDto
 } from '../models/assistant.model';
 
-const API = 'http://localhost:5080/api/assistant';
+const API = '/api/assistant';
 
 @Injectable({ providedIn: 'root' })
 export class AssistantService {

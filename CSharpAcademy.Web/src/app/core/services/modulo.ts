@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ConcluirLicaoResult, Exercicio, Licao, Modulo, RespostaExercicioResult } from '../models/modulo.model';
 
-const API = 'http://localhost:5080/api';
+const API = '/api';
 
 @Injectable({ providedIn: 'root' })
 export class ModuloService {
