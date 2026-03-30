@@ -1,8 +1,13 @@
 <div class="page">
-  <header class="page-header">
-    <h1>🎓 C# Academy</h1>
-    <p>Aprenda C# do nível iniciante ao especialista</p>
+  <header class="page-topbar">
+    <button class="btn-voltar" (click)="voltar()">&#8592; Dashboard</button>
+    <span class="page-titulo">Módulos</span>
   </header>
+
+  <div class="page-hero">
+    <h1>C# Academy</h1>
+    <p>Aprenda C# do nível iniciante ao especialista</p>
+  </div>
 
   <div class="loading" *ngIf="carregando">Carregando módulos...</div>
 

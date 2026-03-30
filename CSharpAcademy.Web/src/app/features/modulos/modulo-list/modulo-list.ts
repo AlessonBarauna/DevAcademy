@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModuloService } from '../../../core/services/modulo';
 import { Modulo } from '../../../core/models/modulo.model';
 
@@ -12,7 +13,9 @@ export class ModuloList implements OnInit {
   modulos: Modulo[] = [];
   carregando = true;
 
-  constructor(private moduloService: ModuloService, private cdr: ChangeDetectorRef) {}
+  constructor(private moduloService: ModuloService, private router: Router, private cdr: ChangeDetectorRef) {}
+
+  voltar(): void { this.router.navigate(['/dashboard']); }
 
   ngOnInit(): void {
     this.moduloService.getModulos().subscribe({
