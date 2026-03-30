@@ -7,12 +7,25 @@
   <div class="page-hero">
     <h1>C# Academy</h1>
     <p>Aprenda C# do nível iniciante ao especialista</p>
+    <div class="busca-wrap">
+      <input
+        class="busca-input"
+        type="text"
+        [(ngModel)]="termoBusca"
+        placeholder="Buscar módulo..."
+        autocomplete="off" />
+      <span class="busca-icon">&#128269;</span>
+    </div>
   </div>
 
   <div class="loading" *ngIf="carregando">Carregando módulos...</div>
 
-  <div class="modulos-grid" *ngIf="!carregando">
-    <div class="modulo-card" *ngFor="let m of modulos" [routerLink]="['/modulos', m.id]">
+  <div class="nenhum-resultado" *ngIf="!carregando && modulosFiltrados.length === 0">
+    Nenhum módulo encontrado para "{{ termoBusca }}".
+  </div>
+
+  <div class="modulos-grid" *ngIf="!carregando && modulosFiltrados.length > 0">
+    <div class="modulo-card" *ngFor="let m of modulosFiltrados" [routerLink]="['/modulos', m.id]">
       <div class="modulo-header">
         <span class="nivel-badge nivel-{{m.nivelMinimo.toLowerCase()}}">{{ m.nivelMinimo }}</span>
         <span class="xp-badge">{{ m.totalLicoes }} lições</span>

@@ -11,7 +11,16 @@ import { Modulo } from '../../../core/models/modulo.model';
 })
 export class ModuloList implements OnInit {
   modulos: Modulo[] = [];
+  termoBusca = '';
   carregando = true;
+
+  get modulosFiltrados(): Modulo[] {
+    const t = this.termoBusca.toLowerCase().trim();
+    if (!t) return this.modulos;
+    return this.modulos.filter(m =>
+      m.titulo.toLowerCase().includes(t) || m.descricao.toLowerCase().includes(t)
+    );
+  }
 
   constructor(private moduloService: ModuloService, private router: Router, private cdr: ChangeDetectorRef) {}
 

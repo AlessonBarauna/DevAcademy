@@ -9,7 +9,11 @@
 </div>
 
 <div class="licao-page">
-  <aside class="sidebar">
+
+  <!-- Overlay mobile -->
+  <div class="sidebar-overlay" *ngIf="sidebarAberta" (click)="fecharSidebar()"></div>
+
+  <aside class="sidebar" [class.aberta]="sidebarAberta">
     <div class="sidebar-topbar">
       <button class="btn-voltar-modulos" (click)="voltarParaModulos()">&#8592; Módulos</button>
     </div>
@@ -28,8 +32,15 @@
     </ul>
   </aside>
 
-  <main class="content" #contentArea *ngIf="licaoSelecionada">
+  <main class="content" #contentArea *ngIf="licaoSelecionada" (scroll)="onContentScroll($event)">
+
+    <!-- Barra de progresso de leitura -->
+    <div class="read-progress-bar">
+      <div class="read-progress-fill" [style.width.%]="scrollProgress"></div>
+    </div>
+
     <nav class="breadcrumb" *ngIf="modulo">
+      <button class="btn-hamburger" (click)="toggleSidebar()" title="Menu lições">&#9776;</button>
       <span class="bc-item bc-link" (click)="voltarParaModulos()">{{ modulo.titulo }}</span>
       <span class="bc-sep">›</span>
       <span class="bc-item bc-current">{{ licaoSelecionada.titulo }}</span>

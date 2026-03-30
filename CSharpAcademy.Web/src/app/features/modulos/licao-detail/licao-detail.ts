@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModuloService } from '../../../core/services/modulo';
 import { AuthService } from '../../../core/services/auth';
@@ -21,6 +21,8 @@ export class LicaoDetail implements OnInit {
   concluindo = false;
   mensagemConclusao = '';
   toastsConquistas: ConquistaResultDto[] = [];
+  sidebarAberta = false;
+  scrollProgress = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -66,9 +68,24 @@ export class LicaoDetail implements OnInit {
     return i >= 0 && i < this.licoes.length - 1 ? this.licoes[i + 1] : null;
   }
 
+  onContentScroll(event: Event): void {
+    const el = event.target as HTMLElement;
+    const max = el.scrollHeight - el.clientHeight;
+    this.scrollProgress = max > 0 ? Math.round((el.scrollTop / max) * 100) : 0;
+  }
+
+  toggleSidebar(): void {
+    this.sidebarAberta = !this.sidebarAberta;
+  }
+
+  fecharSidebar(): void {
+    this.sidebarAberta = false;
+  }
+
   selecionarLicao(licao: Licao): void {
     this.licaoSelecionada = licao;
     this.mensagemConclusao = '';
+    this.sidebarAberta = false;
     setTimeout(() => this.contentArea?.nativeElement?.scrollTo({ top: 0, behavior: 'smooth' }), 0);
   }
 

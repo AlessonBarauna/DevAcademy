@@ -43,6 +43,15 @@
   overflow: hidden;
 }
 
+/* ── Sidebar overlay (mobile) ───────────────────── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+}
+
 /* ── Sidebar (File Explorer) ────────────────────── */
 .sidebar {
   width: 240px;
@@ -172,6 +181,22 @@
   color: #6a9955;
 }
 
+/* ── Barra de progresso de leitura ───────────────── */
+.read-progress-bar {
+  position: sticky;
+  top: 0;
+  height: 2px;
+  background: var(--bg-card);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.read-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--teal));
+  transition: width 0.1s linear;
+}
+
 /* ── Breadcrumb ──────────────────────────────────── */
 .breadcrumb {
   display: flex;
@@ -182,6 +207,23 @@
   background: var(--bg-panel);
   flex-shrink: 0;
 }
+
+.btn-hamburger {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 14px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-hamburger:hover { border-color: var(--accent); color: var(--text); }
 
 .bc-item {
   font-size: 11px;
@@ -421,3 +463,44 @@
 }
 
 .loading { color: var(--text-muted); padding: 32px; font-family: var(--font-mono); font-size: 12px; }
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar.aberta {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay {
+    display: block;
+  }
+
+  .btn-hamburger {
+    display: flex;
+  }
+
+  .breadcrumb {
+    padding: 8px 16px;
+  }
+
+  .teoria.markdown-body,
+  .licao-header,
+  .acoes,
+  .nav-sequencial,
+  .mensagem-conclusao,
+  .banner-concluida {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .btn-nav { max-width: 130px; }
+}
