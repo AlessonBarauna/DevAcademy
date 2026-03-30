@@ -26,4 +26,11 @@ public class UsuarioRepository(AppDbContext ctx) : IUsuarioRepository
 
     public async Task<bool> SalvarAsync()
         => await ctx.SaveChangesAsync() > 0;
+
+    public async Task<IEnumerable<Usuario>> ObterRankingAsync(int top = 10)
+        => await ctx.Usuarios
+            .OrderByDescending(u => u.XP)
+            .ThenByDescending(u => u.StreakAtual)
+            .Take(top)
+            .ToListAsync();
 }

@@ -9,6 +9,7 @@ import { AuthModule } from './features/auth/auth-module';
 import { ModulosModule } from './features/modulos/modulos-module';
 import { ExerciciosModule } from './features/exercicios/exercicios-module';
 import { DashboardModule } from './features/dashboard/dashboard-module';
+import { RankingModule } from './features/ranking/ranking-module';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 @NgModule({
@@ -21,6 +22,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     ModulosModule,
     ExerciciosModule,
     DashboardModule,
+    RankingModule,
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

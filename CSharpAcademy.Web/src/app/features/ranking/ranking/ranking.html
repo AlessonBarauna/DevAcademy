@@ -1,0 +1,36 @@
+<div class="ranking-page">
+  <header class="ranking-header">
+    <button class="btn-voltar" (click)="voltar()">← Dashboard</button>
+    <h1>🏆 Ranking Global</h1>
+  </header>
+
+  <div class="loading" *ngIf="carregando">Carregando ranking...</div>
+
+  <div class="ranking-list" *ngIf="!carregando">
+    <div
+      class="ranking-item"
+      *ngFor="let item of itens"
+      [class.eu-mesmo]="item.euMesmo"
+      [class.top3]="item.posicao <= 3">
+
+      <span class="posicao">{{ medalha(item.posicao) }}</span>
+
+      <div class="usuario-info">
+        <span class="avatar">{{ item.nome.charAt(0).toUpperCase() }}</span>
+        <div class="dados">
+          <span class="nome">{{ item.nome }} <span class="eu-badge" *ngIf="item.euMesmo">você</span></span>
+          <span class="nivel">{{ nivelLabels[item.nivelAtual] }}</span>
+        </div>
+      </div>
+
+      <div class="metricas">
+        <span class="xp">{{ item.xp }} XP</span>
+        <span class="streak" *ngIf="item.streakAtual > 0">🔥 {{ item.streakAtual }}</span>
+      </div>
+    </div>
+
+    <div class="vazio" *ngIf="itens.length === 0">
+      Nenhum usuário no ranking ainda. Seja o primeiro!
+    </div>
+  </div>
+</div>
