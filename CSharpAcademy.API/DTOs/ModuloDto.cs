@@ -19,7 +19,7 @@ public class LicaoDto
     public string Descricao { get; set; } = string.Empty;
     public string ConteudoTeoricoMarkdown { get; set; } = string.Empty;
     public int Ordem { get; set; }
-    public int XPRecompensa { get; set; }
+    public int XpRecompensa { get; set; }
     public bool Completada { get; set; }
 }
 

@@ -36,6 +36,6 @@ public class UsuarioResponseDto
     public string Nome { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public int NivelAtual { get; set; }
-    public int XP { get; set; }
+    public int Xp { get; set; }
     public string Token { get; set; } = string.Empty;
 }

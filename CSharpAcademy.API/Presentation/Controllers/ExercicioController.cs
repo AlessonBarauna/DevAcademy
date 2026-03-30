@@ -30,7 +30,7 @@ public class ExercicioController(
             Tipo = e.Tipo.ToString(),
             OpcoesJson = e.OpcoesJson,
             Ordem = e.Ordem,
-            XPRecompensa = e.XPRecompensa
+            XpRecompensa = e.XPRecompensa
         });
 
         return Ok(resultado);
@@ -51,7 +51,7 @@ public class ExercicioController(
             Tipo = exercicio.Tipo.ToString(),
             OpcoesJson = exercicio.OpcoesJson,
             Ordem = exercicio.Ordem,
-            XPRecompensa = exercicio.XPRecompensa
+            XpRecompensa = exercicio.XPRecompensa
         });
     }
 

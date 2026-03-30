@@ -8,7 +8,7 @@ public class ExercicioDto
     public string Tipo { get; set; } = string.Empty;
     public string OpcoesJson { get; set; } = "[]";
     public int Ordem { get; set; }
-    public int XPRecompensa { get; set; }
+    public int XpRecompensa { get; set; }
 }
 
 public class ResponderExercicioDto

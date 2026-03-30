@@ -32,7 +32,7 @@ public class LicaoController(
             Descricao = l.Descricao,
             ConteudoTeoricoMarkdown = l.ConteudoTeoricoMarkdown,
             Ordem = l.Ordem,
-            XPRecompensa = l.XPRecompensa,
+            XpRecompensa = l.XPRecompensa,
             Completada = licoesConcluidas.Contains(l.Id)
         });
 
@@ -56,7 +56,7 @@ public class LicaoController(
             Descricao = licao.Descricao,
             ConteudoTeoricoMarkdown = licao.ConteudoTeoricoMarkdown,
             Ordem = licao.Ordem,
-            XPRecompensa = licao.XPRecompensa,
+            XpRecompensa = licao.XPRecompensa,
             Completada = licoesConcluidas.Contains(licao.Id)
         });
     }

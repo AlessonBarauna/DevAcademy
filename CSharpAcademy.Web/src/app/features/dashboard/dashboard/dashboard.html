@@ -51,6 +51,7 @@
     <section class="modulos-progresso">
       <h3>Progresso por Módulo</h3>
       <div class="loading" *ngIf="carregando">Carregando...</div>
+      <div class="erro-msg" *ngIf="erroModulos">{{ erroModulos }}</div>
       <div class="modulo-item" *ngFor="let m of modulos" (click)="irParaModulo(m)">
         <div class="modulo-info">
           <span class="modulo-titulo">{{ m.titulo }}</span>
