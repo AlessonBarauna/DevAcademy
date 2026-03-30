@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ModuloService } from '../../../core/services/modulo';
 import { Modulo } from '../../../core/models/modulo.model';
 
@@ -12,12 +12,12 @@ export class ModuloList implements OnInit {
   modulos: Modulo[] = [];
   carregando = true;
 
-  constructor(private moduloService: ModuloService) {}
+  constructor(private moduloService: ModuloService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.moduloService.getModulos().subscribe({
-      next: m => { this.modulos = m; this.carregando = false; },
-      error: () => { this.carregando = false; }
+      next: m => { this.modulos = m; this.carregando = false; this.cdr.detectChanges(); },
+      error: () => { this.carregando = false; this.cdr.detectChanges(); }
     });
   }
 

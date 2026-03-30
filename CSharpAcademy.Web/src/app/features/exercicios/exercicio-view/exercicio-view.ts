@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModuloService } from '../../../core/services/modulo';
 import { Exercicio, RespostaExercicioResult } from '../../../core/models/modulo.model';
@@ -25,7 +25,8 @@ export class ExercicioView implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private moduloService: ModuloService
+    private moduloService: ModuloService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -35,8 +36,9 @@ export class ExercicioView implements OnInit {
       next: ex => {
         this.exercicios = ex;
         this.carregando = false;
+        this.cdr.detectChanges();
       },
-      error: () => { this.carregando = false; }
+      error: () => { this.carregando = false; this.cdr.detectChanges(); }
     });
   }
 
@@ -75,8 +77,9 @@ export class ExercicioView implements OnInit {
         this.resultado = res;
         if (res.correta) this.totalXP += this.exercicioAtual!.xpRecompensa;
         this.respondendo = false;
+        this.cdr.detectChanges();
       },
-      error: () => { this.respondendo = false; }
+      error: () => { this.respondendo = false; this.cdr.detectChanges(); }
     });
   }
 

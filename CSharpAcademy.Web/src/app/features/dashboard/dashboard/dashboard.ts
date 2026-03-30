@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth';
 import { ModuloService } from '../../../core/services/modulo';
@@ -34,7 +34,8 @@ export class Dashboard implements OnInit {
   constructor(
     private authService: AuthService,
     private moduloService: ModuloService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -43,12 +44,14 @@ export class Dashboard implements OnInit {
       next: mods => {
         this.modulos = mods;
         this.carregando = false;
+        this.cdr.detectChanges();
       },
       error: err => {
         this.carregando = false;
         this.erroModulos = err.status === 0
           ? 'Não foi possível conectar ao servidor. Verifique se o backend está rodando.'
           : `Erro ao carregar módulos (${err.status}).`;
+        this.cdr.detectChanges();
       }
     });
   }

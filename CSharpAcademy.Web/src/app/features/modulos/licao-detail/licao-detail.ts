@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModuloService } from '../../../core/services/modulo';
 import { AuthService } from '../../../core/services/auth';
@@ -22,7 +22,8 @@ export class LicaoDetail implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private moduloService: ModuloService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -32,8 +33,9 @@ export class LicaoDetail implements OnInit {
         this.licoes = licoes;
         if (licoes.length > 0) this.licaoSelecionada = licoes[0];
         this.carregando = false;
+        this.cdr.detectChanges();
       },
-      error: () => { this.carregando = false; }
+      error: () => { this.carregando = false; this.cdr.detectChanges(); }
     });
   }
 
@@ -59,15 +61,15 @@ export class LicaoDetail implements OnInit {
           ? 'Lição já concluída anteriormente.'
           : `+${result.xpGanho} XP ganhos! Nível atual: ${result.novoNivel}`;
         this.concluindo = false;
-        // Atualiza XP no AuthService (localStorage)
         const u = this.authService.usuarioAtual;
         if (u && !result.jaConcluidaAntes) {
           (u as any).xp = result.xpTotal;
           (u as any).nivelAtual = result.novoNivel;
           localStorage.setItem('usuario', JSON.stringify(u));
         }
+        this.cdr.detectChanges();
       },
-      error: () => { this.concluindo = false; }
+      error: () => { this.concluindo = false; this.cdr.detectChanges(); }
     });
   }
 }
