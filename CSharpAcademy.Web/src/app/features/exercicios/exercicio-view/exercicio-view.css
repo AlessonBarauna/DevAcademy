@@ -34,6 +34,36 @@
 .progresso { color: var(--text-muted); font-size: 11px; font-family: var(--font-mono); }
 .xp-acumulado { color: var(--yellow); font-weight: 600; font-size: 12px; font-family: var(--font-mono); }
 
+.timer-bar {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  height: 4px;
+  background: var(--bg-card);
+  border-radius: 2px;
+  margin-bottom: 10px;
+  overflow: visible;
+}
+
+.timer-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.9s linear, background 0.5s;
+}
+
+.timer-verde  { background: var(--green); }
+.timer-amarelo { background: var(--yellow); }
+.timer-vermelho { background: var(--red); }
+
+.timer-texto {
+  position: absolute;
+  right: 0;
+  top: 6px;
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
 .barra-progresso {
   width: 100%;
   max-width: 680px;

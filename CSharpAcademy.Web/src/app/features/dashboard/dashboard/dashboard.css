@@ -180,6 +180,7 @@ nav a:hover { color: var(--text); background: var(--bg-hover); }
 
 /* ── Section titles ───────────────────────────── */
 .conquistas h3,
+.atividade-section h3,
 .modulos-progresso h3 {
   font-size: 10px;
   font-family: var(--font-mono);
@@ -187,6 +188,53 @@ nav a:hover { color: var(--text); background: var(--bg-hover); }
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin-bottom: 12px;
+}
+
+/* ── Heatmap de atividade ─────────────────────── */
+.atividade-section {
+  max-width: 900px;
+  margin: 0 auto 16px;
+  padding: 0 20px;
+}
+
+.heatmap-wrap {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+.heatmap-grid {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+}
+
+.heatmap-semana {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.heatmap-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+}
+
+.heatmap-cell-0 { background: var(--bg-card); }
+.heatmap-cell-1 { background: rgba(137, 209, 133, 0.25); }
+.heatmap-cell-2 { background: rgba(137, 209, 133, 0.55); }
+.heatmap-cell-3 { background: var(--green); }
+
+.heatmap-legenda {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
 }
 
 /* ── Conquistas ───────────────────────────────── */

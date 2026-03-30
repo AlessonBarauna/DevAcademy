@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModuloService } from '../../../core/services/modulo';
 import { Exercicio, Licao, RespostaExercicioResult } from '../../../core/models/modulo.model';
@@ -9,7 +9,7 @@ import { Exercicio, Licao, RespostaExercicioResult } from '../../../core/models/
   templateUrl: './exercicio-view.html',
   styleUrl: './exercicio-view.css',
 })
-export class ExercicioView implements OnInit {
+export class ExercicioView implements OnInit, OnDestroy {
   exercicios: Exercicio[] = [];
   licoes: Licao[] = [];
   indiceAtual = 0;
@@ -23,6 +23,9 @@ export class ExercicioView implements OnInit {
   totalXP = 0;
   acertos = 0;
   finalizou = false;
+  tempoTotal = 60;
+  tempoRestante = 60;
+  private timerInterval: ReturnType<typeof setInterval> | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -39,12 +42,54 @@ export class ExercicioView implements OnInit {
         this.exercicios = ex;
         this.carregando = false;
         this.cdr.detectChanges();
+        if (ex.length > 0) this.iniciarTimer();
       },
       error: () => { this.carregando = false; this.cdr.detectChanges(); }
     });
     this.moduloService.getLicoes(this.moduloId).subscribe({
       next: licoes => { this.licoes = licoes; this.cdr.detectChanges(); }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.pararTimer();
+  }
+
+  get timerPercent(): number {
+    return (this.tempoRestante / this.tempoTotal) * 100;
+  }
+
+  get timerCor(): string {
+    if (this.tempoRestante > 30) return 'verde';
+    if (this.tempoRestante > 10) return 'amarelo';
+    return 'vermelho';
+  }
+
+  iniciarTimer(): void {
+    this.pararTimer();
+    this.tempoRestante = this.tempoTotal;
+    this.timerInterval = setInterval(() => {
+      this.tempoRestante--;
+      this.cdr.detectChanges();
+      if (this.tempoRestante <= 0) {
+        this.pararTimer();
+        this.onTimeout();
+      }
+    }, 1000);
+  }
+
+  pararTimer(): void {
+    if (this.timerInterval !== null) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+  }
+
+  private onTimeout(): void {
+    if (this.resultado || this.finalizou) return;
+    // Timeout: conta como erro, avança automaticamente
+    this.resultado = { correta: false, respostaCorreta: null, explicacao: 'Tempo esgotado!' };
+    this.cdr.detectChanges();
   }
 
   get exercicioAtual(): Exercicio | null {
@@ -89,6 +134,7 @@ export class ExercicioView implements OnInit {
 
   responder(): void {
     if (!this.exercicioAtual || this.respondendo) return;
+    this.pararTimer();
     const resposta = this.tipoMultiplaEscolha || this.tipoVerdadeiroFalso
       ? this.respostaSelecionada
       : this.respostaTexto;
@@ -115,7 +161,9 @@ export class ExercicioView implements OnInit {
       this.resultado = null;
       this.respostaSelecionada = '';
       this.respostaTexto = '';
+      this.iniciarTimer();
     } else {
+      this.pararTimer();
       this.finalizou = true;
     }
   }

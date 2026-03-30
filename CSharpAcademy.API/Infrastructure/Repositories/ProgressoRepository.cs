@@ -12,6 +12,18 @@ public class ProgressoRepository(AppDbContext ctx) : IProgressoRepository
             .Select(p => p.LicaoId)
             .ToListAsync();
 
+    public async Task<IEnumerable<(DateOnly Data, int Contagem)>> ObterAtividadePorDiaAsync(int usuarioId, DateTime desde)
+    {
+        var lista = await ctx.Progressos
+            .Where(p => p.UsuarioId == usuarioId && p.Completada && p.DataConclusao >= desde)
+            .Select(p => p.DataConclusao!.Value.Date)
+            .ToListAsync();
+
+        return lista
+            .GroupBy(d => DateOnly.FromDateTime(d))
+            .Select(g => (g.Key, g.Count()));
+    }
+
     public async Task<Progresso?> ObterAsync(int usuarioId, int licaoId)
         => await ctx.Progressos.FirstOrDefaultAsync(p => p.UsuarioId == usuarioId && p.LicaoId == licaoId);
 

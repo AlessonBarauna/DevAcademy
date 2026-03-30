@@ -53,6 +53,7 @@
     <div class="licao-header">
       <h1 [class.titulo-concluido]="licaoSelecionada.completada">{{ licaoSelecionada.titulo }}</h1>
       <p>{{ licaoSelecionada.descricao }}</p>
+      <span class="leitura-tempo">{{ tempoLeitura }}</span>
     </div>
     <div class="teoria markdown-body">
       <markdown [data]="licaoSelecionada.conteudoTeoricoMarkdown"></markdown>

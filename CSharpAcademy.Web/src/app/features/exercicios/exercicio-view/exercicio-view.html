@@ -49,6 +49,11 @@
       <div class="barra-fill" [style.width.%]="((indiceAtual) / exercicios.length) * 100"></div>
     </div>
 
+    <div class="timer-bar" *ngIf="!resultado">
+      <div class="timer-fill" [class]="'timer-' + timerCor" [style.width.%]="timerPercent"></div>
+      <span class="timer-texto">{{ tempoRestante }}s</span>
+    </div>
+
     <div class="enunciado">
       <p>{{ exercicioAtual.enunciado }}</p>
     </div>

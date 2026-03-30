@@ -7,6 +7,7 @@ using CSharpAcademy.API.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using AtividadeDiaDto = CSharpAcademy.API.DTOs.AtividadeDiaDto;
 using ConquistaDto = CSharpAcademy.API.DTOs.ConquistaDto;
 
 namespace CSharpAcademy.API.Presentation.Controllers;
@@ -25,6 +26,15 @@ public class AuthController(IUsuarioRepository usuarioRepo, IConfiguration confi
         var usuario = await usuarioRepo.ObterPorIdAsync(UsuarioId);
         if (usuario == null) return NotFound();
         return Ok(new { usuario.Id, usuario.Nome, usuario.Email, usuario.NivelAtual, Xp = usuario.XP, usuario.StreakAtual, usuario.StreakMaximo });
+    }
+
+    [HttpGet("atividade")]
+    [Authorize]
+    public async Task<IActionResult> Atividade([FromServices] IProgressoRepository progressoRepo)
+    {
+        var desde = DateTime.UtcNow.AddMonths(-6);
+        var atividade = await progressoRepo.ObterAtividadePorDiaAsync(UsuarioId, desde);
+        return Ok(atividade.Select(a => new AtividadeDiaDto(a.Data.ToString("yyyy-MM-dd"), a.Contagem)));
     }
 
     [HttpGet("conquistas")]

@@ -63,6 +63,13 @@ export class LicaoDetail implements OnInit {
     return i > 0 ? this.licoes[i - 1] : null;
   }
 
+  get tempoLeitura(): string {
+    const texto = this.licaoSelecionada?.conteudoTeoricoMarkdown ?? '';
+    const palavras = texto.trim().split(/\s+/).filter(p => p.length > 0).length;
+    const minutos = Math.ceil(palavras / 200);
+    return `~${minutos} min de leitura`;
+  }
+
   get proximaLicao(): Licao | null {
     const i = this.indiceAtual;
     return i >= 0 && i < this.licoes.length - 1 ? this.licoes[i + 1] : null;

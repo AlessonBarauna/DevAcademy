@@ -181,6 +181,15 @@
   color: #6a9955;
 }
 
+.leitura-tempo {
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+}
+
 /* ── Barra de progresso de leitura ───────────────── */
 .read-progress-bar {
   position: sticky;

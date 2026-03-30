@@ -30,6 +30,8 @@ public class LoginDto
     public string Senha { get; set; } = string.Empty;
 }
 
+public record AtividadeDiaDto(string Data, int Contagem);
+
 public class UsuarioResponseDto
 {
     public int Id { get; set; }
