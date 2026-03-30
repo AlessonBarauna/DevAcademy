@@ -1,0 +1,54 @@
+<div class="modulo-detail-page">
+
+  <header class="detail-header">
+    <button class="btn-voltar" (click)="voltar()">&#8592; Módulos</button>
+    <div class="header-meta" *ngIf="modulo">
+      <span class="nivel-badge nivel-{{ modulo.nivelMinimo.toLowerCase() }}">{{ modulo.nivelMinimo }}</span>
+    </div>
+  </header>
+
+  <div class="detail-content" *ngIf="modulo">
+
+    <div class="modulo-hero">
+      <h1>{{ modulo.titulo }}</h1>
+      <p class="modulo-desc">{{ modulo.descricao }}</p>
+      <div class="hero-meta">
+        <span class="meta-item">&#128218; {{ modulo.totalLicoes }} lições</span>
+        <span class="meta-item">&#9889; {{ xpTotal }} XP disponível</span>
+        <span class="meta-item">&#10003; {{ modulo.licoesCompletadas }}/{{ modulo.totalLicoes }} concluídas</span>
+      </div>
+      <div class="hero-bar">
+        <div class="hero-fill" [style.width.%]="progresso"></div>
+      </div>
+      <button class="btn-comecar" (click)="comecar()" [disabled]="licoes.length === 0">
+        {{ modulo.licoesCompletadas === 0 ? '&#9654; Começar' : modulo.licoesCompletadas === modulo.totalLicoes ? '&#8635; Revisar' : '&#9654; Continuar' }}
+      </button>
+    </div>
+
+    <div class="licoes-section">
+      <h2>Conteúdo do módulo</h2>
+      <div class="loading" *ngIf="carregando">Carregando lições...</div>
+      <div class="licao-list" *ngIf="!carregando">
+        <div
+          class="licao-row"
+          *ngFor="let l of licoes; let i = index"
+          [class.completada]="l.completada"
+          (click)="entrarNaLicao(l)">
+          <div class="licao-num">{{ i + 1 }}</div>
+          <div class="licao-info">
+            <span class="licao-titulo">{{ l.titulo }}</span>
+            <span class="licao-desc">{{ l.descricao }}</span>
+          </div>
+          <div class="licao-right">
+            <span class="xp-pill">+{{ l.xpRecompensa }} XP</span>
+            <span class="status-icon" *ngIf="l.completada">&#10003;</span>
+            <span class="status-icon pending" *ngIf="!l.completada">&#8594;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="loading" *ngIf="!modulo && !carregando === false">Carregando...</div>
+</div>

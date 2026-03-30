@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
 import { ModuloList } from './features/modulos/modulo-list/modulo-list';
+import { ModuloDetail } from './features/modulos/modulo-detail/modulo-detail';
 import { LicaoDetail } from './features/modulos/licao-detail/licao-detail';
 import { ExercicioView } from './features/exercicios/exercicio-view/exercicio-view';
 import { Dashboard } from './features/dashboard/dashboard/dashboard';
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'ranking', component: Ranking, canActivate: [AuthGuard] },
   { path: 'perfil', component: Perfil, canActivate: [AuthGuard] },
   { path: 'modulos', component: ModuloList, canActivate: [AuthGuard] },
+  { path: 'modulos/:moduloId', component: ModuloDetail, canActivate: [AuthGuard] },
   { path: 'modulos/:moduloId/licoes', component: LicaoDetail, canActivate: [AuthGuard] },
   { path: 'modulos/:moduloId/licoes/:licaoId/exercicios', component: ExercicioView, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/login' }

@@ -29,10 +29,15 @@ export class LicaoDetail implements OnInit {
 
   ngOnInit(): void {
     this.moduloId = +this.route.snapshot.params['moduloId'];
+    const licaoIdParam = this.route.snapshot.queryParams['licaoId'];
     this.moduloService.getLicoes(this.moduloId).subscribe({
       next: licoes => {
         this.licoes = licoes;
-        if (licoes.length > 0) this.licaoSelecionada = licoes[0];
+        if (licaoIdParam) {
+          this.licaoSelecionada = licoes.find(l => l.id === +licaoIdParam) ?? licoes[0] ?? null;
+        } else if (licoes.length > 0) {
+          this.licaoSelecionada = licoes[0];
+        }
         this.carregando = false;
         this.cdr.detectChanges();
       },
@@ -46,7 +51,7 @@ export class LicaoDetail implements OnInit {
   }
 
   voltarParaModulos(): void {
-    this.router.navigate(['/modulos']);
+    this.router.navigate(['/modulos', this.moduloId]);
   }
 
   irParaExercicios(): void {

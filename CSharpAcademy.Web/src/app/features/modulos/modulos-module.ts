@@ -6,11 +6,12 @@ import { MarkdownModule } from 'ngx-markdown';
 
 import { ModulosRoutingModule } from './modulos-routing-module';
 import { ModuloList } from './modulo-list/modulo-list';
+import { ModuloDetail } from './modulo-detail/modulo-detail';
 import { LicaoDetail } from './licao-detail/licao-detail';
 import { AssistantChat } from '../assistant/assistant-chat/assistant-chat';
 
 @NgModule({
-  declarations: [ModuloList, LicaoDetail, AssistantChat],
+  declarations: [ModuloList, ModuloDetail, LicaoDetail, AssistantChat],
   imports: [CommonModule, FormsModule, RouterModule, ModulosRoutingModule, MarkdownModule.forChild()],
 })
 export class ModulosModule {}

@@ -106,7 +106,7 @@ export class Dashboard implements OnInit, OnDestroy {
   }
 
   irParaModulo(modulo: Modulo): void {
-    this.router.navigate(['/modulos', modulo.id, 'licoes']);
+    this.router.navigate(['/modulos', modulo.id]);
   }
 
   logout(): void {

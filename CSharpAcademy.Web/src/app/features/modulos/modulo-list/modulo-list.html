@@ -7,7 +7,7 @@
   <div class="loading" *ngIf="carregando">Carregando módulos...</div>
 
   <div class="modulos-grid" *ngIf="!carregando">
-    <div class="modulo-card" *ngFor="let m of modulos" [routerLink]="['/modulos', m.id, 'licoes']">
+    <div class="modulo-card" *ngFor="let m of modulos" [routerLink]="['/modulos', m.id]">
       <div class="modulo-header">
         <span class="nivel-badge nivel-{{m.nivelMinimo.toLowerCase()}}">{{ m.nivelMinimo }}</span>
         <span class="xp-badge">{{ m.totalLicoes }} lições</span>
