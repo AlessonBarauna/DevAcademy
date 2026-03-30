@@ -45,6 +45,21 @@ export class LicaoDetail implements OnInit {
     });
   }
 
+  get indiceAtual(): number {
+    if (!this.licaoSelecionada) return -1;
+    return this.licoes.findIndex(l => l.id === this.licaoSelecionada!.id);
+  }
+
+  get licaoAnterior(): Licao | null {
+    const i = this.indiceAtual;
+    return i > 0 ? this.licoes[i - 1] : null;
+  }
+
+  get proximaLicao(): Licao | null {
+    const i = this.indiceAtual;
+    return i >= 0 && i < this.licoes.length - 1 ? this.licoes[i + 1] : null;
+  }
+
   selecionarLicao(licao: Licao): void {
     this.licaoSelecionada = licao;
     this.mensagemConclusao = '';

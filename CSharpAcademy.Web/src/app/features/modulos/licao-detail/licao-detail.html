@@ -48,6 +48,16 @@
       </button>
     </div>
 
+    <nav class="nav-sequencial">
+      <button class="btn-nav" [disabled]="!licaoAnterior" (click)="licaoAnterior && selecionarLicao(licaoAnterior)">
+        &#8592; {{ licaoAnterior?.titulo ?? 'Início' }}
+      </button>
+      <span class="nav-pos">{{ indiceAtual + 1 }} / {{ licoes.length }}</span>
+      <button class="btn-nav btn-nav-next" [disabled]="!proximaLicao" (click)="proximaLicao && selecionarLicao(proximaLicao)">
+        {{ proximaLicao?.titulo ?? 'Fim' }} &#8594;
+      </button>
+    </nav>
+
     <div class="mensagem-conclusao" *ngIf="mensagemConclusao">{{ mensagemConclusao }}</div>
 
     <!-- Professor Assistente integrado -->

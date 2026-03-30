@@ -335,6 +335,43 @@
 }
 .btn-concluir:disabled { opacity: 0.4; cursor: not-allowed; }
 
+/* ── Navegação sequencial ───────────────────────── */
+.nav-sequencial {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 28px 20px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+
+.btn-nav {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 6px 14px;
+  border-radius: var(--radius);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.btn-nav:hover:not(:disabled) { border-color: var(--accent); color: var(--text); }
+.btn-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+.btn-nav-next { text-align: right; }
+
+.nav-pos {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
 .mensagem-conclusao {
   margin: 0 28px 16px;
   background: rgba(137, 209, 133, 0.06);
