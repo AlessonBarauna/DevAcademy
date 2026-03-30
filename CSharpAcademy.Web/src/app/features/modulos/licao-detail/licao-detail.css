@@ -53,6 +53,27 @@
   flex-shrink: 0;
 }
 
+.sidebar-topbar {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.btn-voltar-modulos {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  width: 100%;
+  text-align: left;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-voltar-modulos:hover { border-color: var(--accent); color: var(--text); }
+
 .sidebar h3 {
   font-family: var(--font-mono);
   font-size: 10px;

@@ -10,6 +10,9 @@
 
 <div class="licao-page">
   <aside class="sidebar">
+    <div class="sidebar-topbar">
+      <button class="btn-voltar-modulos" (click)="voltarParaModulos()">&#8592; Módulos</button>
+    </div>
     <h3>Lições</h3>
     <div class="loading" *ngIf="carregando">Carregando...</div>
     <ul *ngIf="!carregando">

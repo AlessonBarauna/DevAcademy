@@ -45,6 +45,10 @@ export class LicaoDetail implements OnInit {
     this.mensagemConclusao = '';
   }
 
+  voltarParaModulos(): void {
+    this.router.navigate(['/modulos']);
+  }
+
   irParaExercicios(): void {
     if (!this.licaoSelecionada) return;
     this.router.navigate(['/modulos', this.moduloId, 'licoes', this.licaoSelecionada.id, 'exercicios']);
