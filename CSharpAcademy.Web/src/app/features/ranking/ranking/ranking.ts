@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { RankingItem } from '../../../core/models/ranking.model';
+import { ThemeService } from '../../../core/services/theme';
 
 @Component({
   selector: 'app-ranking',
@@ -13,6 +14,15 @@ export class Ranking implements OnInit {
   itens: RankingItem[] = [];
   carregando = true;
 
+  get top10(): RankingItem[] {
+    return this.itens.filter(i => !i.euMesmo || i.posicao <= 10);
+  }
+
+  get euForaDoTop(): RankingItem | null {
+    const eu = this.itens.find(i => i.euMesmo);
+    return eu && eu.posicao > 10 ? eu : null;
+  }
+
   readonly nivelLabels: Record<number, string> = {
     1: 'Iniciante', 2: 'Intermediário', 3: 'Avançado', 4: 'Especialista',
   };
@@ -20,7 +30,8 @@ export class Ranking implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public themeService: ThemeService
   ) {}
 
   ngOnInit(): void {

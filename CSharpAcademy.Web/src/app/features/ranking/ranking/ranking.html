@@ -2,6 +2,9 @@
   <header class="ranking-header">
     <button class="btn-voltar" (click)="voltar()">← Dashboard</button>
     <h1>🏆 Ranking Global</h1>
+    <button class="btn-tema" (click)="themeService.toggle()" [title]="themeService.isLight ? 'Modo escuro' : 'Modo claro'">
+      {{ themeService.isLight ? '🌙' : '☀️' }}
+    </button>
   </header>
 
   <div class="loading" *ngIf="carregando">Carregando ranking...</div>
@@ -9,7 +12,7 @@
   <div class="ranking-list" *ngIf="!carregando">
     <div
       class="ranking-item"
-      *ngFor="let item of itens"
+      *ngFor="let item of top10"
       [class.eu-mesmo]="item.euMesmo"
       [class.top3]="item.posicao <= 3">
 
@@ -26,6 +29,24 @@
       <div class="metricas">
         <span class="xp">{{ item.xp }} XP</span>
         <span class="streak" *ngIf="item.streakAtual > 0">🔥 {{ item.streakAtual }}</span>
+      </div>
+    </div>
+
+    <div class="fora-do-top" *ngIf="euForaDoTop">
+      <div class="separador-pos">· · ·</div>
+      <div class="ranking-item eu-mesmo">
+        <span class="posicao">{{ euForaDoTop.posicao }}º</span>
+        <div class="usuario-info">
+          <span class="avatar">{{ euForaDoTop.nome.charAt(0).toUpperCase() }}</span>
+          <div class="dados">
+            <span class="nome">{{ euForaDoTop.nome }} <span class="eu-badge">você</span></span>
+            <span class="nivel">{{ nivelLabels[euForaDoTop.nivelAtual] }}</span>
+          </div>
+        </div>
+        <div class="metricas">
+          <span class="xp">{{ euForaDoTop.xp }} XP</span>
+          <span class="streak" *ngIf="euForaDoTop.streakAtual > 0">🔥 {{ euForaDoTop.streakAtual }}</span>
+        </div>
       </div>
     </div>
 

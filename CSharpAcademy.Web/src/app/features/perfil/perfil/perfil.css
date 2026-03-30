@@ -37,6 +37,19 @@
 }
 .btn-voltar:hover { border-color: var(--accent); color: var(--text); }
 
+.perfil-header .btn-tema {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 14px;
+  transition: border-color 0.15s;
+}
+.perfil-header .btn-tema:hover { border-color: var(--accent); }
+
 .perfil-content {
   max-width: 700px;
   margin: 28px auto;
@@ -266,6 +279,16 @@
   font-family: var(--font-mono);
   color: var(--text-muted);
   line-height: 1.4;
+}
+
+.conquista-data {
+  margin-top: 4px;
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  opacity: 0.7;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 4px;
 }
 
 .loading { color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; }

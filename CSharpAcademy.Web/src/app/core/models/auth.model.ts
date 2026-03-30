@@ -14,6 +14,7 @@ export interface ConquistaDto {
   titulo: string;
   descricao: string;
   icone: string;
+  dataConquista?: string;
 }
 
 export interface UsuarioResponseDto {

@@ -39,4 +39,5 @@ public class ConquistaDto
     public string Titulo { get; set; } = string.Empty;
     public string Descricao { get; set; } = string.Empty;
     public string Icone { get; set; } = string.Empty;
+    public string? DataConquista { get; set; }
 }

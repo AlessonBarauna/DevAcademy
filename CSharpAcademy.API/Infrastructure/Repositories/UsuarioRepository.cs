@@ -33,4 +33,15 @@ public class UsuarioRepository(AppDbContext ctx) : IUsuarioRepository
             .ThenByDescending(u => u.StreakAtual)
             .Take(top)
             .ToListAsync();
+
+    public async Task<int> ObterPosicaoRankingAsync(int usuarioId)
+    {
+        var usuarios = await ctx.Usuarios
+            .OrderByDescending(u => u.XP)
+            .ThenByDescending(u => u.StreakAtual)
+            .Select(u => u.Id)
+            .ToListAsync();
+        var idx = usuarios.IndexOf(usuarioId);
+        return idx >= 0 ? idx + 1 : -1;
+    }
 }

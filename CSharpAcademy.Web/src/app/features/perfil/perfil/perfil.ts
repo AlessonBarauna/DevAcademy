@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth';
+import { ThemeService } from '../../../core/services/theme';
 import { ConquistaDto, UsuarioResponseDto } from '../../../core/models/auth.model';
 
 @Component({
@@ -30,7 +31,8 @@ export class Perfil implements OnInit, OnDestroy {
     private authService: AuthService,
     private http: HttpClient,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public themeService: ThemeService
   ) {}
 
   ngOnInit(): void {

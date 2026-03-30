@@ -47,7 +47,8 @@ public class AuthController(IUsuarioRepository usuarioRepo, IConfiguration confi
             Codigo = c.Codigo,
             Titulo = c.Titulo,
             Descricao = c.Descricao,
-            Icone = c.Icone
+            Icone = c.Icone,
+            DataConquista = c.DataConquista.ToString("dd/MM/yyyy")
         }));
     }
 

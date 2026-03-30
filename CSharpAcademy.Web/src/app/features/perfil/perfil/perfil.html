@@ -2,6 +2,9 @@
   <header class="perfil-header">
     <button class="btn-voltar" (click)="voltar()">← Dashboard</button>
     <h1>👤 Meu Perfil</h1>
+    <button class="btn-tema" (click)="themeService.toggle()" [title]="themeService.isLight ? 'Modo escuro' : 'Modo claro'">
+      {{ themeService.isLight ? '🌙' : '☀️' }}
+    </button>
   </header>
 
   <div class="perfil-content" *ngIf="usuario">
@@ -75,6 +78,7 @@
           <span class="conquista-icone">{{ c.icone }}</span>
           <span class="conquista-titulo">{{ c.titulo }}</span>
           <span class="conquista-desc">{{ c.descricao }}</span>
+          <span class="conquista-data" *ngIf="c.dataConquista">{{ c.dataConquista }}</span>
         </div>
       </div>
     </section>
