@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AssistantService } from '../../../core/services/assistant';
 import { AuthService } from '../../../core/services/auth';
 import { ChatMessage, ChatRequestDto, CustomExerciseDto, FeedbackDto } from '../../../core/models/assistant.model';
@@ -25,7 +25,8 @@ export class AssistantChat implements OnInit {
 
   constructor(
     private assistantService: AssistantService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {}
@@ -47,6 +48,7 @@ export class AssistantChat implements OnInit {
     this.assistantService.getHistorico(this.licaoId).subscribe({
       next: msgs => {
         this.mensagens = msgs;
+        this.cdr.detectChanges();
         setTimeout(() => this.scrollParaBaixo(), 100);
       }
     });
@@ -79,8 +81,9 @@ export class AssistantChat implements OnInit {
           setTimeout(() => this.scrollParaBaixo(), 100);
         }
         this.carregando = false;
+        this.cdr.detectChanges();
       },
-      error: () => { this.carregando = false; }
+      error: () => { this.carregando = false; this.cdr.detectChanges(); }
     });
   }
 
@@ -100,6 +103,7 @@ export class AssistantChat implements OnInit {
       next: () => {
         const msg = this.mensagens.find(m => m.id === idMensagem);
         if (msg) msg.estrelas = estrelas;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -112,6 +116,7 @@ export class AssistantChat implements OnInit {
       next: exercicio => {
         this.exercicioModal = exercicio;
         this.mostrarExercicioModal = true;
+        this.cdr.detectChanges();
       }
     });
   }

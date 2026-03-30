@@ -36,6 +36,14 @@ export class AuthService {
     );
   }
 
+  atualizarProgresso(xp: number, nivelAtual: number): void {
+    const u = this._usuario.value;
+    if (!u) return;
+    const atualizado = { ...u, xp, nivelAtual };
+    localStorage.setItem('usuario', JSON.stringify(atualizado));
+    this._usuario.next(atualizado);
+  }
+
   logout(): void {
     localStorage.removeItem('usuario');
     this._usuario.next(null);

@@ -61,11 +61,8 @@ export class LicaoDetail implements OnInit {
           ? 'Lição já concluída anteriormente.'
           : `+${result.xpGanho} XP ganhos! Nível atual: ${result.novoNivel}`;
         this.concluindo = false;
-        const u = this.authService.usuarioAtual;
-        if (u && !result.jaConcluidaAntes) {
-          (u as any).xp = result.xpTotal;
-          (u as any).nivelAtual = result.novoNivel;
-          localStorage.setItem('usuario', JSON.stringify(u));
+        if (!result.jaConcluidaAntes) {
+          this.authService.atualizarProgresso(result.xpTotal, result.novoNivel);
         }
         this.cdr.detectChanges();
       },

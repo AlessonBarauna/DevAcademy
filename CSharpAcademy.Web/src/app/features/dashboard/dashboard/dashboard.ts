@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth';
 import { ModuloService } from '../../../core/services/modulo';
 import { Modulo } from '../../../core/models/modulo.model';
@@ -11,11 +12,12 @@ import { UsuarioResponseDto } from '../../../core/models/auth.model';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard implements OnInit {
+export class Dashboard implements OnInit, OnDestroy {
   usuario: UsuarioResponseDto | null = null;
   modulos: Modulo[] = [];
   carregando = true;
   erroModulos = '';
+  private sub = new Subscription();
 
   readonly nivelLabels: Record<number, string> = {
     1: 'Iniciante',
@@ -39,7 +41,12 @@ export class Dashboard implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.usuario = this.authService.usuarioAtual;
+    this.sub.add(
+      this.authService.usuario$.subscribe(u => {
+        this.usuario = u;
+        this.cdr.detectChanges();
+      })
+    );
     this.moduloService.getModulos().subscribe({
       next: mods => {
         this.modulos = mods;
@@ -85,6 +92,10 @@ export class Dashboard implements OnInit {
     const base = xpBase[nivelAtual] ?? 0;
     if (nivelAtual === 4) return 100;
     return Math.min(100, Math.round(((xp - base) / (limite - base)) * 100));
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 
   irParaModulo(modulo: Modulo): void {
