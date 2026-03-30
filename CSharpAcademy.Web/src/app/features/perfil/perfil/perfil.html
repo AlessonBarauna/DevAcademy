@@ -38,6 +38,31 @@
       </div>
     </section>
 
+    <!-- Heatmap de atividade -->
+    <section class="atividade-section" *ngIf="heatmapSemanas.length > 0">
+      <h3>Atividade de Estudo</h3>
+      <div class="heatmap-wrap">
+        <div class="heatmap-grid">
+          <div class="heatmap-semana" *ngFor="let semana of heatmapSemanas">
+            <div
+              class="heatmap-cell"
+              *ngFor="let dia of semana"
+              [class]="'heatmap-cell-' + dia.nivel"
+              [title]="formatarDataHeatmap(dia.data) + (dia.count > 0 ? ': ' + dia.count + ' lição(ões)' : '')">
+            </div>
+          </div>
+        </div>
+        <div class="heatmap-legenda">
+          <span>Menos</span>
+          <div class="heatmap-cell heatmap-cell-0"></div>
+          <div class="heatmap-cell heatmap-cell-1"></div>
+          <div class="heatmap-cell heatmap-cell-2"></div>
+          <div class="heatmap-cell heatmap-cell-3"></div>
+          <span>Mais</span>
+        </div>
+      </div>
+    </section>
+
     <!-- Conquistas -->
     <section class="conquistas-section">
       <h3>🏅 Conquistas</h3>

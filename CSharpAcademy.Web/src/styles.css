@@ -49,6 +49,40 @@
 }
 
 /* ================================================
+   Light Theme
+   ================================================ */
+[data-theme="light"] {
+  --bg:          #f3f3f3;
+  --bg-panel:    #ffffff;
+  --bg-card:     #e8e8e8;
+  --bg-input:    #f0f0f0;
+  --bg-hover:    #eaeaea;
+  --bg-active:   #dde5f0;
+
+  --border:        #d0d0d0;
+  --border-subtle: #e0e0e0;
+  --border-accent: #0078d4;
+
+  --text:       #1e1e1e;
+  --text-dim:   #555555;
+  --text-muted: #999999;
+
+  --blue:   #0078d4;
+  --teal:   #008080;
+  --green:  #388a34;
+  --purple: #6f42c1;
+  --yellow: #795e26;
+  --orange: #a31515;
+  --red:    #c41a1a;
+  --cyan:   #001080;
+
+  --accent:  #0078d4;
+  --success: #388a34;
+  --warning: #795e26;
+  --error:   #c41a1a;
+}
+
+/* ================================================
    Reset & Base
    ================================================ */
 *, *::before, *::after {

@@ -39,9 +39,22 @@ export class AuthService {
   atualizarProgresso(xp: number, nivelAtual: number, streakAtual?: number): void {
     const u = this._usuario.value;
     if (!u) return;
-    const atualizado = { ...u, xp, nivelAtual, ...(streakAtual !== undefined && { streakAtual }) };
+    const hoje = new Date().toISOString().slice(0, 10);
+    const atualizado = { ...u, xp, nivelAtual, ultimoEstudo: hoje, ...(streakAtual !== undefined && { streakAtual }) };
     localStorage.setItem('usuario', JSON.stringify(atualizado));
     this._usuario.next(atualizado);
+  }
+
+  sincronizarPerfil(): void {
+    this.http.get<any>(`${API}/auth/perfil`).subscribe({
+      next: perfil => {
+        const u = this._usuario.value;
+        if (!u) return;
+        const atualizado = { ...u, xp: perfil.xp, nivelAtual: perfil.nivelAtual, streakAtual: perfil.streakAtual, streakMaximo: perfil.streakMaximo, ultimoEstudo: perfil.ultimoEstudo };
+        localStorage.setItem('usuario', JSON.stringify(atualizado));
+        this._usuario.next(atualizado);
+      }
+    });
   }
 
   logout(): void {

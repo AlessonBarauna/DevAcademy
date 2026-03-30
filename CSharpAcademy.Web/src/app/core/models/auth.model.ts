@@ -25,4 +25,5 @@ export interface UsuarioResponseDto {
   token: string;
   streakAtual?: number;
   streakMaximo?: number;
+  ultimoEstudo?: string;
 }

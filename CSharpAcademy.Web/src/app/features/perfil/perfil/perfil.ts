@@ -15,6 +15,7 @@ export class Perfil implements OnInit, OnDestroy {
   usuario: UsuarioResponseDto | null = null;
   conquistas: ConquistaDto[] = [];
   carregando = true;
+  heatmapSemanas: { data: Date; count: number; nivel: number }[][] = [];
   private sub = new Subscription();
 
   readonly nivelLabels: Record<number, string> = {
@@ -43,6 +44,36 @@ export class Perfil implements OnInit, OnDestroy {
       next: c => { this.conquistas = c; this.carregando = false; this.cdr.detectChanges(); },
       error: () => { this.carregando = false; this.cdr.detectChanges(); }
     });
+
+    this.http.get<{ data: string; contagem: number }[]>('/api/auth/atividade').subscribe({
+      next: atividade => { this.heatmapSemanas = this.buildHeatmap(atividade); this.cdr.detectChanges(); }
+    });
+  }
+
+  buildHeatmap(atividade: { data: string; contagem: number }[]): { data: Date; count: number; nivel: number }[][] {
+    const mapaContagem = new Map<string, number>();
+    for (const a of atividade) mapaContagem.set(a.data, a.contagem);
+    const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+    const inicioGrid = new Date(hoje);
+    inicioGrid.setDate(hoje.getDate() - 26 * 7 + 1);
+    inicioGrid.setDate(inicioGrid.getDate() - inicioGrid.getDay());
+    const semanas: { data: Date; count: number; nivel: number }[][] = [];
+    let semanaAtual: { data: Date; count: number; nivel: number }[] = [];
+    const cursor = new Date(inicioGrid);
+    while (cursor <= hoje) {
+      const iso = cursor.toISOString().slice(0, 10);
+      const count = mapaContagem.get(iso) ?? 0;
+      const nivel = count === 0 ? 0 : count === 1 ? 1 : count <= 3 ? 2 : 3;
+      semanaAtual.push({ data: new Date(cursor), count, nivel });
+      if (semanaAtual.length === 7) { semanas.push(semanaAtual); semanaAtual = []; }
+      cursor.setDate(cursor.getDate() + 1);
+    }
+    if (semanaAtual.length > 0) semanas.push(semanaAtual);
+    return semanas;
+  }
+
+  formatarDataHeatmap(data: Date): string {
+    return data.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' });
   }
 
   get nivelLabel(): string {

@@ -5,9 +5,16 @@
       <a routerLink="/modulos">Módulos</a>
       <a routerLink="/ranking">🏆 Ranking</a>
       <a routerLink="/perfil">👤 Perfil</a>
+      <button class="btn-tema" (click)="themeService.toggle()" [title]="themeService.isLight ? 'Modo escuro' : 'Modo claro'">
+        {{ themeService.isLight ? '🌙' : '☀️' }}
+      </button>
       <button class="btn-logout" (click)="logout()">Sair</button>
     </nav>
   </header>
+
+  <div class="streak-risco-banner" *ngIf="streakEmRisco">
+    🔥 Seu streak de <strong>{{ usuario?.streakAtual }} dia(s)</strong> está em risco! Estude hoje para mantê-lo.
+  </div>
 
   <div class="dash-content" *ngIf="usuario">
     <!-- Perfil -->

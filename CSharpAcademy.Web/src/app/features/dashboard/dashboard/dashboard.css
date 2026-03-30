@@ -44,6 +44,19 @@ nav a {
 
 nav a:hover { color: var(--text); background: var(--bg-hover); }
 
+.btn-tema {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 8px;
+  transition: border-color 0.15s;
+}
+.btn-tema:hover { border-color: var(--accent); }
+
 .btn-logout {
   background: transparent;
   border: 1px solid var(--border);
@@ -58,6 +71,18 @@ nav a:hover { color: var(--text); background: var(--bg-hover); }
 }
 
 .btn-logout:hover { border-color: var(--red); color: var(--red); }
+
+/* Streak em risco */
+.streak-risco-banner {
+  background: rgba(220, 180, 0, 0.08);
+  border-bottom: 1px solid rgba(220, 180, 0, 0.25);
+  color: #d4a800;
+  padding: 9px 20px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  text-align: center;
+}
+.streak-risco-banner strong { color: var(--warning); }
 
 /* Main content */
 .dash-content {

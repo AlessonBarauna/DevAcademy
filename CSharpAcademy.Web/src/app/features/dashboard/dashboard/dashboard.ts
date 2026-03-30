@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth';
 import { ModuloService } from '../../../core/services/modulo';
+import { ThemeService } from '../../../core/services/theme';
 import { Modulo } from '../../../core/models/modulo.model';
 import { ConquistaDto, UsuarioResponseDto } from '../../../core/models/auth.model';
 
@@ -41,10 +42,19 @@ export class Dashboard implements OnInit, OnDestroy {
     private moduloService: ModuloService,
     private http: HttpClient,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public themeService: ThemeService
   ) {}
 
+  get streakEmRisco(): boolean {
+    const ultimoEstudo = this.usuario?.ultimoEstudo;
+    if (!ultimoEstudo || !this.usuario?.streakAtual) return false;
+    const hoje = new Date().toISOString().slice(0, 10);
+    return ultimoEstudo < hoje;
+  }
+
   ngOnInit(): void {
+    this.authService.sincronizarPerfil();
     this.sub.add(
       this.authService.usuario$.subscribe(u => {
         this.usuario = u;
