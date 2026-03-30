@@ -9,11 +9,38 @@
 
   <!-- Finalizado -->
   <div class="finalizado" *ngIf="finalizou">
-    <div class="icone">🎉</div>
-    <h2>Parabéns!</h2>
-    <p>Você completou todos os exercícios desta lição.</p>
-    <p class="xp-total">Total de XP ganho: <strong>{{ totalXP }} XP</strong></p>
-    <button class="btn-voltar-licao" (click)="voltarParaLicao()">Voltar para a Lição</button>
+    <div class="result-card">
+      <div class="result-stars">
+        <span [class.star-on]="estrelas >= 1">&#9733;</span>
+        <span [class.star-on]="estrelas >= 2">&#9733;</span>
+        <span [class.star-on]="estrelas >= 3">&#9733;</span>
+      </div>
+      <div class="result-titulo">
+        {{ percentualAcerto === 100 ? 'Perfeito!' : percentualAcerto >= 60 ? 'Muito bem!' : 'Continue praticando!' }}
+      </div>
+      <div class="result-score">
+        <div class="score-item">
+          <span class="score-val">{{ acertos }}/{{ exercicios.length }}</span>
+          <span class="score-label">Acertos</span>
+        </div>
+        <div class="score-divider"></div>
+        <div class="score-item">
+          <span class="score-val">{{ percentualAcerto }}%</span>
+          <span class="score-label">Aproveitamento</span>
+        </div>
+        <div class="score-divider"></div>
+        <div class="score-item">
+          <span class="score-val xp-val">+{{ totalXP }}</span>
+          <span class="score-label">XP ganho</span>
+        </div>
+      </div>
+      <div class="result-acoes">
+        <button class="btn-voltar-licao" (click)="voltarParaLicao()">&#8592; Voltar à Lição</button>
+        <button class="btn-proxima-licao" *ngIf="proximaLicao" (click)="irParaProximaLicao()">
+          {{ proximaLicao.titulo }} &#8594;
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Exercício atual -->

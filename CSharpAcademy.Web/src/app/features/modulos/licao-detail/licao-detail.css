@@ -172,6 +172,42 @@
   color: #6a9955;
 }
 
+/* ── Breadcrumb ──────────────────────────────────── */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 28px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+  flex-shrink: 0;
+}
+
+.bc-item {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.bc-link {
+  cursor: pointer;
+  color: var(--accent);
+  transition: color 0.15s;
+}
+.bc-link:hover { color: var(--blue); }
+
+.bc-sep {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.bc-current {
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Banner lição concluída */
 .banner-concluida {
   background: rgba(137, 209, 133, 0.06);

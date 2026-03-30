@@ -28,7 +28,13 @@
     </ul>
   </aside>
 
-  <main class="content" *ngIf="licaoSelecionada">
+  <main class="content" #contentArea *ngIf="licaoSelecionada">
+    <nav class="breadcrumb" *ngIf="modulo">
+      <span class="bc-item bc-link" (click)="voltarParaModulos()">{{ modulo.titulo }}</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-item bc-current">{{ licaoSelecionada.titulo }}</span>
+    </nav>
+
     <div class="banner-concluida" *ngIf="licaoSelecionada.completada">
       ✅ Você já concluiu esta lição! Pode revisá-la à vontade.
     </div>

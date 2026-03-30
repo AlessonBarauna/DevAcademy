@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModuloService } from '../../../core/services/modulo';
-import { Exercicio, RespostaExercicioResult } from '../../../core/models/modulo.model';
+import { Exercicio, Licao, RespostaExercicioResult } from '../../../core/models/modulo.model';
 
 @Component({
   selector: 'app-exercicio-view',
@@ -11,6 +11,7 @@ import { Exercicio, RespostaExercicioResult } from '../../../core/models/modulo.
 })
 export class ExercicioView implements OnInit {
   exercicios: Exercicio[] = [];
+  licoes: Licao[] = [];
   indiceAtual = 0;
   moduloId!: number;
   licaoId!: number;
@@ -20,6 +21,7 @@ export class ExercicioView implements OnInit {
   respostaTexto = '';
   resultado: RespostaExercicioResult | null = null;
   totalXP = 0;
+  acertos = 0;
   finalizou = false;
 
   constructor(
@@ -40,6 +42,9 @@ export class ExercicioView implements OnInit {
       },
       error: () => { this.carregando = false; this.cdr.detectChanges(); }
     });
+    this.moduloService.getLicoes(this.moduloId).subscribe({
+      next: licoes => { this.licoes = licoes; this.cdr.detectChanges(); }
+    });
   }
 
   get exercicioAtual(): Exercicio | null {
@@ -59,6 +64,24 @@ export class ExercicioView implements OnInit {
     return this.exercicioAtual?.tipo === 'VerdadeiroFalso';
   }
 
+  get percentualAcerto(): number {
+    if (this.exercicios.length === 0) return 0;
+    return Math.round((this.acertos / this.exercicios.length) * 100);
+  }
+
+  get estrelas(): number {
+    const p = this.percentualAcerto;
+    if (p === 100) return 3;
+    if (p >= 60) return 2;
+    if (p >= 30) return 1;
+    return 0;
+  }
+
+  get proximaLicao(): Licao | null {
+    const idx = this.licoes.findIndex(l => l.id === this.licaoId);
+    return idx >= 0 && idx < this.licoes.length - 1 ? this.licoes[idx + 1] : null;
+  }
+
   selecionar(opcao: string): void {
     if (this.resultado) return;
     this.respostaSelecionada = opcao;
@@ -75,7 +98,10 @@ export class ExercicioView implements OnInit {
     this.moduloService.responderExercicio(this.licaoId, this.exercicioAtual.id, resposta).subscribe({
       next: res => {
         this.resultado = res;
-        if (res.correta) this.totalXP += this.exercicioAtual!.xpRecompensa;
+        if (res.correta) {
+          this.totalXP += this.exercicioAtual!.xpRecompensa;
+          this.acertos++;
+        }
         this.respondendo = false;
         this.cdr.detectChanges();
       },
@@ -95,6 +121,16 @@ export class ExercicioView implements OnInit {
   }
 
   voltarParaLicao(): void {
-    this.router.navigate(['/modulos', this.moduloId, 'licoes']);
+    this.router.navigate(['/modulos', this.moduloId, 'licoes'], {
+      queryParams: { licaoId: this.licaoId }
+    });
+  }
+
+  irParaProximaLicao(): void {
+    if (this.proximaLicao) {
+      this.router.navigate(['/modulos', this.moduloId, 'licoes'], {
+        queryParams: { licaoId: this.proximaLicao.id }
+      });
+    }
   }
 }

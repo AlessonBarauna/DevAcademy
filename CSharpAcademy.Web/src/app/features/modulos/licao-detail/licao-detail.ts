@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModuloService } from '../../../core/services/modulo';
 import { AuthService } from '../../../core/services/auth';
-import { ConquistaResultDto, Licao } from '../../../core/models/modulo.model';
+import { ConquistaResultDto, Licao, Modulo } from '../../../core/models/modulo.model';
 
 @Component({
   selector: 'app-licao-detail',
@@ -11,8 +11,11 @@ import { ConquistaResultDto, Licao } from '../../../core/models/modulo.model';
   styleUrl: './licao-detail.css',
 })
 export class LicaoDetail implements OnInit {
+  @ViewChild('contentArea') contentArea!: ElementRef<HTMLElement>;
+
   licoes: Licao[] = [];
   licaoSelecionada: Licao | null = null;
+  modulo: Modulo | null = null;
   moduloId!: number;
   carregando = true;
   concluindo = false;
@@ -30,6 +33,9 @@ export class LicaoDetail implements OnInit {
   ngOnInit(): void {
     this.moduloId = +this.route.snapshot.params['moduloId'];
     const licaoIdParam = this.route.snapshot.queryParams['licaoId'];
+    this.moduloService.getModulos().subscribe({
+      next: mods => { this.modulo = mods.find(m => m.id === this.moduloId) ?? null; this.cdr.detectChanges(); }
+    });
     this.moduloService.getLicoes(this.moduloId).subscribe({
       next: licoes => {
         this.licoes = licoes;
@@ -63,6 +69,7 @@ export class LicaoDetail implements OnInit {
   selecionarLicao(licao: Licao): void {
     this.licaoSelecionada = licao;
     this.mensagemConclusao = '';
+    setTimeout(() => this.contentArea?.nativeElement?.scrollTo({ top: 0, behavior: 'smooth' }), 0);
   }
 
   voltarParaModulos(): void {
