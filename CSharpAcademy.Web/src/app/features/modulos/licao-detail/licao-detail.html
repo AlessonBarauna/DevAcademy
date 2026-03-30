@@ -1,3 +1,13 @@
+<div class="conquista-toasts">
+  <div class="conquista-toast" *ngFor="let t of toastsConquistas">
+    <span class="toast-icone">{{ t.icone }}</span>
+    <div class="toast-texto">
+      <span class="toast-titulo">{{ t.titulo }}</span>
+      <span class="toast-desc">{{ t.descricao }}</span>
+    </div>
+  </div>
+</div>
+
 <div class="licao-page">
   <aside class="sidebar">
     <h3>Lições</h3>

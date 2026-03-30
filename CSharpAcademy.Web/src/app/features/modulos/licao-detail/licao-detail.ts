@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModuloService } from '../../../core/services/modulo';
 import { AuthService } from '../../../core/services/auth';
-import { Licao } from '../../../core/models/modulo.model';
+import { ConquistaResultDto, Licao } from '../../../core/models/modulo.model';
 
 @Component({
   selector: 'app-licao-detail',
@@ -17,6 +17,7 @@ export class LicaoDetail implements OnInit {
   carregando = true;
   concluindo = false;
   mensagemConclusao = '';
+  toastsConquistas: ConquistaResultDto[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -49,6 +50,19 @@ export class LicaoDetail implements OnInit {
     this.router.navigate(['/modulos', this.moduloId, 'licoes', this.licaoSelecionada.id, 'exercicios']);
   }
 
+  exibirToastsConquistas(conquistas: ConquistaResultDto[]): void {
+    conquistas.forEach((c, i) => {
+      setTimeout(() => {
+        this.toastsConquistas.push(c);
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          this.toastsConquistas = this.toastsConquistas.filter(t => t !== c);
+          this.cdr.detectChanges();
+        }, 4000);
+      }, i * 600);
+    });
+  }
+
   concluirLicao(): void {
     if (!this.licaoSelecionada || this.licaoSelecionada.completada) return;
     this.concluindo = true;
@@ -61,6 +75,9 @@ export class LicaoDetail implements OnInit {
         if (!result.jaConcluidaAntes) {
           this.authService.atualizarProgresso(result.xpTotal, result.novoNivel, result.streakAtual);
           this.mensagemConclusao = `+${result.xpGanho} XP! Nível ${result.novoNivel} 🔥 ${result.streakAtual} dia(s) de streak`;
+          if (result.novasConquistas?.length) {
+            this.exibirToastsConquistas(result.novasConquistas);
+          }
         } else {
           this.mensagemConclusao = 'Lição já concluída anteriormente.';
         }
