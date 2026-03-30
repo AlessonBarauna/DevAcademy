@@ -1,0 +1,156 @@
+.perfil-page {
+  min-height: 100vh;
+  background: #0f0f23;
+  color: #e0e0e0;
+  padding: 0 0 40px;
+}
+
+.perfil-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 32px;
+  background: #1a1a3e;
+  border-bottom: 1px solid #2a2a5a;
+}
+.perfil-header h1 { margin: 0; font-size: 22px; }
+
+.btn-voltar {
+  background: none;
+  border: 1px solid #3a3a6a;
+  color: #a78bfa;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.btn-voltar:hover { background: #2a2a5a; }
+
+.perfil-content {
+  max-width: 700px;
+  margin: 32px auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Cartão principal */
+.perfil-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: #1a1a3e;
+  border: 1px solid #2a2a5a;
+  border-radius: 16px;
+  padding: 28px;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.info { flex: 1; }
+.info h2 { font-size: 24px; margin-bottom: 4px; }
+.email { display: block; font-size: 13px; color: #6b7280; margin-bottom: 10px; }
+
+.nivel-badge {
+  display: inline-block;
+  background: #4c1d95;
+  color: #a78bfa;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.xp-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #9ca3af;
+  margin-bottom: 6px;
+}
+.xp-bar {
+  height: 8px;
+  background: #2a2a5a;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7c3aed, #a78bfa);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* Streak */
+.streak-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.streak-card {
+  background: #1a1a3e;
+  border: 1px solid #2a2a5a;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+.streak-card.atual { border-color: #f97316; }
+.streak-card.maximo { border-color: #fbbf24; }
+
+.streak-valor { font-size: 36px; font-weight: 700; margin-bottom: 6px; }
+.streak-label { font-size: 12px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Conquistas */
+.conquistas-section h3 {
+  font-size: 16px;
+  color: #a78bfa;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.conquistas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+.conquista-badge {
+  background: #1a1a3e;
+  border: 1px solid #4c1d95;
+  border-radius: 12px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+.conquista-badge:hover { border-color: #a78bfa; }
+
+.conquista-icone { font-size: 32px; }
+.conquista-titulo { font-size: 12px; font-weight: 600; color: #e0e0e0; }
+.conquista-desc { font-size: 11px; color: #6b7280; line-height: 1.3; }
+
+.loading { color: #9ca3af; }
+.vazio { color: #6b7280; font-size: 14px; padding: 20px 0; }
+
+@media (max-width: 600px) {
+  .perfil-card { flex-direction: column; text-align: center; }
+  .streak-section { grid-template-columns: 1fr; }
+}

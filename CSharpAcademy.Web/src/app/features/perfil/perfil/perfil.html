@@ -1,0 +1,57 @@
+<div class="perfil-page">
+  <header class="perfil-header">
+    <button class="btn-voltar" (click)="voltar()">← Dashboard</button>
+    <h1>👤 Meu Perfil</h1>
+  </header>
+
+  <div class="perfil-content" *ngIf="usuario">
+
+    <!-- Cartão principal -->
+    <section class="perfil-card">
+      <div class="avatar">{{ usuario.nome.charAt(0).toUpperCase() }}</div>
+      <div class="info">
+        <h2>{{ usuario.nome }}</h2>
+        <span class="email">{{ usuario.email }}</span>
+        <span class="nivel-badge">{{ nivelLabel }}</span>
+        <div class="xp-bar-wrap">
+          <div class="xp-bar-label">
+            <span>{{ usuario.xp }} XP</span>
+            <span *ngIf="usuario.nivelAtual < 4">Meta: {{ xpParaSubir }} XP</span>
+            <span *ngIf="usuario.nivelAtual === 4">Nível máximo!</span>
+          </div>
+          <div class="xp-bar">
+            <div class="xp-fill" [style.width.%]="percentualXP"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Streak -->
+    <section class="streak-section">
+      <div class="streak-card atual">
+        <div class="streak-valor">🔥 {{ usuario.streakAtual ?? 0 }}</div>
+        <div class="streak-label">Streak Atual</div>
+      </div>
+      <div class="streak-card maximo">
+        <div class="streak-valor">⚡ {{ usuario.streakMaximo ?? 0 }}</div>
+        <div class="streak-label">Maior Streak</div>
+      </div>
+    </section>
+
+    <!-- Conquistas -->
+    <section class="conquistas-section">
+      <h3>🏅 Conquistas</h3>
+      <div class="loading" *ngIf="carregando">Carregando...</div>
+      <div class="vazio" *ngIf="!carregando && conquistas.length === 0">
+        Nenhuma conquista ainda. Complete lições para desbloquear badges!
+      </div>
+      <div class="conquistas-grid" *ngIf="!carregando && conquistas.length > 0">
+        <div class="conquista-badge" *ngFor="let c of conquistas" [title]="c.descricao">
+          <span class="conquista-icone">{{ c.icone }}</span>
+          <span class="conquista-titulo">{{ c.titulo }}</span>
+          <span class="conquista-desc">{{ c.descricao }}</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

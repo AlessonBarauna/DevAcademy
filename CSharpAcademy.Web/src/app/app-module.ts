@@ -10,6 +10,7 @@ import { ModulosModule } from './features/modulos/modulos-module';
 import { ExerciciosModule } from './features/exercicios/exercicios-module';
 import { DashboardModule } from './features/dashboard/dashboard-module';
 import { RankingModule } from './features/ranking/ranking-module';
+import { PerfilModule } from './features/perfil/perfil-module';
 import { MarkdownModule } from 'ngx-markdown';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
@@ -24,6 +25,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     ExerciciosModule,
     DashboardModule,
     RankingModule,
+    PerfilModule,
     MarkdownModule.forRoot(),
   ],
   providers: [
