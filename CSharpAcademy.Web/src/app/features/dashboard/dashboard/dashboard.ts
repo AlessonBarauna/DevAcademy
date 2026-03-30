@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth';
 import { ModuloService } from '../../../core/services/modulo';
@@ -35,20 +34,11 @@ export class Dashboard implements OnInit {
   constructor(
     private authService: AuthService,
     private moduloService: ModuloService,
-    private http: HttpClient,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.usuario = this.authService.usuarioAtual;
-    // Busca XP e nível atualizados da API (localStorage pode estar desatualizado)
-    this.http.get<UsuarioResponseDto>('/api/auth/perfil').subscribe({
-      next: perfil => {
-        if (this.usuario) {
-          this.usuario = { ...this.usuario, xp: perfil.xp, nivelAtual: perfil.nivelAtual };
-        }
-      }
-    });
     this.moduloService.getModulos().subscribe({
       next: mods => {
         this.modulos = mods;
