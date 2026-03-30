@@ -7,6 +7,8 @@ import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { AuthModule } from './features/auth/auth-module';
 import { ModulosModule } from './features/modulos/modulos-module';
+import { ExerciciosModule } from './features/exercicios/exercicios-module';
+import { DashboardModule } from './features/dashboard/dashboard-module';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 @NgModule({
@@ -16,7 +18,9 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     FormsModule,
     AppRoutingModule,
     AuthModule,
-    ModulosModule
+    ModulosModule,
+    ExerciciosModule,
+    DashboardModule,
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

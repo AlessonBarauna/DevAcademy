@@ -1,0 +1,86 @@
+<div class="ex-page">
+  <div class="ex-header">
+    <button class="btn-voltar" (click)="voltarParaLicao()">&#8592; Voltar</button>
+    <span class="progresso">{{ indiceAtual + 1 }} / {{ exercicios.length }}</span>
+    <span class="xp-acumulado">XP: {{ totalXP }}</span>
+  </div>
+
+  <div class="loading" *ngIf="carregando">Carregando exercícios...</div>
+
+  <!-- Finalizado -->
+  <div class="finalizado" *ngIf="finalizou">
+    <div class="icone">🎉</div>
+    <h2>Parabéns!</h2>
+    <p>Você completou todos os exercícios desta lição.</p>
+    <p class="xp-total">Total de XP ganho: <strong>{{ totalXP }} XP</strong></p>
+    <button class="btn-voltar-licao" (click)="voltarParaLicao()">Voltar para a Lição</button>
+  </div>
+
+  <!-- Exercício atual -->
+  <div class="ex-card" *ngIf="!carregando && !finalizou && exercicioAtual">
+    <div class="barra-progresso">
+      <div class="barra-fill" [style.width.%]="((indiceAtual) / exercicios.length) * 100"></div>
+    </div>
+
+    <div class="enunciado">
+      <p>{{ exercicioAtual.enunciado }}</p>
+    </div>
+
+    <!-- Múltipla Escolha -->
+    <div class="opcoes" *ngIf="tipoMultiplaEscolha || tipoVerdadeiroFalso">
+      <button
+        *ngFor="let opcao of opcoes"
+        class="opcao"
+        [class.selecionada]="respostaSelecionada === opcao"
+        [class.correta]="resultado && opcao === resultado.respostaCorreta"
+        [class.errada]="resultado && respostaSelecionada === opcao && !resultado.correta"
+        [disabled]="!!resultado"
+        (click)="selecionar(opcao)">
+        {{ opcao }}
+      </button>
+    </div>
+
+    <!-- Verdadeiro/Falso sem opcoesJson (fallback) -->
+    <div class="opcoes" *ngIf="tipoVerdadeiroFalso && opcoes.length === 0">
+      <button class="opcao" [class.selecionada]="respostaSelecionada === 'Verdadeiro'"
+        [disabled]="!!resultado" (click)="selecionar('Verdadeiro')">Verdadeiro</button>
+      <button class="opcao" [class.selecionada]="respostaSelecionada === 'Falso'"
+        [disabled]="!!resultado" (click)="selecionar('Falso')">Falso</button>
+    </div>
+
+    <!-- Código / Preencher Espaços -->
+    <div class="resposta-texto" *ngIf="!tipoMultiplaEscolha && !tipoVerdadeiroFalso">
+      <input
+        type="text"
+        [(ngModel)]="respostaTexto"
+        placeholder="Digite sua resposta..."
+        [disabled]="!!resultado"
+        (keyup.enter)="responder()" />
+    </div>
+
+    <!-- Feedback -->
+    <div class="feedback correta-msg" *ngIf="resultado?.correta">
+      ✓ Correto! +{{ exercicioAtual.xpRecompensa }} XP
+    </div>
+    <div class="feedback errada-msg" *ngIf="resultado && !resultado.correta">
+      ✗ Incorreto. {{ resultado.explicacao }}
+      <br><strong>Resposta: {{ resultado.respostaCorreta }}</strong>
+    </div>
+
+    <div class="acoes">
+      <button class="btn-responder" *ngIf="!resultado"
+        [disabled]="respondendo || (!respostaSelecionada && !respostaTexto)"
+        (click)="responder()">
+        {{ respondendo ? 'Verificando...' : 'Responder' }}
+      </button>
+      <button class="btn-proximo" *ngIf="resultado" (click)="proximo()">
+        {{ indiceAtual < exercicios.length - 1 ? 'Próximo' : 'Finalizar' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="sem-exercicios" *ngIf="!carregando && !finalizou && exercicios.length === 0">
+    <p>Nenhum exercício disponível para esta lição.</p>
+    <button class="btn-voltar-licao" (click)="voltarParaLicao()">Voltar</button>
+  </div>
+</div>

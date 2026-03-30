@@ -24,6 +24,15 @@
       <pre>{{ licaoSelecionada.conteudoTeoricoMarkdown }}</pre>
     </div>
 
+    <div class="acoes">
+      <button class="btn-exercicios" (click)="irParaExercicios()">&#128196; Praticar Exercícios</button>
+      <button class="btn-concluir" [disabled]="licaoSelecionada.completada || concluindo" (click)="concluirLicao()">
+        {{ licaoSelecionada.completada ? '✓ Concluída' : concluindo ? 'Salvando...' : 'Marcar como Concluída' }}
+      </button>
+    </div>
+
+    <div class="mensagem-conclusao" *ngIf="mensagemConclusao">{{ mensagemConclusao }}</div>
+
     <!-- Professor Assistente integrado -->
     <app-assistant-chat [licaoId]="licaoSelecionada.id"></app-assistant-chat>
   </main>

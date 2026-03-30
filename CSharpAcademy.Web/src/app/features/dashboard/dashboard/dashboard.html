@@ -1,0 +1,70 @@
+<div class="dash-page">
+  <header class="dash-header">
+    <div class="logo">&#127891; C# Academy</div>
+    <nav>
+      <a routerLink="/modulos">Módulos</a>
+      <button class="btn-logout" (click)="logout()">Sair</button>
+    </nav>
+  </header>
+
+  <div class="dash-content" *ngIf="usuario">
+    <!-- Perfil -->
+    <section class="perfil-card">
+      <div class="avatar">{{ usuario.nome.charAt(0).toUpperCase() }}</div>
+      <div class="perfil-info">
+        <h2>{{ usuario.nome }}</h2>
+        <span class="nivel-badge">{{ nivelLabel }}</span>
+        <div class="xp-bar-wrap">
+          <div class="xp-bar-label">
+            <span>{{ usuario.xp }} XP</span>
+            <span *ngIf="usuario.nivelAtual < 4">Meta: {{ xpParaSubir }} XP</span>
+            <span *ngIf="usuario.nivelAtual === 4">Nível máximo!</span>
+          </div>
+          <div class="xp-bar">
+            <div class="xp-fill" [style.width.%]="percentualXP"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Estatísticas -->
+    <section class="stats">
+      <div class="stat-card">
+        <div class="stat-valor">{{ totalCompletadas }}</div>
+        <div class="stat-label">Lições Concluídas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-valor">{{ totalLicoes }}</div>
+        <div class="stat-label">Total de Lições</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-valor">{{ percentualGeral }}%</div>
+        <div class="stat-label">Progresso Geral</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-valor">{{ usuario.xp }}</div>
+        <div class="stat-label">XP Total</div>
+      </div>
+    </section>
+
+    <!-- Progresso por módulo -->
+    <section class="modulos-progresso">
+      <h3>Progresso por Módulo</h3>
+      <div class="loading" *ngIf="carregando">Carregando...</div>
+      <div class="modulo-item" *ngFor="let m of modulos" (click)="irParaModulo(m)">
+        <div class="modulo-info">
+          <span class="modulo-titulo">{{ m.titulo }}</span>
+          <span class="modulo-nivel">{{ m.nivelMinimo }}</span>
+        </div>
+        <div class="modulo-bar-wrap">
+          <div class="modulo-bar">
+            <div class="modulo-fill"
+              [style.width.%]="m.totalLicoes > 0 ? (m.licoesCompletadas / m.totalLicoes) * 100 : 0">
+            </div>
+          </div>
+          <span class="modulo-contagem">{{ m.licoesCompletadas }}/{{ m.totalLicoes }}</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

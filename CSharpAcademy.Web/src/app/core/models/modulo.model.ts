@@ -18,3 +18,26 @@ export interface Licao {
   xpRecompensa: number;
   completada: boolean;
 }
+
+export interface Exercicio {
+  id: number;
+  licaoId: number;
+  enunciado: string;
+  tipo: string;
+  opcoesJson: string;
+  ordem: number;
+  xpRecompensa: number;
+}
+
+export interface RespostaExercicioResult {
+  correta: boolean;
+  explicacao: string | null;
+  respostaCorreta: string | null;
+}
+
+export interface ConcluirLicaoResult {
+  xpGanho: number;
+  novoNivel: number;
+  xpTotal: number;
+  jaConcluidaAntes: boolean;
+}

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModuloService } from '../../../core/services/modulo';
+import { AuthService } from '../../../core/services/auth';
 import { Licao } from '../../../core/models/modulo.model';
 
 @Component({
@@ -14,8 +15,15 @@ export class LicaoDetail implements OnInit {
   licaoSelecionada: Licao | null = null;
   moduloId!: number;
   carregando = true;
+  concluindo = false;
+  mensagemConclusao = '';
 
-  constructor(private route: ActivatedRoute, private moduloService: ModuloService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private moduloService: ModuloService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.moduloId = +this.route.snapshot.params['moduloId'];
@@ -31,5 +39,35 @@ export class LicaoDetail implements OnInit {
 
   selecionarLicao(licao: Licao): void {
     this.licaoSelecionada = licao;
+    this.mensagemConclusao = '';
+  }
+
+  irParaExercicios(): void {
+    if (!this.licaoSelecionada) return;
+    this.router.navigate(['/modulos', this.moduloId, 'licoes', this.licaoSelecionada.id, 'exercicios']);
+  }
+
+  concluirLicao(): void {
+    if (!this.licaoSelecionada || this.licaoSelecionada.completada) return;
+    this.concluindo = true;
+    this.moduloService.concluirLicao(this.moduloId, this.licaoSelecionada.id).subscribe({
+      next: result => {
+        this.licaoSelecionada!.completada = true;
+        const idx = this.licoes.findIndex(l => l.id === this.licaoSelecionada!.id);
+        if (idx >= 0) this.licoes[idx].completada = true;
+        this.mensagemConclusao = result.jaConcluidaAntes
+          ? 'Lição já concluída anteriormente.'
+          : `+${result.xpGanho} XP ganhos! Nível atual: ${result.novoNivel}`;
+        this.concluindo = false;
+        // Atualiza XP no AuthService (localStorage)
+        const u = this.authService.usuarioAtual;
+        if (u && !result.jaConcluidaAntes) {
+          (u as any).xp = result.xpTotal;
+          (u as any).nivelAtual = result.novoNivel;
+          localStorage.setItem('usuario', JSON.stringify(u));
+        }
+      },
+      error: () => { this.concluindo = false; }
+    });
   }
 }
