@@ -1,61 +1,85 @@
 .ranking-page {
   min-height: 100vh;
-  background: #0f0f23;
-  color: #e0e0e0;
+  background: var(--bg);
+  color: var(--text);
   padding: 0 0 40px;
+  font-family: var(--font-ui);
 }
 
 .ranking-header {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 20px 32px;
-  background: #1a1a3e;
-  border-bottom: 1px solid #2a2a5a;
+  gap: 16px;
+  padding: 0 24px;
+  height: 48px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
 }
-.ranking-header h1 { margin: 0; font-size: 22px; }
+
+.ranking-header h1 {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--yellow);
+}
 
 .btn-voltar {
   background: none;
-  border: 1px solid #3a3a6a;
-  color: #a78bfa;
-  padding: 8px 14px;
-  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 5px 12px;
+  border-radius: var(--radius);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  transition: border-color 0.15s, color 0.15s;
 }
-.btn-voltar:hover { background: #2a2a5a; }
+.btn-voltar:hover { border-color: var(--accent); color: var(--text); }
 
-.loading { text-align: center; padding: 60px; color: #9ca3af; }
+.loading {
+  text-align: center;
+  padding: 60px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
 
 .ranking-list {
   max-width: 640px;
-  margin: 32px auto;
+  margin: 28px auto;
   padding: 0 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .ranking-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  background: #1a1a3e;
-  border: 1px solid #2a2a5a;
-  border-radius: 12px;
-  padding: 16px 20px;
-  transition: transform 0.15s;
+  gap: 14px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  transition: border-color 0.15s;
 }
-.ranking-item:hover { transform: translateX(4px); }
-.ranking-item.top3 { border-color: #fbbf24; }
-.ranking-item.eu-mesmo { border-color: #a78bfa; background: #1e1a3e; }
+
+.ranking-item:hover { border-color: var(--border-accent); }
+
+.ranking-item.top3 { border-color: rgba(220, 220, 170, 0.25); }
+.ranking-item.eu-mesmo {
+  border-color: rgba(0, 122, 204, 0.4);
+  background: rgba(0, 122, 204, 0.05);
+}
 
 .posicao {
-  font-size: 22px;
-  min-width: 40px;
+  font-size: 18px;
+  min-width: 36px;
   text-align: center;
+  font-family: var(--font-mono);
   font-weight: 700;
+  color: var(--text-muted);
 }
 
 .usuario-info {
@@ -66,38 +90,75 @@
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: var(--font-mono);
   font-weight: 700;
-  font-size: 16px;
-  color: white;
+  font-size: 14px;
+  color: var(--teal);
   flex-shrink: 0;
 }
 
 .dados { display: flex; flex-direction: column; gap: 2px; }
-.nome { font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 8px; }
-.eu-badge {
-  background: #a78bfa;
-  color: #0f0f23;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 10px;
+
+.nome {
+  font-weight: 500;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.nivel { font-size: 12px; color: #9ca3af; }
+
+.eu-badge {
+  background: rgba(0, 122, 204, 0.2);
+  color: var(--blue);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+.nivel {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
 
 .metricas {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 4px;
+  gap: 3px;
 }
-.xp { font-weight: 700; color: #a78bfa; font-size: 15px; }
-.streak { font-size: 13px; color: #f97316; }
 
-.vazio { text-align: center; padding: 40px; color: #6b7280; }
+.xp {
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--yellow);
+  font-size: 13px;
+}
+
+.streak {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--orange);
+}
+
+.vazio {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}

@@ -1,1 +1,76 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ================================================
+   Design System — VS Code Dark+ / Terminal
+   ================================================ */
+:root {
+  /* Backgrounds */
+  --bg:          #1e1e1e;
+  --bg-panel:    #252526;
+  --bg-card:     #2d2d30;
+  --bg-input:    #3c3c3c;
+  --bg-hover:    #2a2d2e;
+  --bg-active:   #37373d;
+
+  /* Borders */
+  --border:        #3e3e42;
+  --border-subtle: #2d2d30;
+  --border-accent: #007acc;
+
+  /* Text */
+  --text:       #d4d4d4;
+  --text-dim:   #9d9d9d;
+  --text-muted: #5a5a5a;
+
+  /* Syntax / Accent Colors */
+  --blue:   #4fc1ff;
+  --teal:   #4ec9b0;
+  --green:  #89d185;
+  --purple: #c586c0;
+  --yellow: #dcdcaa;
+  --orange: #ce9178;
+  --red:    #f44747;
+  --cyan:   #9cdcfe;
+
+  /* Semantic */
+  --accent:  #007acc;
+  --success: #89d185;
+  --warning: #dcdcaa;
+  --error:   #f44747;
+
+  /* Typography */
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  --font-ui:   'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  /* Radii */
+  --radius:    4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+}
+
+/* ================================================
+   Reset & Base
+   ================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: var(--font-ui);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ================================================
+   Scrollbar
+   ================================================ */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #424242; border-radius: var(--radius); border: 2px solid var(--bg); }
+::-webkit-scrollbar-thumb:hover { background: #555; }

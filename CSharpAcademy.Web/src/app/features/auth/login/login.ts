@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth';
 
@@ -14,7 +14,7 @@ export class Login {
   erro = '';
   carregando = false;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router, private cdr: ChangeDetectorRef) {}
 
   entrar(): void {
     this.erro = '';
@@ -24,6 +24,7 @@ export class Login {
       error: () => {
         this.erro = 'E-mail ou senha inválidos.';
         this.carregando = false;
+        this.cdr.detectChanges();
       }
     });
   }

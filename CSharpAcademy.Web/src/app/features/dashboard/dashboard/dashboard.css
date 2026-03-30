@@ -1,157 +1,231 @@
 .dash-page {
   min-height: 100vh;
-  background: #0f0f23;
-  color: #e0e0e0;
+  background: var(--bg);
+  color: var(--text);
 }
 
+/* Header — VS Code title bar style */
 .dash-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 32px;
-  background: #1a1a3e;
-  border-bottom: 1px solid #2a2a5a;
+  padding: 0 20px;
+  height: 48px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .logo {
-  font-size: 20px;
-  font-weight: 700;
-  color: #a78bfa;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal);
+  letter-spacing: 0.3px;
 }
 
-nav { display: flex; align-items: center; gap: 24px; }
-nav a { color: #9ca3af; text-decoration: none; font-size: 14px; }
-nav a:hover { color: #a78bfa; }
+nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+nav a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  transition: color 0.1s, background 0.1s;
+  font-family: var(--font-ui);
+}
+
+nav a:hover { color: var(--text); background: var(--bg-hover); }
 
 .btn-logout {
   background: transparent;
-  border: 1px solid #4a4a7a;
-  color: #9ca3af;
-  padding: 6px 16px;
-  border-radius: 6px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 4px 12px;
+  border-radius: var(--radius);
   cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  margin-left: 8px;
+  transition: border-color 0.15s, color 0.15s;
 }
-.btn-logout:hover { border-color: #f87171; color: #f87171; }
 
+.btn-logout:hover { border-color: var(--red); color: var(--red); }
+
+/* Main content */
 .dash-content {
-  max-width: 900px;
-  margin: 32px auto;
+  max-width: 960px;
+  margin: 28px auto;
   padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-/* Perfil */
+/* ── Perfil ───────────────────────────────────── */
 .perfil-card {
   display: flex;
   align-items: center;
-  gap: 24px;
-  background: #1a1a3e;
-  border-radius: 16px;
-  padding: 28px;
-  margin-bottom: 28px;
-  border: 1px solid #2a2a5a;
+  gap: 20px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
 }
 
 .avatar {
-  width: 72px;
-  height: 72px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  background: var(--bg-card);
+  border: 2px solid var(--teal);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
+  font-family: var(--font-mono);
+  font-size: 22px;
   font-weight: 700;
+  color: var(--teal);
   flex-shrink: 0;
 }
 
 .perfil-info { flex: 1; }
-.perfil-info h2 { font-size: 22px; margin-bottom: 8px; }
+
+.perfil-info h2 {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--yellow);
+  margin-bottom: 6px;
+}
 
 .nivel-badge {
-  background: #4c1d95;
-  color: #a78bfa;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
   display: inline-block;
+  background: rgba(0, 122, 204, 0.12);
+  border: 1px solid rgba(0, 122, 204, 0.35);
+  color: var(--blue);
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  font-weight: 500;
   margin-bottom: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .xp-bar-label {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
-  color: #9ca3af;
-  margin-bottom: 6px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  margin-bottom: 5px;
 }
 
 .xp-bar {
-  height: 8px;
-  background: #2a2a5a;
-  border-radius: 4px;
+  height: 3px;
+  background: var(--bg-card);
+  border-radius: 2px;
   overflow: hidden;
 }
 
 .xp-fill {
   height: 100%;
-  background: linear-gradient(90deg, #7c3aed, #a78bfa);
-  border-radius: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--teal));
+  border-radius: 2px;
   transition: width 0.5s ease;
 }
 
-/* Stats */
+/* ── Stats ────────────────────────────────────── */
 .stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 28px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
 }
 
 .stat-card {
-  background: #1a1a3e;
-  border: 1px solid #2a2a5a;
-  border-radius: 12px;
-  padding: 20px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 12px;
   text-align: center;
 }
-.stat-streak { border-color: #f97316; }
+
+.stat-streak { border-color: rgba(220, 220, 170, 0.25); }
 
 .stat-valor {
-  font-size: 32px;
+  font-size: 22px;
   font-weight: 700;
-  color: #a78bfa;
-  margin-bottom: 4px;
+  font-family: var(--font-mono);
+  color: var(--yellow);
+  margin-bottom: 5px;
 }
 
 .stat-label {
-  font-size: 12px;
-  color: #9ca3af;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Módulos */
-.modulos-progresso h3 {
-  font-size: 16px;
-  color: #a78bfa;
+  font-size: 9px;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 16px;
+  font-family: var(--font-mono);
 }
 
-.modulo-item {
-  background: #1a1a3e;
-  border: 1px solid #2a2a5a;
-  border-radius: 12px;
-  padding: 16px 20px;
+/* ── Section titles ───────────────────────────── */
+.conquistas h3,
+.modulos-progresso h3 {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
   margin-bottom: 12px;
-  cursor: pointer;
-  transition: border-color 0.2s;
 }
-.modulo-item:hover { border-color: #7c3aed; }
+
+/* ── Conquistas ───────────────────────────────── */
+.conquistas-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.conquista-badge {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 76px;
+  cursor: default;
+  transition: border-color 0.15s;
+}
+
+.conquista-badge:hover { border-color: var(--teal); }
+.conquista-icone { font-size: 22px; }
+.conquista-titulo { font-size: 10px; color: var(--text-dim); text-align: center; font-family: var(--font-mono); }
+
+/* ── Módulos ──────────────────────────────────── */
+.modulo-item {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 13px 16px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.modulo-item:hover { border-color: var(--accent); background: var(--bg-hover); }
 
 .modulo-info {
   display: flex;
@@ -160,85 +234,52 @@ nav a:hover { color: #a78bfa; }
   margin-bottom: 10px;
 }
 
-.modulo-titulo { font-size: 15px; font-weight: 600; }
-.modulo-nivel {
-  font-size: 12px;
-  color: #a78bfa;
-  background: #2d1b69;
-  padding: 2px 10px;
-  border-radius: 12px;
+.modulo-titulo {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--cyan);
+  font-weight: 500;
 }
 
-.modulo-bar-wrap {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.modulo-nivel {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.3px;
 }
+
+.modulo-bar-wrap { display: flex; align-items: center; gap: 12px; }
 
 .modulo-bar {
   flex: 1;
-  height: 6px;
-  background: #2a2a5a;
-  border-radius: 3px;
+  height: 3px;
+  background: var(--bg-card);
+  border-radius: 2px;
   overflow: hidden;
 }
 
 .modulo-fill {
   height: 100%;
-  background: linear-gradient(90deg, #059669, #34d399);
-  border-radius: 3px;
+  background: var(--green);
+  border-radius: 2px;
   transition: width 0.4s ease;
 }
 
-.modulo-contagem { font-size: 12px; color: #9ca3af; white-space: nowrap; }
-
-.loading { color: #9ca3af; }
-.erro-msg { color: #f87171; padding: 12px 0; font-size: 0.875rem; }
-
-/* Conquistas */
-.conquistas {
-  margin-bottom: 28px;
+.modulo-contagem {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
-.conquistas h3 {
-  font-size: 16px;
-  color: #a78bfa;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 16px;
-}
+.loading { color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; }
+.erro-msg { color: var(--red); padding: 10px 0; font-size: 12px; font-family: var(--font-mono); }
 
-.conquistas-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.conquista-badge {
-  background: #1a1a3e;
-  border: 1px solid #4c1d95;
-  border-radius: 12px;
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  min-width: 90px;
-  cursor: default;
-  transition: border-color 0.2s;
-}
-.conquista-badge:hover { border-color: #a78bfa; }
-
-.conquista-icone { font-size: 28px; }
-
-.conquista-titulo {
-  font-size: 11px;
-  color: #9ca3af;
-  text-align: center;
-  line-height: 1.3;
-}
-
-@media (max-width: 600px) {
-  .stats { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 700px) {
+  .stats { grid-template-columns: repeat(3, 1fr); }
   .perfil-card { flex-direction: column; text-align: center; }
 }

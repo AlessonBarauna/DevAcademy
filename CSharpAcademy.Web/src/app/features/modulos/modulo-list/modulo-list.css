@@ -1,102 +1,139 @@
 .page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 40px 20px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 32px 24px;
+  font-family: var(--font-ui);
 }
 
 .page-header {
-  text-align: center;
-  margin-bottom: 40px;
+  max-width: 960px;
+  margin: 0 auto 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
 }
 
 .page-header h1 {
-  font-size: 2.5rem;
-  color: white;
-  margin: 0 0 8px;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--yellow);
+  margin-bottom: 4px;
 }
 
 .page-header p {
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 1.1rem;
-  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-family: var(--font-mono);
 }
+
+.page-header p::before { content: '// '; color: #6a9955; }
 
 .loading {
   text-align: center;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 40px;
 }
 
 .modulos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-  max-width: 1000px;
+  gap: 14px;
+  max-width: 960px;
   margin: 0 auto;
 }
 
 .modulo-card {
-  background: white;
-  border-radius: 12px;
-  padding: 24px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: border-color 0.15s, transform 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+
+.modulo-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 2px; height: 100%;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 0.15s;
 }
 
 .modulo-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  border-color: var(--accent);
+  transform: translateY(-2px);
 }
+
+.modulo-card:hover::after { opacity: 1; }
 
 .modulo-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 12px;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .nivel-badge {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 20px;
-  background: #e0e7ff;
-  color: #4338ca;
+  font-size: 9px;
+  font-family: var(--font-mono);
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
+.nivel-iniciante { border-color: rgba(137, 209, 133, 0.3); color: var(--green); }
+.nivel-intermediario { border-color: rgba(220, 220, 170, 0.3); color: var(--yellow); }
+.nivel-avancado { border-color: rgba(197, 134, 192, 0.3); color: var(--purple); }
+.nivel-especialista { border-color: rgba(79, 193, 255, 0.3); color: var(--blue); }
+
 .xp-badge {
-  font-size: 12px;
-  color: #6b7280;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
 }
 
 .modulo-card h2 {
-  font-size: 1.1rem;
-  color: #1f2937;
-  margin: 0 0 8px;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--cyan);
+  margin-bottom: 6px;
+  font-weight: 500;
 }
 
 .modulo-card p {
-  font-size: 0.875rem;
-  color: #6b7280;
-  margin: 0 0 16px;
-  line-height: 1.5;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  line-height: 1.55;
 }
 
 .progress-bar {
-  height: 6px;
-  background: #e5e7eb;
-  border-radius: 3px;
+  height: 3px;
+  background: var(--bg-card);
+  border-radius: 2px;
   overflow: hidden;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #667eea, #764ba2);
-  border-radius: 3px;
+  background: var(--green);
+  border-radius: 2px;
   transition: width 0.4s;
 }
 
 .progress-text {
-  font-size: 12px;
-  color: #9ca3af;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
 }

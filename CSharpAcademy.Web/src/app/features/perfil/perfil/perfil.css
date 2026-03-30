@@ -1,96 +1,132 @@
 .perfil-page {
   min-height: 100vh;
-  background: #0f0f23;
-  color: #e0e0e0;
+  background: var(--bg);
+  color: var(--text);
   padding: 0 0 40px;
+  font-family: var(--font-ui);
 }
 
 .perfil-header {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 20px 32px;
-  background: #1a1a3e;
-  border-bottom: 1px solid #2a2a5a;
+  gap: 16px;
+  padding: 0 24px;
+  height: 48px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
 }
-.perfil-header h1 { margin: 0; font-size: 22px; }
+
+.perfil-header h1 {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--yellow);
+}
 
 .btn-voltar {
   background: none;
-  border: 1px solid #3a3a6a;
-  color: #a78bfa;
-  padding: 8px 14px;
-  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 5px 12px;
+  border-radius: var(--radius);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  transition: border-color 0.15s, color 0.15s;
 }
-.btn-voltar:hover { background: #2a2a5a; }
+.btn-voltar:hover { border-color: var(--accent); color: var(--text); }
 
 .perfil-content {
   max-width: 700px;
-  margin: 32px auto;
+  margin: 28px auto;
   padding: 0 24px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 /* Cartão principal */
 .perfil-card {
   display: flex;
   align-items: center;
-  gap: 24px;
-  background: #1a1a3e;
-  border: 1px solid #2a2a5a;
-  border-radius: 16px;
-  padding: 28px;
+  gap: 22px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--teal);
+  border-radius: var(--radius-lg);
+  padding: 24px;
 }
 
 .avatar {
-  width: 80px;
-  height: 80px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  background: var(--bg-card);
+  border: 2px solid var(--teal);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
+  font-family: var(--font-mono);
+  font-size: 26px;
   font-weight: 700;
+  color: var(--teal);
   flex-shrink: 0;
 }
 
 .info { flex: 1; }
-.info h2 { font-size: 24px; margin-bottom: 4px; }
-.email { display: block; font-size: 13px; color: #6b7280; margin-bottom: 10px; }
+
+.info h2 {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--yellow);
+  margin-bottom: 3px;
+}
+
+.email {
+  display: block;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
 
 .nivel-badge {
   display: inline-block;
-  background: #4c1d95;
-  color: #a78bfa;
-  padding: 4px 12px;
+  background: rgba(0, 122, 204, 0.12);
+  border: 1px solid rgba(0, 122, 204, 0.35);
+  color: var(--blue);
+  padding: 2px 10px;
   border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  font-weight: 500;
   margin-bottom: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .xp-bar-label {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
-  color: #9ca3af;
-  margin-bottom: 6px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  margin-bottom: 5px;
 }
+
 .xp-bar {
-  height: 8px;
-  background: #2a2a5a;
-  border-radius: 4px;
+  height: 3px;
+  background: var(--bg-card);
+  border-radius: 2px;
   overflow: hidden;
 }
+
 .xp-fill {
   height: 100%;
-  background: linear-gradient(90deg, #7c3aed, #a78bfa);
-  border-radius: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--teal));
+  border-radius: 2px;
   transition: width 0.5s ease;
 }
 
@@ -98,57 +134,92 @@
 .streak-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 12px;
 }
 
 .streak-card {
-  background: #1a1a3e;
-  border: 1px solid #2a2a5a;
-  border-radius: 12px;
-  padding: 20px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
   text-align: center;
 }
-.streak-card.atual { border-color: #f97316; }
-.streak-card.maximo { border-color: #fbbf24; }
 
-.streak-valor { font-size: 36px; font-weight: 700; margin-bottom: 6px; }
-.streak-label { font-size: 12px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; }
+.streak-card.atual { border-color: rgba(220, 220, 170, 0.25); }
+.streak-card.maximo { border-color: rgba(79, 193, 255, 0.2); }
+
+.streak-valor {
+  font-size: 32px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--yellow);
+  margin-bottom: 5px;
+}
+
+.streak-label {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 
 /* Conquistas */
 .conquistas-section h3 {
-  font-size: 16px;
-  color: #a78bfa;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 16px;
+  letter-spacing: 1.5px;
+  margin-bottom: 14px;
 }
 
 .conquistas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 
 .conquista-badge {
-  background: #1a1a3e;
-  border: 1px solid #4c1d95;
-  border-radius: 12px;
-  padding: 16px 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   text-align: center;
-  transition: border-color 0.2s;
+  transition: border-color 0.15s;
+  cursor: default;
 }
-.conquista-badge:hover { border-color: #a78bfa; }
 
-.conquista-icone { font-size: 32px; }
-.conquista-titulo { font-size: 12px; font-weight: 600; color: #e0e0e0; }
-.conquista-desc { font-size: 11px; color: #6b7280; line-height: 1.3; }
+.conquista-badge:hover { border-color: var(--teal); }
 
-.loading { color: #9ca3af; }
-.vazio { color: #6b7280; font-size: 14px; padding: 20px 0; }
+.conquista-icone { font-size: 28px; }
+
+.conquista-titulo {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.conquista-desc {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.loading { color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; }
+
+.vazio {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 16px 0;
+}
 
 @media (max-width: 600px) {
   .perfil-card { flex-direction: column; text-align: center; }
