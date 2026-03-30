@@ -117,6 +117,7 @@ nav a:hover { color: #a78bfa; }
   padding: 20px;
   text-align: center;
 }
+.stat-streak { border-color: #f97316; }
 
 .stat-valor {
   font-size: 32px;

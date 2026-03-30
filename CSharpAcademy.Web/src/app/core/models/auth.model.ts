@@ -16,4 +16,6 @@ export interface UsuarioResponseDto {
   nivelAtual: number;
   xp: number;
   token: string;
+  streakAtual?: number;
+  streakMaximo?: number;
 }

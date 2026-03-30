@@ -10,6 +10,9 @@ public class Usuario
     public int XP { get; set; } = 0;
     public string Idioma { get; set; } = "pt-BR";
     public DateTime DataCadastro { get; set; } = DateTime.UtcNow;
+    public int StreakAtual { get; set; } = 0;
+    public int StreakMaximo { get; set; } = 0;
+    public DateTime? UltimoEstudo { get; set; }
 
     public ICollection<Progresso> Progressos { get; set; } = [];
     public ICollection<AI.ChatMessage> ChatMessages { get; set; } = [];

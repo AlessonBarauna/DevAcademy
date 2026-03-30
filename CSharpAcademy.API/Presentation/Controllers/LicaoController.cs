@@ -110,6 +110,27 @@ public class LicaoController(
             < 700 => 3,
             _ => 4
         };
+
+        // Atualiza streak: incrementa se estudou hoje ou ontem, reinicia se parou
+        var hoje = DateTime.UtcNow.Date;
+        if (usuario.UltimoEstudo?.Date == hoje)
+        {
+            // Já estudou hoje — streak não muda, apenas registra
+        }
+        else if (usuario.UltimoEstudo?.Date == hoje.AddDays(-1))
+        {
+            // Estudou ontem — mantém a sequência
+            usuario.StreakAtual++;
+        }
+        else
+        {
+            // Primeira atividade ou quebrou a sequência
+            usuario.StreakAtual = 1;
+        }
+        usuario.UltimoEstudo = DateTime.UtcNow;
+        if (usuario.StreakAtual > usuario.StreakMaximo)
+            usuario.StreakMaximo = usuario.StreakAtual;
+
         await usuarioRepo.AtualizarAsync(usuario);
         await progressoRepo.SalvarAsync();
 
@@ -118,7 +139,8 @@ public class LicaoController(
             XpGanho = licao.XPRecompensa,
             NovoNivel = usuario.NivelAtual,
             XpTotal = usuario.XP,
-            JaConcluidaAntes = false
+            JaConcluidaAntes = false,
+            StreakAtual = usuario.StreakAtual
         });
     }
 }

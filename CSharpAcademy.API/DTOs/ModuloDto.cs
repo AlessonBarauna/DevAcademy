@@ -29,4 +29,5 @@ public class ConcluirLicaoResponseDto
     public int NovoNivel { get; set; }
     public int XpTotal { get; set; }
     public bool JaConcluidaAntes { get; set; }
+    public int StreakAtual { get; set; }
 }

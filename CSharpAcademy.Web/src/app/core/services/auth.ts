@@ -36,10 +36,10 @@ export class AuthService {
     );
   }
 
-  atualizarProgresso(xp: number, nivelAtual: number): void {
+  atualizarProgresso(xp: number, nivelAtual: number, streakAtual?: number): void {
     const u = this._usuario.value;
     if (!u) return;
-    const atualizado = { ...u, xp, nivelAtual };
+    const atualizado = { ...u, xp, nivelAtual, ...(streakAtual !== undefined && { streakAtual }) };
     localStorage.setItem('usuario', JSON.stringify(atualizado));
     this._usuario.next(atualizado);
   }

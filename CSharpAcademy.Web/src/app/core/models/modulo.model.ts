@@ -40,4 +40,5 @@ export interface ConcluirLicaoResult {
   novoNivel: number;
   xpTotal: number;
   jaConcluidaAntes: boolean;
+  streakAtual: number;
 }

@@ -23,7 +23,7 @@ public class AuthController(IUsuarioRepository usuarioRepo, IConfiguration confi
     {
         var usuario = await usuarioRepo.ObterPorIdAsync(UsuarioId);
         if (usuario == null) return NotFound();
-        return Ok(new { usuario.Id, usuario.Nome, usuario.Email, usuario.NivelAtual, Xp = usuario.XP });
+        return Ok(new { usuario.Id, usuario.Nome, usuario.Email, usuario.NivelAtual, Xp = usuario.XP, usuario.StreakAtual, usuario.StreakMaximo });
     }
 
     [HttpPost("registrar")]

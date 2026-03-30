@@ -57,12 +57,12 @@ export class LicaoDetail implements OnInit {
         this.licaoSelecionada!.completada = true;
         const idx = this.licoes.findIndex(l => l.id === this.licaoSelecionada!.id);
         if (idx >= 0) this.licoes[idx].completada = true;
-        this.mensagemConclusao = result.jaConcluidaAntes
-          ? 'Lição já concluída anteriormente.'
-          : `+${result.xpGanho} XP ganhos! Nível atual: ${result.novoNivel}`;
         this.concluindo = false;
         if (!result.jaConcluidaAntes) {
-          this.authService.atualizarProgresso(result.xpTotal, result.novoNivel);
+          this.authService.atualizarProgresso(result.xpTotal, result.novoNivel, result.streakAtual);
+          this.mensagemConclusao = `+${result.xpGanho} XP! Nível ${result.novoNivel} 🔥 ${result.streakAtual} dia(s) de streak`;
+        } else {
+          this.mensagemConclusao = 'Lição já concluída anteriormente.';
         }
         this.cdr.detectChanges();
       },

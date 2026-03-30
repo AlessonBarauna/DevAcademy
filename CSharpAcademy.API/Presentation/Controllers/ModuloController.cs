@@ -8,7 +8,7 @@ namespace CSharpAcademy.API.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+//[Authorize]
 public class ModuloController(
     IModuloRepository moduloRepo,
     IProgressoRepository progressoRepo) : ControllerBase
@@ -17,6 +17,7 @@ public class ModuloController(
 
     /// <summary>Lista todos os módulos com progresso do usuário</summary>
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> ObterTodos()
     {
         var licoesConcluidas = (await progressoRepo.ObterLicoesConcluidasAsync(UsuarioId)).ToList();
@@ -38,6 +39,7 @@ public class ModuloController(
 
     /// <summary>Obtém um módulo pelo Id</summary>
     [HttpGet("{id:int}")]
+    [AllowAnonymous] 
     public async Task<IActionResult> ObterPorId(int id)
     {
         var modulo = await moduloRepo.ObterPorIdAsync(id);
