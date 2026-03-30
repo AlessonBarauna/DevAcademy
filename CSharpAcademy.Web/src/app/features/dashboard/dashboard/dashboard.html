@@ -52,6 +52,17 @@
       </div>
     </section>
 
+    <!-- Conquistas -->
+    <section class="conquistas" *ngIf="conquistas.length > 0">
+      <h3>🏅 Conquistas</h3>
+      <div class="conquistas-grid">
+        <div class="conquista-badge" *ngFor="let c of conquistas" [title]="c.descricao">
+          <span class="conquista-icone">{{ c.icone }}</span>
+          <span class="conquista-titulo">{{ c.titulo }}</span>
+        </div>
+      </div>
+    </section>
+
     <!-- Progresso por módulo -->
     <section class="modulos-progresso">
       <h3>Progresso por Módulo</h3>

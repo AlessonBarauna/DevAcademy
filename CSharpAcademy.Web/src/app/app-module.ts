@@ -10,6 +10,7 @@ import { ModulosModule } from './features/modulos/modulos-module';
 import { ExerciciosModule } from './features/exercicios/exercicios-module';
 import { DashboardModule } from './features/dashboard/dashboard-module';
 import { RankingModule } from './features/ranking/ranking-module';
+import { MarkdownModule } from 'ngx-markdown';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 @NgModule({
@@ -23,6 +24,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     ExerciciosModule,
     DashboardModule,
     RankingModule,
+    MarkdownModule.forRoot(),
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using CSharpAcademy.API.Application.Services;
 using CSharpAcademy.API.DTOs;
 using CSharpAcademy.API.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -63,7 +64,7 @@ public class LicaoController(
 
     /// <summary>Marca uma lição como concluída e concede XP ao usuário</summary>
     [HttpPost("{licaoId:int}/concluir")]
-    public async Task<IActionResult> Concluir(int licaoId, [FromServices] IUsuarioRepository usuarioRepo)
+    public async Task<IActionResult> Concluir(int licaoId, [FromServices] IUsuarioRepository usuarioRepo, [FromServices] ConquistaService conquistaService)
     {
         var licao = await licaoRepo.ObterPorIdAsync(licaoId);
         if (licao == null) return NotFound();
@@ -134,13 +135,22 @@ public class LicaoController(
         await usuarioRepo.AtualizarAsync(usuario);
         await progressoRepo.SalvarAsync();
 
+        var novasConquistas = await conquistaService.AvaliarAsync(usuario);
+
         return Ok(new ConcluirLicaoResponseDto
         {
             XpGanho = licao.XPRecompensa,
             NovoNivel = usuario.NivelAtual,
             XpTotal = usuario.XP,
             JaConcluidaAntes = false,
-            StreakAtual = usuario.StreakAtual
+            StreakAtual = usuario.StreakAtual,
+            NovasConquistas = novasConquistas.Select(c => new ConquistaDto
+            {
+                Codigo = c.Codigo,
+                Titulo = c.Titulo,
+                Descricao = c.Descricao,
+                Icone = c.Icone
+            }).ToList()
         });
     }
 }

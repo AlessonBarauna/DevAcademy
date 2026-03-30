@@ -20,8 +20,8 @@
       <h1>{{ licaoSelecionada.titulo }}</h1>
       <p>{{ licaoSelecionada.descricao }}</p>
     </div>
-    <div class="teoria">
-      <pre>{{ licaoSelecionada.conteudoTeoricoMarkdown }}</pre>
+    <div class="teoria markdown-body">
+      <markdown [data]="licaoSelecionada.conteudoTeoricoMarkdown"></markdown>
     </div>
 
     <div class="acoes">

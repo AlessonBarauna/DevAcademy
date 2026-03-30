@@ -7,6 +7,7 @@ using CSharpAcademy.API.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using ConquistaDto = CSharpAcademy.API.DTOs.ConquistaDto;
 
 namespace CSharpAcademy.API.Presentation.Controllers;
 
@@ -24,6 +25,20 @@ public class AuthController(IUsuarioRepository usuarioRepo, IConfiguration confi
         var usuario = await usuarioRepo.ObterPorIdAsync(UsuarioId);
         if (usuario == null) return NotFound();
         return Ok(new { usuario.Id, usuario.Nome, usuario.Email, usuario.NivelAtual, Xp = usuario.XP, usuario.StreakAtual, usuario.StreakMaximo });
+    }
+
+    [HttpGet("conquistas")]
+    [Authorize]
+    public async Task<IActionResult> Conquistas([FromServices] IConquistaRepository conquistaRepo)
+    {
+        var conquistas = await conquistaRepo.ObterPorUsuarioAsync(UsuarioId);
+        return Ok(conquistas.Select(c => new ConquistaDto
+        {
+            Codigo = c.Codigo,
+            Titulo = c.Titulo,
+            Descricao = c.Descricao,
+            Icone = c.Icone
+        }));
     }
 
     [HttpPost("registrar")]

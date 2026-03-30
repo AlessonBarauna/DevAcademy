@@ -15,6 +15,7 @@ public class Usuario
     public DateTime? UltimoEstudo { get; set; }
 
     public ICollection<Progresso> Progressos { get; set; } = [];
+    public ICollection<Conquista> Conquistas { get; set; } = [];
     public ICollection<AI.ChatMessage> ChatMessages { get; set; } = [];
     public ICollection<AI.ChatSession> ChatSessions { get; set; } = [];
 }

@@ -35,10 +35,18 @@ export interface RespostaExercicioResult {
   respostaCorreta: string | null;
 }
 
+export interface ConquistaResultDto {
+  codigo: string;
+  titulo: string;
+  descricao: string;
+  icone: string;
+}
+
 export interface ConcluirLicaoResult {
   xpGanho: number;
   novoNivel: number;
   xpTotal: number;
   jaConcluidaAntes: boolean;
   streakAtual: number;
+  novasConquistas: ConquistaResultDto[];
 }

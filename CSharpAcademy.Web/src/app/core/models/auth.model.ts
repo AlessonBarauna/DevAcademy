@@ -9,6 +9,13 @@ export interface RegistrarUsuarioDto {
   senha: string;
 }
 
+export interface ConquistaDto {
+  codigo: string;
+  titulo: string;
+  descricao: string;
+  icone: string;
+}
+
 export interface UsuarioResponseDto {
   id: number;
   nome: string;

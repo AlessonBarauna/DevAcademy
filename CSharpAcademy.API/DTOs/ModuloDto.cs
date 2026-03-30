@@ -30,4 +30,13 @@ public class ConcluirLicaoResponseDto
     public int XpTotal { get; set; }
     public bool JaConcluidaAntes { get; set; }
     public int StreakAtual { get; set; }
+    public List<ConquistaDto> NovasConquistas { get; set; } = [];
+}
+
+public class ConquistaDto
+{
+    public string Codigo { get; set; } = string.Empty;
+    public string Titulo { get; set; } = string.Empty;
+    public string Descricao { get; set; } = string.Empty;
+    public string Icone { get; set; } = string.Empty;
 }

@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth';
 import { ModuloService } from '../../../core/services/modulo';
 import { Modulo } from '../../../core/models/modulo.model';
-import { UsuarioResponseDto } from '../../../core/models/auth.model';
+import { ConquistaDto, UsuarioResponseDto } from '../../../core/models/auth.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,6 +16,7 @@ import { UsuarioResponseDto } from '../../../core/models/auth.model';
 export class Dashboard implements OnInit, OnDestroy {
   usuario: UsuarioResponseDto | null = null;
   modulos: Modulo[] = [];
+  conquistas: ConquistaDto[] = [];
   carregando = true;
   erroModulos = '';
   private sub = new Subscription();
@@ -36,6 +38,7 @@ export class Dashboard implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private moduloService: ModuloService,
+    private http: HttpClient,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
@@ -60,6 +63,10 @@ export class Dashboard implements OnInit, OnDestroy {
           : `Erro ao carregar módulos (${err.status}).`;
         this.cdr.detectChanges();
       }
+    });
+
+    this.http.get<ConquistaDto[]>('/api/auth/conquistas').subscribe({
+      next: c => { this.conquistas = c; this.cdr.detectChanges(); }
     });
   }
 

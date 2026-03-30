@@ -1,5 +1,6 @@
 using System.Text;
 using System.Threading.RateLimiting;
+using CSharpAcademy.API.Application.Services;
 using CSharpAcademy.API.Application.Services.AI;
 using CSharpAcademy.API.Infrastructure.Data;
 using CSharpAcademy.API.Infrastructure.Repositories;
@@ -59,6 +60,8 @@ builder.Services.AddHttpClient<IMistralService, MistralService>(client =>
 
 // ── Repositories — domínio ────────────────────────────────────────────────────
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IConquistaRepository, ConquistaRepository>();
+builder.Services.AddScoped<ConquistaService>();
 builder.Services.AddScoped<IModuloRepository, ModuloRepository>();
 builder.Services.AddScoped<ILicaoRepository, LicaoRepository>();
 builder.Services.AddScoped<IExercicioRepository, ExercicioRepository>();
