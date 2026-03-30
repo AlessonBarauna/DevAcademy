@@ -54,7 +54,7 @@
               title="{{i}} estrela(s)">☆</span>
           </div>
           <div class="stars-filled" *ngIf="msg.estrelas !== null">
-            <span *ngFor="let i of estrelaRange" [class.filled]="i <= (msg.estrelas ?? 0)">★</span>
+            <span *ngFor="let i of estrelaRange" [class.filled]="i <= msg.estrelas!">★</span>
           </div>
           <button
             class="btn-exercise"
