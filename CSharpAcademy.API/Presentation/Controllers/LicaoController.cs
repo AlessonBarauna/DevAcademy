@@ -92,7 +92,9 @@ public class LicaoController(
                 Completada = true,
                 XPGanho = licao.XPRecompensa,
                 DataInicio = DateTime.UtcNow,
-                DataConclusao = DateTime.UtcNow
+                DataConclusao = DateTime.UtcNow,
+                NivelRetencao = 1,
+                ProximaRevisao = DateTime.UtcNow.AddDays(SrsHelper.IntervaloDias(1))
             });
         }
         else
@@ -100,6 +102,7 @@ public class LicaoController(
             progresso.Completada = true;
             progresso.XPGanho = licao.XPRecompensa;
             progresso.DataConclusao = DateTime.UtcNow;
+            progresso.ProximaRevisao ??= DateTime.UtcNow.AddDays(SrsHelper.IntervaloDias(1));
             await progressoRepo.AtualizarAsync(progresso);
         }
 

@@ -27,6 +27,13 @@ public class ProgressoRepository(AppDbContext ctx) : IProgressoRepository
     public async Task<Progresso?> ObterAsync(int usuarioId, int licaoId)
         => await ctx.Progressos.FirstOrDefaultAsync(p => p.UsuarioId == usuarioId && p.LicaoId == licaoId);
 
+    public async Task<IEnumerable<Progresso>> ObterRevisoesHojeAsync(int usuarioId)
+        => await ctx.Progressos
+            .Include(p => p.Licao)
+            .Where(p => p.UsuarioId == usuarioId && p.Completada && p.ProximaRevisao <= DateTime.UtcNow)
+            .OrderBy(p => p.ProximaRevisao)
+            .ToListAsync();
+
     public async Task AdicionarAsync(Progresso progresso)
         => await ctx.Progressos.AddAsync(progresso);
 

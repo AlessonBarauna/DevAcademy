@@ -3,6 +3,7 @@ using System;
 using CSharpAcademy.API.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CSharpAcademy.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260403223411_AddSrsToProgresso")]
+    partial class AddSrsToProgresso
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.5");
@@ -1259,12 +1262,6 @@ namespace CSharpAcademy.API.Migrations
 
                     b.Property<DateTime?>("UltimoEstudo")
                         .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("UltimoRecargaVida")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Vidas")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int>("XP")
                         .HasColumnType("INTEGER");

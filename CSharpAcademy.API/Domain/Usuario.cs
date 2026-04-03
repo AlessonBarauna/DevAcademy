@@ -14,6 +14,10 @@ public class Usuario
     public int StreakMaximo { get; set; } = 0;
     public DateTime? UltimoEstudo { get; set; }
 
+    // Hearts System
+    public int Vidas { get; set; } = 5;
+    public DateTime? UltimoRecargaVida { get; set; }
+
     public ICollection<Progresso> Progressos { get; set; } = [];
     public ICollection<Conquista> Conquistas { get; set; } = [];
     public ICollection<AI.ChatMessage> ChatMessages { get; set; } = [];

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using CSharpAcademy.API.Application.Services;
 using CSharpAcademy.API.Domain;
 using CSharpAcademy.API.DTOs;
 using CSharpAcademy.API.Infrastructure.Repositories;
@@ -60,7 +61,8 @@ public class ExercicioController(
     public async Task<IActionResult> Responder(
         int exercicioId,
         [FromBody] ResponderExercicioDto dto,
-        [FromServices] IRespostaRepository respostaRepo)
+        [FromServices] IRespostaRepository respostaRepo,
+        [FromServices] IUsuarioRepository usuarioRepo)
     {
         var exercicio = await exercicioRepo.ObterPorIdAsync(exercicioId);
         if (exercicio == null) return NotFound();
@@ -69,6 +71,14 @@ public class ExercicioController(
             dto.Resposta.Trim(),
             exercicio.RespostaCorreta.Trim(),
             StringComparison.OrdinalIgnoreCase);
+
+        var usuario = await usuarioRepo.ObterPorIdAsync(UsuarioId);
+        if (usuario != null)
+        {
+            VidasHelper.AplicarRecarga(usuario);
+            if (!correta) VidasHelper.Deduzir(usuario);
+            await usuarioRepo.AtualizarAsync(usuario);
+        }
 
         await respostaRepo.AdicionarAsync(new RespostaUsuario
         {
@@ -84,7 +94,9 @@ public class ExercicioController(
         {
             correta,
             explicacao = correta ? null : exercicio.Explicacao,
-            respostaCorreta = correta ? exercicio.RespostaCorreta : null
+            respostaCorreta = correta ? exercicio.RespostaCorreta : null,
+            vidasRestantes = usuario?.Vidas ?? VidasHelper.MaxVidas,
+            minutosParaRecarga = usuario != null ? VidasHelper.MinutosParaProximaRecarga(usuario) : 0
         });
     }
 }
