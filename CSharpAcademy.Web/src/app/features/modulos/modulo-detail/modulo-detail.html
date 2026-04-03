@@ -20,9 +20,14 @@
       <div class="hero-bar">
         <div class="hero-fill" [style.width.%]="progresso"></div>
       </div>
-      <button class="btn-comecar" (click)="comecar()" [disabled]="licoes.length === 0">
-        {{ modulo.licoesCompletadas === 0 ? '&#9654; Começar' : modulo.licoesCompletadas === modulo.totalLicoes ? '&#8635; Revisar' : '&#9654; Continuar' }}
-      </button>
+      <div class="hero-acoes">
+        <button class="btn-comecar" (click)="comecar()" [disabled]="licoes.length === 0">
+          {{ modulo.licoesCompletadas === 0 ? '▶ Começar' : moduloConcluido ? '↺ Revisar' : '▶ Continuar' }}
+        </button>
+        <button class="btn-certificado" *ngIf="moduloConcluido" (click)="verCertificado()">
+          🏆 Ver Certificado
+        </button>
+      </div>
     </div>
 
     <div class="licoes-section">
