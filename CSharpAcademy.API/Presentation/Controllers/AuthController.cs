@@ -52,6 +52,35 @@ public class AuthController(IUsuarioRepository usuarioRepo, IConfiguration confi
         }));
     }
 
+    [HttpGet("analytics")]
+    [Authorize]
+    public async Task<IActionResult> Analytics(
+        [FromServices] IRespostaRepository respostaRepo,
+        [FromServices] IModuloRepository moduloRepo)
+    {
+        var modulos = await moduloRepo.ObterTodosAsync();
+
+        // Carrega todas as respostas do usuário com a lição do exercício
+        var respostas = await respostaRepo.ObterComModuloAsync(UsuarioId);
+
+        var resultado = modulos.Select(m =>
+        {
+            var respostasModulo = respostas.Where(r => r.ModuloId == m.Id).ToList();
+            var total = respostasModulo.Count;
+            var corretas = respostasModulo.Count(r => r.Correta);
+            return new
+            {
+                moduloId = m.Id,
+                moduloTitulo = m.Titulo,
+                totalRespostas = total,
+                totalCorretas = corretas,
+                percentualAcerto = total > 0 ? (int)Math.Round((double)corretas / total * 100) : 0
+            };
+        });
+
+        return Ok(resultado);
+    }
+
     [HttpPost("registrar")]
     public async Task<IActionResult> Registrar([FromBody] RegistrarUsuarioDto dto)
     {

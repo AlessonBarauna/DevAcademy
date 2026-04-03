@@ -22,6 +22,40 @@ Você é um **professor de C#/.NET** trabalhando neste projeto junto com o aluno
 
 ---
 
+## Fluxo de Desenvolvimento — Git
+
+Toda nova funcionalidade **obrigatoriamente** segue este fluxo:
+
+1. **Criar branch** a partir da master:
+   ```bash
+   git checkout -b feat/nome-da-feature
+   ```
+   Exemplos: `feat/desafio-rapido`, `feat/missoes-diarias`, `feat/skill-tree`
+
+2. **Implementar** mantendo código limpo e seguindo o padrão do projeto.
+
+3. **Adicionar alterações:**
+   ```bash
+   git add .
+   ```
+
+4. **Commit semântico em português, formato curto:**
+   ```bash
+   git commit -m "feat: descrição curta da funcionalidade"
+   ```
+
+5. **Subir a branch:**
+   ```bash
+   git push origin feat/nome-da-feature
+   ```
+
+**Regras:**
+- Nunca commitar diretamente na `master`
+- Uma branch por feature — nunca misturar funcionalidades
+- Branch names: kebab-case, sem acentos, prefixo `feat/`
+
+---
+
 ## Stack
 
 - **Backend**: .NET 10 Web API — `CSharpAcademy.API/`
@@ -79,6 +113,7 @@ CSharpAcademy.API/
 | `IChatMessageRepository` | `ChatMessageRepository` | ChatMessage (IA) |
 | `IAssistantFAQRepository` | `AssistantFAQRepository` | AssistantFAQ (IA) |
 | `IAssistantFeedbackRepository` | `AssistantFeedbackRepository` | AssistantFeedback (IA) |
+| `IMissaoRepository` | `MissaoRepository` | MissaoDiaria |
 
 ## Endpoints
 
@@ -98,6 +133,10 @@ CSharpAcademy.API/
 | GET | `/api/assistant/historico/{licaoId}` | Histórico da conversa |
 | POST | `/api/assistant/{id}/avaliar` | Avaliação 1-5 estrelas |
 | POST | `/api/assistant/gerar-exercicio` | Exercício customizado por IA |
+| GET | `/api/revisao/pendentes` | Lições com revisão pendente (SRS) |
+| POST | `/api/revisao/{licaoId}/registrar` | Registra resultado de revisão |
+| GET | `/api/desafio/rapido` | Exercícios aleatórios de lições concluídas |
+| GET | `/api/missoes/hoje` | Missões diárias (gera se não existir) |
 
 ## Configuração Groq
 

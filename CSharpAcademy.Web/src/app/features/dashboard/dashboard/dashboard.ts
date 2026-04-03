@@ -6,6 +6,8 @@ import { AuthService } from '../../../core/services/auth';
 import { ModuloService } from '../../../core/services/modulo';
 import { ThemeService } from '../../../core/services/theme';
 import { RevisaoService } from '../../../core/services/revisao';
+import { MissaoService } from '../../../core/services/missao';
+import { MissaoDiaria } from '../../../core/models/missao.model';
 import { Modulo } from '../../../core/models/modulo.model';
 import { RevisaoPendente } from '../../../core/models/revisao.model';
 import { ConquistaDto, UsuarioResponseDto } from '../../../core/models/auth.model';
@@ -21,6 +23,7 @@ export class Dashboard implements OnInit, OnDestroy {
   modulos: Modulo[] = [];
   conquistas: ConquistaDto[] = [];
   revisoesPendentes: RevisaoPendente[] = [];
+  missoesDiarias: MissaoDiaria[] = [];
   carregando = true;
   erroModulos = '';
   heatmapSemanas: { data: Date; count: number; nivel: number }[][] = [];
@@ -44,6 +47,7 @@ export class Dashboard implements OnInit, OnDestroy {
     private authService: AuthService,
     private moduloService: ModuloService,
     private revisaoService: RevisaoService,
+    private missaoService: MissaoService,
     private http: HttpClient,
     private router: Router,
     private cdr: ChangeDetectorRef,
@@ -86,6 +90,10 @@ export class Dashboard implements OnInit, OnDestroy {
 
     this.revisaoService.getPendentes().subscribe({
       next: r => { this.revisoesPendentes = r; this.cdr.detectChanges(); }
+    });
+
+    this.missaoService.getHoje().subscribe({
+      next: m => { this.missoesDiarias = m; this.cdr.detectChanges(); }
     });
 
     this.http.get<{ data: string; contagem: number }[]>('/api/auth/atividade').subscribe({
@@ -165,6 +173,19 @@ export class Dashboard implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+  }
+
+  get missoesConcluidasHoje(): number {
+    return this.missoesDiarias.filter(m => m.concluida).length;
+  }
+
+  iconeMissao(tipo: string): string {
+    const mapa: Record<string, string> = {
+      GanharXP: '⚡',
+      ConcluirLicoes: '📖',
+      ExerciciosCorretos: '🎯'
+    };
+    return mapa[tipo] ?? '🎯';
   }
 
   get totalRevisoesPendentes(): number {

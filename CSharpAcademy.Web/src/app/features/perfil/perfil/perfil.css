@@ -300,7 +300,88 @@
   padding: 16px 0;
 }
 
+/* Analytics de Aprendizado */
+.analytics-section {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.analytics-section h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 20px 0;
+}
+
+.radar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.radar-svg { overflow: visible; flex-shrink: 0; }
+
+.radar-grade { fill: none; stroke: var(--border); stroke-width: 1; }
+.radar-eixo { stroke: var(--border); stroke-width: 1; }
+
+.radar-area {
+  fill: rgba(79, 193, 255, 0.15);
+  stroke: var(--blue);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.radar-label {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  fill: var(--text-muted);
+}
+
+.radar-legenda { display: flex; flex-direction: column; gap: 8px; min-width: 160px; }
+
+.radar-legenda-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.legenda-titulo {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.legenda-valor {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--blue);
+  white-space: nowrap;
+}
+
+.legenda-valor.sem-dados { color: var(--text-muted); font-weight: 400; }
+
+.analytics-barras { display: flex; flex-direction: column; gap: 12px; }
+.analytics-barra-item { display: flex; flex-direction: column; gap: 4px; }
+
+.barra-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); }
+.barra-pct { font-family: var(--font-mono); font-weight: 600; color: var(--text); }
+
+.barra-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.barra-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; background: var(--border); }
+.barra-boa { background: var(--green); }
+.barra-media { background: var(--yellow); }
+.barra-baixa { background: var(--red); }
+
 @media (max-width: 600px) {
   .perfil-card { flex-direction: column; text-align: center; }
   .streak-section { grid-template-columns: 1fr; }
+  .radar-wrap { flex-direction: column; align-items: flex-start; }
 }
