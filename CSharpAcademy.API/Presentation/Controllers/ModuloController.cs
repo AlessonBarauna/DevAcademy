@@ -23,15 +23,31 @@ public class ModuloController(
         var licoesConcluidas = (await progressoRepo.ObterLicoesConcluidasAsync(UsuarioId)).ToList();
         var modulos = await moduloRepo.ObterTodosAsync();
 
-        var resultado = modulos.Select(m => new ModuloDto
+        // Pré-computa quantas lições cada módulo tem concluídas (para calcular desbloqueio)
+        var concluidasPorModulo = modulos.ToDictionary(
+            m => m.Id,
+            m => m.Licoes.Count(l => licoesConcluidas.Contains(l.Id)));
+
+        var resultado = modulos.Select(m =>
         {
-            Id = m.Id,
-            Titulo = m.Titulo,
-            Descricao = m.Descricao,
-            Ordem = m.Ordem,
-            NivelMinimo = m.NivelMinimo.ToString(),
-            TotalLicoes = m.Licoes.Count,
-            LicoesCompletadas = m.Licoes.Count(l => licoesConcluidas.Contains(l.Id))
+            var licoesConcluídasNesteModulo = concluidasPorModulo[m.Id];
+            var desbloqueado = m.PreRequisitoId == null ||
+                (modulos.FirstOrDefault(r => r.Id == m.PreRequisitoId) is { } req
+                 && req.Licoes.Count > 0
+                 && concluidasPorModulo[req.Id] >= req.Licoes.Count);
+
+            return new ModuloDto
+            {
+                Id = m.Id,
+                Titulo = m.Titulo,
+                Descricao = m.Descricao,
+                Ordem = m.Ordem,
+                NivelMinimo = m.NivelMinimo.ToString(),
+                TotalLicoes = m.Licoes.Count,
+                LicoesCompletadas = licoesConcluídasNesteModulo,
+                PreRequisitoId = m.PreRequisitoId,
+                Desbloqueado = desbloqueado
+            };
         });
 
         return Ok(resultado);
@@ -46,6 +62,15 @@ public class ModuloController(
         if (modulo == null) return NotFound();
 
         var licoesConcluidas = (await progressoRepo.ObterLicoesConcluidasAsync(UsuarioId)).ToList();
+        var licoesConcluidasNeste = modulo.Licoes.Count(l => licoesConcluidas.Contains(l.Id));
+
+        bool desbloqueado = true;
+        if (modulo.PreRequisitoId != null)
+        {
+            var prereq = await moduloRepo.ObterPorIdAsync(modulo.PreRequisitoId.Value);
+            desbloqueado = prereq != null && prereq.Licoes.Count > 0
+                && prereq.Licoes.Count(l => licoesConcluidas.Contains(l.Id)) >= prereq.Licoes.Count;
+        }
 
         return Ok(new ModuloDto
         {
@@ -55,7 +80,9 @@ public class ModuloController(
             Ordem = modulo.Ordem,
             NivelMinimo = modulo.NivelMinimo.ToString(),
             TotalLicoes = modulo.Licoes.Count,
-            LicoesCompletadas = modulo.Licoes.Count(l => licoesConcluidas.Contains(l.Id))
+            LicoesCompletadas = licoesConcluidasNeste,
+            PreRequisitoId = modulo.PreRequisitoId,
+            Desbloqueado = desbloqueado
         });
     }
 }

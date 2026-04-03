@@ -107,48 +107,101 @@
   padding: 40px;
 }
 
-.modulos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 14px;
-  max-width: 960px;
+/* ── Skill Tree ─────────────────────────────────────────────────────── */
+.trilha {
+  max-width: 600px;
   margin: 0 auto;
-  padding: 0 24px 40px;
+  padding: 0 24px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.modulo-card {
+.trilha-node-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Linha conectora entre nodes */
+.trilha-conector {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 40px;
+}
+
+.conector-linha {
+  width: 3px;
+  height: 100%;
+  background: var(--border);
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+
+.conector-desbloqueado {
+  background: var(--green);
+}
+
+/* Node */
+.trilha-node {
+  width: 100%;
   background: var(--bg-panel);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   padding: 20px;
-  cursor: pointer;
-  transition: border-color 0.15s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: border-color 0.15s, transform 0.15s, opacity 0.15s;
   position: relative;
-  overflow: hidden;
 }
 
-.modulo-card::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 2px; height: 100%;
-  background: var(--accent);
-  opacity: 0;
-  transition: opacity 0.15s;
+.node-desbloqueado {
+  cursor: pointer;
+  border-left: 3px solid var(--teal);
 }
 
-.modulo-card:hover {
+.node-desbloqueado:hover {
   border-color: var(--accent);
   transform: translateY(-2px);
 }
 
-.modulo-card:hover::after { opacity: 1; }
+.node-concluido {
+  cursor: pointer;
+  border-left: 3px solid var(--green);
+  background: color-mix(in srgb, var(--bg-panel) 95%, var(--green));
+}
 
-.modulo-header {
+.node-concluido:hover {
+  border-color: var(--green);
+  transform: translateY(-2px);
+}
+
+.node-bloqueado {
+  cursor: not-allowed;
+  opacity: 0.45;
+  filter: grayscale(0.5);
+}
+
+.node-icone {
+  font-size: 28px;
+  min-width: 36px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.node-conteudo {
+  flex: 1;
+  min-width: 0;
+}
+
+.node-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .nivel-badge {
@@ -167,44 +220,52 @@
 .nivel-avancado { border-color: rgba(197, 134, 192, 0.3); color: var(--purple); }
 .nivel-especialista { border-color: rgba(79, 193, 255, 0.3); color: var(--blue); }
 
-.xp-badge {
+.node-licoes {
   font-size: 10px;
   font-family: var(--font-mono);
   color: var(--text-muted);
 }
 
-.modulo-card h2 {
+.node-titulo {
   font-size: 13px;
   font-family: var(--font-mono);
   color: var(--cyan);
-  margin-bottom: 6px;
-  font-weight: 500;
+  margin: 0 0 4px 0;
+  font-weight: 600;
 }
 
-.modulo-card p {
-  font-size: 12px;
+.node-descricao {
+  font-size: 11px;
   color: var(--text-muted);
-  margin-bottom: 16px;
-  line-height: 1.55;
+  margin: 0 0 10px 0;
+  line-height: 1.5;
 }
 
-.progress-bar {
+.node-bloqueado-msg {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 4px 0 0 0;
+}
+
+.node-progress-bar {
   height: 3px;
-  background: var(--bg-card);
+  background: var(--border);
   border-radius: 2px;
   overflow: hidden;
-  margin-bottom: 5px;
 }
 
-.progress-fill {
+.node-progress-fill {
   height: 100%;
   background: var(--green);
   border-radius: 2px;
   transition: width 0.4s;
 }
 
-.progress-text {
-  font-size: 10px;
+.node-cta {
+  font-size: 11px;
   font-family: var(--font-mono);
-  color: var(--text-muted);
+  color: var(--accent);
+  white-space: nowrap;
+  flex-shrink: 0;
 }

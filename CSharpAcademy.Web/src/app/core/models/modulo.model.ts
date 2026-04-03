@@ -6,6 +6,8 @@ export interface Modulo {
   nivelMinimo: string;
   totalLicoes: number;
   licoesCompletadas: number;
+  preRequisitoId: number | null;
+  desbloqueado: boolean;
 }
 
 export interface Licao {

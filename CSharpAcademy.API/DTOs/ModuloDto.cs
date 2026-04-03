@@ -9,6 +9,8 @@ public class ModuloDto
     public string NivelMinimo { get; set; } = string.Empty;
     public int TotalLicoes { get; set; }
     public int LicoesCompletadas { get; set; }
+    public int? PreRequisitoId { get; set; }
+    public bool Desbloqueado { get; set; }
 }
 
 public class LicaoDto

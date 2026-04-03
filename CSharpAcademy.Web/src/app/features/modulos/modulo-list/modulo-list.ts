@@ -37,4 +37,19 @@ export class ModuloList implements OnInit {
     if (m.totalLicoes === 0) return 0;
     return Math.round((m.licoesCompletadas / m.totalLicoes) * 100);
   }
+
+  concluido(m: Modulo): boolean {
+    return m.totalLicoes > 0 && m.licoesCompletadas >= m.totalLicoes;
+  }
+
+  nivelIcone(nivel: string): string {
+    const mapa: Record<string, string> = {
+      iniciante: '🌱', intermediario: '⚡', avancado: '🔥', especialista: '💎'
+    };
+    return mapa[nivel.toLowerCase()] ?? '📘';
+  }
+
+  navegar(m: Modulo): void {
+    if (m.desbloqueado) this.router.navigate(['/modulos', m.id]);
+  }
 }

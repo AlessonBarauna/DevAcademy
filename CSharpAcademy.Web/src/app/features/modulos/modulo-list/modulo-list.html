@@ -1,12 +1,12 @@
 <div class="page">
   <header class="page-topbar">
     <button class="btn-voltar" (click)="voltar()">&#8592; Dashboard</button>
-    <span class="page-titulo">Módulos</span>
+    <span class="page-titulo">Trilha de Aprendizado</span>
   </header>
 
   <div class="page-hero">
     <h1>C# Academy</h1>
-    <p>Aprenda C# do nível iniciante ao especialista</p>
+    <p>Complete cada módulo para desbloquear o próximo</p>
     <div class="busca-wrap">
       <input
         class="busca-input"
@@ -18,24 +18,55 @@
     </div>
   </div>
 
-  <div class="loading" *ngIf="carregando">Carregando módulos...</div>
+  <div class="loading" *ngIf="carregando">Carregando trilha...</div>
 
   <div class="nenhum-resultado" *ngIf="!carregando && modulosFiltrados.length === 0">
     Nenhum módulo encontrado para "{{ termoBusca }}".
   </div>
 
-  <div class="modulos-grid" *ngIf="!carregando && modulosFiltrados.length > 0">
-    <div class="modulo-card" *ngFor="let m of modulosFiltrados" [routerLink]="['/modulos', m.id]">
-      <div class="modulo-header">
-        <span class="nivel-badge nivel-{{m.nivelMinimo.toLowerCase()}}">{{ m.nivelMinimo }}</span>
-        <span class="xp-badge">{{ m.totalLicoes }} lições</span>
+  <div class="trilha" *ngIf="!carregando && modulosFiltrados.length > 0">
+    <div class="trilha-node-wrap" *ngFor="let m of modulosFiltrados; let last = last">
+
+      <!-- Conector entre nodes -->
+      <div class="trilha-conector" *ngIf="m.preRequisitoId !== null">
+        <div class="conector-linha" [class.conector-desbloqueado]="m.desbloqueado"></div>
       </div>
-      <h2>{{ m.titulo }}</h2>
-      <p>{{ m.descricao }}</p>
-      <div class="progress-bar">
-        <div class="progress-fill" [style.width.%]="progresso(m)"></div>
+
+      <!-- Node do módulo -->
+      <div class="trilha-node"
+           [class.node-concluido]="concluido(m)"
+           [class.node-desbloqueado]="m.desbloqueado && !concluido(m)"
+           [class.node-bloqueado]="!m.desbloqueado"
+           (click)="navegar(m)">
+
+        <div class="node-icone">
+          <span *ngIf="concluido(m)">✅</span>
+          <span *ngIf="!concluido(m) && m.desbloqueado">{{ nivelIcone(m.nivelMinimo) }}</span>
+          <span *ngIf="!m.desbloqueado">🔒</span>
+        </div>
+
+        <div class="node-conteudo">
+          <div class="node-header">
+            <span class="nivel-badge nivel-{{m.nivelMinimo.toLowerCase()}}">{{ m.nivelMinimo }}</span>
+            <span class="node-licoes">{{ m.licoesCompletadas }}/{{ m.totalLicoes }} lições</span>
+          </div>
+          <h2 class="node-titulo">{{ m.titulo }}</h2>
+          <p class="node-descricao" *ngIf="m.desbloqueado">{{ m.descricao }}</p>
+          <p class="node-bloqueado-msg" *ngIf="!m.desbloqueado">
+            Complete o módulo anterior para desbloquear
+          </p>
+          <div class="node-progress-bar" *ngIf="m.desbloqueado">
+            <div class="node-progress-fill" [style.width.%]="progresso(m)"></div>
+          </div>
+        </div>
+
+        <div class="node-cta" *ngIf="m.desbloqueado">
+          <span *ngIf="concluido(m)">Revisar</span>
+          <span *ngIf="!concluido(m) && m.licoesCompletadas > 0">Continuar →</span>
+          <span *ngIf="!concluido(m) && m.licoesCompletadas === 0">Começar →</span>
+        </div>
       </div>
-      <span class="progress-text">{{ m.licoesCompletadas }}/{{ m.totalLicoes }} completadas</span>
+
     </div>
   </div>
 </div>
