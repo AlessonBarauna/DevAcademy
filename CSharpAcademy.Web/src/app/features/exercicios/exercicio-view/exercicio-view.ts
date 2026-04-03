@@ -25,6 +25,8 @@ export class ExercicioView implements OnInit, OnDestroy {
   finalizou = false;
   tempoTotal = 60;
   tempoRestante = 60;
+  vidasRestantes = 5;
+  minutosParaRecarga = 0;
   private timerInterval: ReturnType<typeof setInterval> | null = null;
 
   constructor(
@@ -88,7 +90,7 @@ export class ExercicioView implements OnInit, OnDestroy {
   private onTimeout(): void {
     if (this.resultado || this.finalizou) return;
     // Timeout: conta como erro, avança automaticamente
-    this.resultado = { correta: false, respostaCorreta: null, explicacao: 'Tempo esgotado!' };
+    this.resultado = { correta: false, respostaCorreta: null, explicacao: 'Tempo esgotado!', vidasRestantes: this.vidasRestantes, minutosParaRecarga: this.minutosParaRecarga };
     this.cdr.detectChanges();
   }
 
@@ -99,6 +101,10 @@ export class ExercicioView implements OnInit, OnDestroy {
   get opcoes(): string[] {
     try { return JSON.parse(this.exercicioAtual?.opcoesJson ?? '[]'); }
     catch { return []; }
+  }
+
+  get coracoes(): boolean[] {
+    return Array.from({ length: 5 }, (_, i) => i < this.vidasRestantes);
   }
 
   get tipoMultiplaEscolha(): boolean {
@@ -144,6 +150,8 @@ export class ExercicioView implements OnInit, OnDestroy {
     this.moduloService.responderExercicio(this.licaoId, this.exercicioAtual.id, resposta).subscribe({
       next: res => {
         this.resultado = res;
+        this.vidasRestantes = res.vidasRestantes;
+        this.minutosParaRecarga = res.minutosParaRecarga;
         if (res.correta) {
           this.totalXP += this.exercicioAtual!.xpRecompensa;
           this.acertos++;

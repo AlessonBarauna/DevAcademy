@@ -33,6 +33,8 @@ export interface RespostaExercicioResult {
   correta: boolean;
   explicacao: string | null;
   respostaCorreta: string | null;
+  vidasRestantes: number;
+  minutosParaRecarga: number;
 }
 
 export interface ConquistaResultDto {

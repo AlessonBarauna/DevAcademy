@@ -60,6 +60,26 @@
       </div>
     </section>
 
+    <!-- Revisões pendentes (SRS) -->
+    <section class="revisoes-section" *ngIf="revisoesPendentes.length > 0">
+      <h3>🔁 Revisões Pendentes <span class="revisoes-badge">{{ totalRevisoesPendentes }}</span></h3>
+      <p class="revisoes-subtitulo">Baseado em repetição espaçada — revise agora para fixar melhor.</p>
+      <div class="revisoes-lista">
+        <div class="revisao-item" *ngFor="let r of revisoesPendentes" (click)="irParaRevisao(r)">
+          <div class="revisao-info">
+            <span class="revisao-titulo">{{ r.licaoTitulo }}</span>
+            <span class="revisao-retencao">Retenção: {{ r.nivelRetencao }}/5</span>
+          </div>
+          <div class="revisao-barra-wrap">
+            <div class="revisao-barra">
+              <div class="revisao-fill" [style.width.%]="r.nivelRetencao * 20"></div>
+            </div>
+            <span class="revisao-label">{{ r.totalRevisoes }} revisão(ões)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Conquistas -->
     <section class="conquistas" *ngIf="conquistas.length > 0">
       <h3>🏅 Conquistas</h3>

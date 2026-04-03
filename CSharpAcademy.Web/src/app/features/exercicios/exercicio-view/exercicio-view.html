@@ -2,6 +2,10 @@
   <div class="ex-header">
     <button class="btn-voltar" (click)="voltarParaLicao()">&#8592; Voltar</button>
     <span class="progresso">{{ indiceAtual + 1 }} / {{ exercicios.length }}</span>
+    <div class="vidas-wrap">
+      <span class="coracao" *ngFor="let cheio of coracoes" [class.vazio]="!cheio">&#10084;</span>
+      <span class="recarga-hint" *ngIf="vidasRestantes < 5 && minutosParaRecarga > 0">+1 em {{minutosParaRecarga}}min</span>
+    </div>
     <span class="xp-acumulado">XP: {{ totalXP }}</span>
   </div>
 

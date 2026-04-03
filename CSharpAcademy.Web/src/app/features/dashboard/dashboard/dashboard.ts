@@ -5,7 +5,9 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth';
 import { ModuloService } from '../../../core/services/modulo';
 import { ThemeService } from '../../../core/services/theme';
+import { RevisaoService } from '../../../core/services/revisao';
 import { Modulo } from '../../../core/models/modulo.model';
+import { RevisaoPendente } from '../../../core/models/revisao.model';
 import { ConquistaDto, UsuarioResponseDto } from '../../../core/models/auth.model';
 
 @Component({
@@ -18,6 +20,7 @@ export class Dashboard implements OnInit, OnDestroy {
   usuario: UsuarioResponseDto | null = null;
   modulos: Modulo[] = [];
   conquistas: ConquistaDto[] = [];
+  revisoesPendentes: RevisaoPendente[] = [];
   carregando = true;
   erroModulos = '';
   heatmapSemanas: { data: Date; count: number; nivel: number }[][] = [];
@@ -40,6 +43,7 @@ export class Dashboard implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private moduloService: ModuloService,
+    private revisaoService: RevisaoService,
     private http: HttpClient,
     private router: Router,
     private cdr: ChangeDetectorRef,
@@ -78,6 +82,10 @@ export class Dashboard implements OnInit, OnDestroy {
 
     this.http.get<ConquistaDto[]>('/api/auth/conquistas').subscribe({
       next: c => { this.conquistas = c; this.cdr.detectChanges(); }
+    });
+
+    this.revisaoService.getPendentes().subscribe({
+      next: r => { this.revisoesPendentes = r; this.cdr.detectChanges(); }
     });
 
     this.http.get<{ data: string; contagem: number }[]>('/api/auth/atividade').subscribe({
@@ -157,6 +165,14 @@ export class Dashboard implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+  }
+
+  get totalRevisoesPendentes(): number {
+    return this.revisoesPendentes.length;
+  }
+
+  irParaRevisao(revisao: RevisaoPendente): void {
+    this.router.navigate(['/modulos', revisao.moduloId, 'licoes', revisao.licaoId]);
   }
 
   irParaModulo(modulo: Modulo): void {
