@@ -352,6 +352,28 @@ nav a:hover { color: var(--text); background: var(--bg-hover); }
 .loading { color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; }
 .erro-msg { color: var(--red); padding: 10px 0; font-size: 12px; font-family: var(--font-mono); }
 
+/* Desafio Rápido CTA */
+.desafio-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--bg-panel) 85%, var(--yellow)), var(--bg-panel));
+  border: 1px solid color-mix(in srgb, var(--yellow) 30%, var(--border));
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.desafio-cta:hover { border-color: var(--yellow); transform: translateY(-1px); }
+
+.desafio-cta-info { display: flex; align-items: center; gap: 14px; }
+.desafio-cta-icone { font-size: 28px; }
+.desafio-cta-titulo { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.desafio-cta-sub { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); }
+.desafio-cta-arrow { font-size: 18px; color: var(--yellow); font-weight: 700; }
+
 /* SRS — Revisões Pendentes */
 .revisoes-section {
   background: var(--bg-panel);

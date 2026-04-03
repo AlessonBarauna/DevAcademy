@@ -6,5 +6,6 @@ public interface IExercicioRepository
 {
     Task<IEnumerable<Exercicio>> ObterPorLicaoAsync(int licaoId);
     Task<Exercicio?> ObterPorIdAsync(int id);
+    Task<IEnumerable<Exercicio>> ObterAleatoriosDeConcluidasAsync(int usuarioId, int quantidade);
     Task<bool> SalvarAsync();
 }

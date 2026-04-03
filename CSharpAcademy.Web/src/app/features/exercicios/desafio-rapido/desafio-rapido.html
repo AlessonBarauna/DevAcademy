@@ -1,0 +1,102 @@
+<div class="desafio-page">
+
+  <div class="loading" *ngIf="carregando">Preparando desafio...</div>
+
+  <!-- Sem exercícios disponíveis -->
+  <div class="sem-dados" *ngIf="!carregando && semExercicios">
+    <div class="sem-dados-icon">⚡</div>
+    <h2>Complete algumas lições primeiro!</h2>
+    <p>O Desafio Rápido usa exercícios de lições que você já concluiu.</p>
+    <button class="btn-voltar" (click)="voltar()">← Ir para módulos</button>
+  </div>
+
+  <!-- Resultado final -->
+  <div class="resultado-final" *ngIf="finalizou">
+    <div class="resultado-card">
+      <div class="resultado-icone">
+        {{ percentualAcerto === 100 ? '🏆' : percentualAcerto >= 60 ? '⚡' : '💪' }}
+      </div>
+      <h2>{{ percentualAcerto === 100 ? 'Perfeito!' : percentualAcerto >= 60 ? 'Ótimo!' : 'Continue treinando!' }}</h2>
+      <div class="resultado-stats">
+        <div class="stat">
+          <span class="stat-val">{{ acertos }}/{{ exercicios.length }}</span>
+          <span class="stat-label">Acertos</span>
+        </div>
+        <div class="stat">
+          <span class="stat-val">{{ percentualAcerto }}%</span>
+          <span class="stat-label">Aproveitamento</span>
+        </div>
+        <div class="stat">
+          <span class="stat-val xp">+{{ totalXP }}</span>
+          <span class="stat-label">XP ganho</span>
+        </div>
+      </div>
+      <div class="resultado-acoes">
+        <button class="btn-repetir" (click)="ngOnInit()">⚡ Novo Desafio</button>
+        <button class="btn-voltar" (click)="voltar()">← Dashboard</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desafio em andamento -->
+  <div class="desafio-content" *ngIf="!carregando && !semExercicios && !finalizou && exercicioAtual">
+
+    <!-- Header com timer global -->
+    <div class="desafio-header">
+      <span class="desafio-titulo">⚡ Desafio Rápido</span>
+      <div class="timer-global" [class]="'timer-' + timerCor">
+        <span class="timer-num">{{ tempoRestante }}s</span>
+        <div class="timer-arc">
+          <svg viewBox="0 0 36 36">
+            <path class="arc-bg" d="M18 2 a 16 16 0 0 1 0 32 a 16 16 0 0 1 0 -32"/>
+            <path class="arc-fill" [class]="'arc-' + timerCor"
+              [style.stroke-dasharray]="timerPercent + ' 100'"
+              d="M18 2 a 16 16 0 0 1 0 32 a 16 16 0 0 1 0 -32"/>
+          </svg>
+        </div>
+      </div>
+      <span class="desafio-progresso">{{ indiceAtual + 1 }}/{{ exercicios.length }}</span>
+    </div>
+
+    <!-- Barra de progresso das questões -->
+    <div class="questoes-bar">
+      <div class="questao-dot"
+           *ngFor="let ex of exercicios; let i = index"
+           [class.ativa]="i === indiceAtual"
+           [class.concluida]="i < indiceAtual">
+      </div>
+    </div>
+
+    <!-- Exercício -->
+    <div class="exercicio-card" [class.card-correta]="resultado?.correta" [class.card-errada]="resultado && !resultado.correta">
+      <p class="enunciado">{{ exercicioAtual.enunciado }}</p>
+
+      <!-- Opções -->
+      <div class="opcoes" *ngIf="tipoOpcoes">
+        <button
+          *ngFor="let opcao of opcoes"
+          class="opcao"
+          [class.selecionada]="respostaSelecionada === opcao"
+          [class.correta]="resultado && opcao === resultado.respostaCorreta"
+          [class.errada]="resultado && respostaSelecionada === opcao && !resultado.correta"
+          [disabled]="!!resultado"
+          (click)="selecionar(opcao); responder()">
+          {{ opcao }}
+        </button>
+      </div>
+
+      <!-- Texto livre -->
+      <div class="resposta-texto" *ngIf="!tipoOpcoes">
+        <input type="text" [(ngModel)]="respostaTexto" placeholder="Resposta..."
+          [disabled]="!!resultado" (keyup.enter)="responder()" autofocus />
+        <button class="btn-responder" [disabled]="respondendo || !respostaTexto" (click)="responder()">→</button>
+      </div>
+
+      <!-- Feedback rápido -->
+      <div class="feedback" *ngIf="resultado">
+        <span *ngIf="resultado.correta" class="correto">✓ +{{ exercicioAtual.xpRecompensa }} XP</span>
+        <span *ngIf="!resultado.correta" class="errado">✗ {{ resultado.respostaCorreta }}</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -35,4 +35,10 @@ export class ModuloService {
       { resposta }
     );
   }
+
+  getDesafioRapido(quantidade = 5): Observable<{ semExercicios: boolean; exercicios: Exercicio[] }> {
+    return this.http.get<{ semExercicios: boolean; exercicios: Exercicio[] }>(
+      `${API}/desafio/rapido?quantidade=${quantidade}`
+    );
+  }
 }
