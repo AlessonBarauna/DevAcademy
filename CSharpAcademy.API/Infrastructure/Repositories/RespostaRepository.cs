@@ -1,5 +1,6 @@
 using CSharpAcademy.API.Domain;
 using CSharpAcademy.API.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CSharpAcademy.API.Infrastructure.Repositories;
 

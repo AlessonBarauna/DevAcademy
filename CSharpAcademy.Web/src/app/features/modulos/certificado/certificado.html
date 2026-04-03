@@ -1,0 +1,62 @@
+<div class="cert-page">
+
+  <!-- Controles (ocultos na impressão) -->
+  <div class="cert-controles no-print">
+    <button class="btn-voltar" (click)="voltar()">← Voltar</button>
+    <button class="btn-imprimir" (click)="imprimir()" *ngIf="certificado">🖨️ Salvar / Imprimir</button>
+  </div>
+
+  <div class="loading no-print" *ngIf="carregando">Carregando certificado...</div>
+
+  <div class="erro no-print" *ngIf="erro">
+    <p>{{ erro }}</p>
+    <button class="btn-voltar" (click)="voltar()">← Voltar ao módulo</button>
+  </div>
+
+  <!-- Certificado -->
+  <div class="certificado" *ngIf="certificado">
+
+    <div class="cert-topo">
+      <span class="cert-logo">&#127891; C# Academy</span>
+      <span class="cert-tipo">Certificado de Conclusão</span>
+    </div>
+
+    <div class="cert-corpo">
+      <p class="cert-declara">Certificamos que</p>
+      <h1 class="cert-nome">{{ certificado.nomeAluno }}</h1>
+      <p class="cert-concluiu">concluiu com êxito o módulo</p>
+      <h2 class="cert-modulo">{{ certificado.moduloTitulo }}</h2>
+      <p class="cert-descricao">{{ certificado.moduloDescricao }}</p>
+
+      <div class="cert-stats">
+        <div class="cert-stat">
+          <span class="cert-stat-val">{{ certificado.totalLicoes }}</span>
+          <span class="cert-stat-label">Lições</span>
+        </div>
+        <div class="cert-divider"></div>
+        <div class="cert-stat">
+          <span class="cert-stat-val">{{ certificado.xpGanho }} XP</span>
+          <span class="cert-stat-label">Conquistados</span>
+        </div>
+        <div class="cert-divider"></div>
+        <div class="cert-stat">
+          <span class="cert-stat-val">{{ nivelIcone(certificado.nivel) }} {{ certificado.nivel }}</span>
+          <span class="cert-stat-label">Nível</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cert-rodape">
+      <div class="cert-assinatura">
+        <div class="assinatura-linha"></div>
+        <span>C# Academy</span>
+      </div>
+      <div class="cert-data">
+        <span class="data-label">Concluído em</span>
+        <span class="data-val">{{ certificado.dataConclusao }}</span>
+      </div>
+    </div>
+
+    <div class="cert-watermark">C#</div>
+  </div>
+</div>
