@@ -5,5 +5,6 @@ public enum TipoExercicio
     MultiplaEscolha = 1,
     VerdadeiroFalso = 2,
     PreencherEspacos = 3,
-    Codigo = 4
+    Codigo = 4,
+    CorrigirCodigo = 5
 }

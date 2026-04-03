@@ -115,6 +115,19 @@ export class ExercicioView implements OnInit, OnDestroy {
     return this.exercicioAtual?.tipo === 'VerdadeiroFalso';
   }
 
+  get tipoPreencherEspacos(): boolean {
+    return this.exercicioAtual?.tipo === 'PreencherEspacos';
+  }
+
+  get tipoCorrigirCodigo(): boolean {
+    return this.exercicioAtual?.tipo === 'CorrigirCodigo';
+  }
+
+  /** Divide o enunciado em partes para destacar o ____ inline */
+  get enunciadoPartes(): string[] {
+    return this.exercicioAtual?.enunciado.split('____') ?? [];
+  }
+
   get percentualAcerto(): number {
     if (this.exercicios.length === 0) return 0;
     return Math.round((this.acertos / this.exercicios.length) * 100);

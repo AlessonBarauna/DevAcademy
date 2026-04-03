@@ -30,6 +30,7 @@ public class ExercicioController(
             Enunciado = e.Enunciado,
             Tipo = e.Tipo.ToString(),
             OpcoesJson = e.OpcoesJson,
+            DicaTexto = e.DicaTexto,
             Ordem = e.Ordem,
             XpRecompensa = e.XPRecompensa
         });

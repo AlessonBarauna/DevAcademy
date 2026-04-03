@@ -25,6 +25,7 @@ export interface Exercicio {
   enunciado: string;
   tipo: string;
   opcoesJson: string;
+  dicaTexto: string | null;
   ordem: number;
   xpRecompensa: number;
 }

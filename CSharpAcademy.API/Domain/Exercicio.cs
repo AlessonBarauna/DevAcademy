@@ -9,6 +9,7 @@ public class Exercicio
     public string Explicacao { get; set; } = string.Empty;
     public TipoExercicio Tipo { get; set; } = TipoExercicio.MultiplaEscolha;
     public string OpcoesJson { get; set; } = "[]"; // JSON array
+    public string? DicaTexto { get; set; }          // dica exibida após resposta errada
     public int Ordem { get; set; }
     public int XPRecompensa { get; set; } = 5;
 

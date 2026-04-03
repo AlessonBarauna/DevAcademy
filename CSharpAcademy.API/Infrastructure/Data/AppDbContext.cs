@@ -783,7 +783,41 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 Tipo = TipoExercicio.PreencherEspacos,
                 OpcoesJson = "[]",
                 RespostaCorreta = "sealed",
-                Explicacao = "'sealed' impede herança. Em Singletons é recomendado porque uma subclasse poderia criar uma segunda instância, quebrar o contrato ou expor o construtor privado. 'sealed' também pode gerar pequenas otimizações de performance em chamadas virtuais." }
+                Explicacao = "'sealed' impede herança. Em Singletons é recomendado porque uma subclasse poderia criar uma segunda instância, quebrar o contrato ou expor o construtor privado. 'sealed' também pode gerar pequenas otimizações de performance em chamadas virtuais." },
+
+            // ── CorrigirCodigo — distribuídos em lições já existentes ────────────────
+
+            new Exercicio { Id = 46, LicaoId = 1, Ordem = 4, XPRecompensa = 8,
+                Tipo = TipoExercicio.CorrigirCodigo,
+                Enunciado = "O código abaixo não compila. Qual palavra-chave deve substituir o erro?\n\nconst int x;\nx = 10;",
+                OpcoesJson = "[\"readonly\",\"var\",\"static\",\"fixed\"]",
+                RespostaCorreta = "readonly",
+                DicaTexto = "const exige inicialização na declaração. readonly pode ser definida no construtor.",
+                Explicacao = "'const' exige valor na declaração. Para atribuir no corpo do código, use 'readonly' (em campos de classe) ou simplesmente remova o modificador." },
+
+            new Exercicio { Id = 47, LicaoId = 3, Ordem = 4, XPRecompensa = 8,
+                Tipo = TipoExercicio.CorrigirCodigo,
+                Enunciado = "Encontre o bug:\n\nfor (int i = 0; i <= lista.Count; i++)\n{\n    Console.WriteLine(lista[i]);\n}",
+                OpcoesJson = "[\"i <= lista.Count\",\"i < lista.Count\",\"i = 0\",\"lista[i]\"]",
+                RespostaCorreta = "i < lista.Count",
+                DicaTexto = "Índices em C# vão de 0 até Count-1. Usar <= gera IndexOutOfRangeException.",
+                Explicacao = "O índice máximo válido é Count-1. Com '<=' o loop tenta acessar lista[Count], que não existe, lançando IndexOutOfRangeException." },
+
+            new Exercicio { Id = 48, LicaoId = 7, Ordem = 4, XPRecompensa = 8,
+                Tipo = TipoExercicio.CorrigirCodigo,
+                Enunciado = "O código abaixo lança NullReferenceException. O que está errado?\n\nstring? nome = null;\nConsole.WriteLine(nome.Length);",
+                OpcoesJson = "[\"nome.Length\",\"nome?.Length\",\"string? nome\",\"Console.WriteLine\"]",
+                RespostaCorreta = "nome?.Length",
+                DicaTexto = "Operador ?. acessa o membro somente se o objeto não for null.",
+                Explicacao = "Usar '?.' (null-conditional) retorna null em vez de lançar exceção. Para nullable types, sempre prefira '?.' ou verifique antes com 'if (nome != null)'." },
+
+            new Exercicio { Id = 49, LicaoId = 11, Ordem = 4, XPRecompensa = 8,
+                Tipo = TipoExercicio.CorrigirCodigo,
+                Enunciado = "O método abaixo não aguarda a operação async corretamente:\n\npublic void BuscarDados()\n{\n    var result = ObterAsync();\n    Console.WriteLine(result);\n}",
+                OpcoesJson = "[\"void → async Task\",\"result → await result\",\"ObterAsync() → ObterAsync\",\"Console.WriteLine\"]",
+                RespostaCorreta = "void → async Task",
+                DicaTexto = "Para usar await, o método precisa ser marcado como async e retornar Task.",
+                Explicacao = "Sem 'async', não é possível usar 'await'. O método deve ser 'async Task BuscarDados()' e a chamada 'var result = await ObterAsync();' para aguardar corretamente." }
         );
     }
 }

@@ -58,12 +58,27 @@
       <span class="timer-texto">{{ tempoRestante }}s</span>
     </div>
 
-    <div class="enunciado">
+    <!-- Enunciado: PreencherEspacos com destaque no ____ -->
+    <div class="enunciado" *ngIf="tipoPreencherEspacos">
+      <p>
+        <ng-container *ngFor="let parte of enunciadoPartes; let last = last">
+          {{ parte }}<span class="lacuna" *ngIf="!last">____</span>
+        </ng-container>
+      </p>
+    </div>
+
+    <!-- Enunciado: CorrigirCodigo em bloco de código -->
+    <div class="enunciado" *ngIf="tipoCorrigirCodigo">
+      <pre class="codigo-bloco"><code>{{ exercicioAtual.enunciado }}</code></pre>
+    </div>
+
+    <!-- Enunciado padrão -->
+    <div class="enunciado" *ngIf="!tipoPreencherEspacos && !tipoCorrigirCodigo">
       <p>{{ exercicioAtual.enunciado }}</p>
     </div>
 
-    <!-- Múltipla Escolha -->
-    <div class="opcoes" *ngIf="tipoMultiplaEscolha || tipoVerdadeiroFalso">
+    <!-- Múltipla Escolha / Verdadeiro-Falso / CorrigirCodigo (com opções) -->
+    <div class="opcoes" *ngIf="tipoMultiplaEscolha || tipoVerdadeiroFalso || (tipoCorrigirCodigo && opcoes.length > 0)">
       <button
         *ngFor="let opcao of opcoes"
         class="opcao"
@@ -84,8 +99,8 @@
         [disabled]="!!resultado" (click)="selecionar('Falso')">Falso</button>
     </div>
 
-    <!-- Código / Preencher Espaços -->
-    <div class="resposta-texto" *ngIf="!tipoMultiplaEscolha && !tipoVerdadeiroFalso">
+    <!-- Texto livre: PreencherEspacos e Codigo -->
+    <div class="resposta-texto" *ngIf="tipoPreencherEspacos || (!tipoMultiplaEscolha && !tipoVerdadeiroFalso && !tipoCorrigirCodigo)">
       <input
         type="text"
         [(ngModel)]="respostaTexto"
@@ -101,6 +116,9 @@
     <div class="feedback errada-msg" *ngIf="resultado && !resultado.correta">
       ✗ Incorreto. {{ resultado.explicacao }}
       <br><strong>Resposta: {{ resultado.respostaCorreta }}</strong>
+      <div class="dica" *ngIf="exercicioAtual.dicaTexto">
+        💡 <em>{{ exercicioAtual.dicaTexto }}</em>
+      </div>
     </div>
 
     <div class="acoes">

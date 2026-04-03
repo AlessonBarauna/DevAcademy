@@ -7,6 +7,7 @@ public class ExercicioDto
     public string Enunciado { get; set; } = string.Empty;
     public string Tipo { get; set; } = string.Empty;
     public string OpcoesJson { get; set; } = "[]";
+    public string? DicaTexto { get; set; }
     public int Ordem { get; set; }
     public int XpRecompensa { get; set; }
 }
