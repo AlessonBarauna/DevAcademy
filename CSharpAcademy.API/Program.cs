@@ -67,6 +67,7 @@ builder.Services.AddScoped<ILicaoRepository, LicaoRepository>();
 builder.Services.AddScoped<IExercicioRepository, ExercicioRepository>();
 builder.Services.AddScoped<IProgressoRepository, ProgressoRepository>();
 builder.Services.AddScoped<IRespostaRepository, RespostaRepository>();
+builder.Services.AddScoped<IMissaoRepository, MissaoRepository>();
 
 // ── Repositories — IA ─────────────────────────────────────────────────────────
 builder.Services.AddScoped<IChatMessageRepository, ChatMessageRepository>();

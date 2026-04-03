@@ -13,6 +13,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<RespostaUsuario> RespostasUsuarios => Set<RespostaUsuario>();
     public DbSet<Progresso> Progressos => Set<Progresso>();
     public DbSet<Conquista> Conquistas => Set<Conquista>();
+    public DbSet<MissaoDiaria> MissoesDiarias => Set<MissaoDiaria>();
 
     // AI
     public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();

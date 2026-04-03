@@ -60,6 +60,29 @@
       </div>
     </section>
 
+    <!-- Missões Diárias -->
+    <section class="missoes-section" *ngIf="missoesDiarias.length > 0">
+      <h3>🎯 Missões Diárias
+        <span class="missoes-contador">{{ missoesConcluidasHoje }}/{{ missoesDiarias.length }} concluídas</span>
+      </h3>
+      <div class="missoes-lista">
+        <div class="missao-item" *ngFor="let m of missoesDiarias" [class.concluida]="m.concluida">
+          <div class="missao-icone">{{ iconeMissao(m.tipo) }}</div>
+          <div class="missao-info">
+            <div class="missao-header">
+              <span class="missao-desc">{{ m.descricao }}</span>
+              <span class="missao-xp">+{{ m.xpBonus }} XP</span>
+            </div>
+            <div class="missao-barra">
+              <div class="missao-fill" [style.width.%]="m.percentual" [class.completa]="m.concluida"></div>
+            </div>
+            <span class="missao-progresso">{{ m.progresso }}/{{ m.meta }}</span>
+          </div>
+          <span class="missao-check" *ngIf="m.concluida">✓</span>
+        </div>
+      </div>
+    </section>
+
     <!-- Desafio Rápido CTA -->
     <section class="desafio-cta" routerLink="/desafio-rapido">
       <div class="desafio-cta-info">
