@@ -6,6 +6,7 @@ import { ModuloList } from './features/modulos/modulo-list/modulo-list';
 import { ModuloDetail } from './features/modulos/modulo-detail/modulo-detail';
 import { LicaoDetail } from './features/modulos/licao-detail/licao-detail';
 import { ExercicioView } from './features/exercicios/exercicio-view/exercicio-view';
+import { DesafioRapido } from './features/exercicios/desafio-rapido/desafio-rapido';
 import { Dashboard } from './features/dashboard/dashboard/dashboard';
 import { Ranking } from './features/ranking/ranking/ranking';
 import { Perfil } from './features/perfil/perfil/perfil';
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'modulos/:moduloId', component: ModuloDetail, canActivate: [AuthGuard] },
   { path: 'modulos/:moduloId/licoes', component: LicaoDetail, canActivate: [AuthGuard] },
   { path: 'modulos/:moduloId/licoes/:licaoId/exercicios', component: ExercicioView, canActivate: [AuthGuard] },
+  { path: 'desafio-rapido', component: DesafioRapido, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/login' }
 ];
 
