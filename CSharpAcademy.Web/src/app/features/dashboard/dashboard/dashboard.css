@@ -44,6 +44,20 @@ nav a {
 
 nav a:hover { color: var(--text); background: var(--bg-hover); }
 
+.nav-revisao { position: relative; display: inline-flex; align-items: center; gap: 6px; }
+
+.nav-badge {
+  background: var(--red, #e74c3c);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  line-height: 1.4;
+  min-width: 18px;
+  text-align: center;
+}
+
 .btn-tema {
   background: transparent;
   border: 1px solid var(--border);

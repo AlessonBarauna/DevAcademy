@@ -2,6 +2,9 @@
   <header class="page-topbar">
     <button class="btn-voltar" (click)="voltar()">&#8592; Dashboard</button>
     <span class="page-titulo">Trilha de Aprendizado</span>
+    <a class="topbar-revisao" routerLink="/revisao" *ngIf="(revisaoService.contagem$ | async) as n">
+      <span *ngIf="n > 0">🔁 Revisões <span class="nav-badge">{{ n }}</span></span>
+    </a>
   </header>
 
   <div class="page-hero">

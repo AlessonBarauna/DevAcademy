@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModuloService } from '../../../core/services/modulo';
+import { RevisaoService } from '../../../core/services/revisao';
 import { Modulo } from '../../../core/models/modulo.model';
 
 @Component({
@@ -22,11 +23,17 @@ export class ModuloList implements OnInit {
     );
   }
 
-  constructor(private moduloService: ModuloService, private router: Router, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private moduloService: ModuloService,
+    public revisaoService: RevisaoService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   voltar(): void { this.router.navigate(['/dashboard']); }
 
   ngOnInit(): void {
+    this.revisaoService.carregar();
     this.moduloService.getModulos().subscribe({
       next: m => { this.modulos = m; this.carregando = false; this.cdr.detectChanges(); },
       error: () => { this.carregando = false; this.cdr.detectChanges(); }

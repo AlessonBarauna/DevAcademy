@@ -1,0 +1,36 @@
+<div class="revisao-page">
+  <header class="revisao-topbar">
+    <button class="btn-voltar" (click)="voltar()">&#8592; Dashboard</button>
+    <span class="revisao-titulo">🔁 Revisões Pendentes</span>
+  </header>
+
+  <div class="revisao-content">
+    <div class="loading" *ngIf="carregando">Carregando...</div>
+
+    <div class="empty-state" *ngIf="!carregando && pendentes.length === 0">
+      <div class="empty-icone">✅</div>
+      <h2>Nenhuma revisão pendente!</h2>
+      <p>Você está em dia. Continue estudando para acumular mais conteúdo a revisar.</p>
+      <button class="btn-modulos" (click)="voltar()">Ir para o Dashboard</button>
+    </div>
+
+    <div class="pendentes-lista" *ngIf="!carregando && pendentes.length > 0">
+      <p class="pendentes-subtitulo">
+        Revise estas lições com base em repetição espaçada — quanto menor a retenção, maior a prioridade.
+      </p>
+      <div class="pendente-card" *ngFor="let r of pendentes">
+        <div class="pendente-info">
+          <span class="pendente-titulo">{{ r.licaoTitulo }}</span>
+          <span class="pendente-meta">{{ r.totalRevisoes }} revisão(ões) • Próxima: {{ r.proximaRevisao | date:'dd/MM' }}</span>
+        </div>
+        <div class="pendente-retencao">
+          <div class="retencao-barra">
+            <div class="retencao-fill" [style.width.%]="r.nivelRetencao * 20" [class]="'nivel-' + r.nivelRetencao"></div>
+          </div>
+          <span class="retencao-label">Retenção {{ nivelLabel(r.nivelRetencao) }}</span>
+        </div>
+        <button class="btn-revisar" (click)="revisar(r)">Revisar →</button>
+      </div>
+    </div>
+  </div>
+</div>

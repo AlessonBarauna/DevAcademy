@@ -3,6 +3,10 @@
     <div class="logo">&#127891; C# Academy</div>
     <nav>
       <a routerLink="/modulos">Módulos</a>
+      <a routerLink="/revisao" class="nav-revisao">
+        🔁 Revisões
+        <span class="nav-badge" *ngIf="totalRevisoesPendentes > 0">{{ totalRevisoesPendentes }}</span>
+      </a>
       <a routerLink="/ranking">🏆 Ranking</a>
       <a routerLink="/perfil">👤 Perfil</a>
       <button class="btn-tema" (click)="themeService.toggle()" [title]="themeService.isLight ? 'Modo escuro' : 'Modo claro'">
