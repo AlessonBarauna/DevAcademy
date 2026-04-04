@@ -78,6 +78,25 @@
 
     <div class="mensagem-conclusao" *ngIf="mensagemConclusao">{{ mensagemConclusao }}</div>
 
+    <!-- Notas do Aluno -->
+    <section class="notas-section">
+      <button class="notas-toggle" (click)="toggleNota()">
+        📝 Minhas Notas
+        <span class="notas-status" *ngIf="notaStatus === 'salvando'">Salvando...</span>
+        <span class="notas-status salvo" *ngIf="notaStatus === 'salvo'">✓ Salvo</span>
+        <span class="notas-chevron">{{ notaAberta ? '▲' : '▼' }}</span>
+      </button>
+      <div class="notas-body" *ngIf="notaAberta">
+        <textarea
+          class="notas-textarea"
+          placeholder="Anote os pontos importantes desta lição..."
+          [(ngModel)]="notaConteudo"
+          (ngModelChange)="onNotaChange($event)"
+          rows="6">
+        </textarea>
+      </div>
+    </section>
+
     <!-- Professor Assistente integrado -->
     <app-assistant-chat [licaoId]="licaoSelecionada.id"></app-assistant-chat>
   </main>

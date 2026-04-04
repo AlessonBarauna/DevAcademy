@@ -513,3 +513,71 @@
 
   .btn-nav { max-width: 130px; }
 }
+
+/* ── Notas do Aluno ─────────────────────────────── */
+.notas-section {
+  margin: 20px 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-panel);
+}
+
+.notas-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  padding: 12px 16px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.notas-toggle:hover { background: var(--bg-hover); }
+
+.notas-status {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.notas-status.salvo { color: var(--green); }
+
+.notas-chevron {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.notas-body {
+  border-top: 1px solid var(--border);
+  padding: 12px;
+}
+
+.notas-textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 10px 12px;
+  resize: vertical;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.notas-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.notas-textarea::placeholder { color: var(--text-muted); }

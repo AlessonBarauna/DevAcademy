@@ -1,5 +1,7 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Subject, Subscription, debounceTime, distinctUntilChanged } from 'rxjs';
 import { ModuloService } from '../../../core/services/modulo';
 import { AuthService } from '../../../core/services/auth';
 import { ConquistaResultDto, Licao, Modulo } from '../../../core/models/modulo.model';
@@ -10,7 +12,7 @@ import { ConquistaResultDto, Licao, Modulo } from '../../../core/models/modulo.m
   templateUrl: './licao-detail.html',
   styleUrl: './licao-detail.css',
 })
-export class LicaoDetail implements OnInit {
+export class LicaoDetail implements OnInit, OnDestroy {
   @ViewChild('contentArea') contentArea!: ElementRef<HTMLElement>;
 
   licoes: Licao[] = [];
@@ -24,11 +26,19 @@ export class LicaoDetail implements OnInit {
   sidebarAberta = false;
   scrollProgress = 0;
 
+  // Notas
+  notaConteudo = '';
+  notaAberta = false;
+  notaStatus: 'idle' | 'salvando' | 'salvo' = 'idle';
+  private notaChange$ = new Subject<string>();
+  private notaSub = new Subscription();
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private moduloService: ModuloService,
     private authService: AuthService,
+    private http: HttpClient,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -47,10 +57,47 @@ export class LicaoDetail implements OnInit {
           this.licaoSelecionada = licoes[0];
         }
         this.carregando = false;
+        if (this.licaoSelecionada) this.carregarNota(this.licaoSelecionada.id);
         this.cdr.detectChanges();
       },
       error: () => { this.carregando = false; this.cdr.detectChanges(); }
     });
+
+    this.notaSub = this.notaChange$.pipe(
+      debounceTime(1500),
+      distinctUntilChanged()
+    ).subscribe(conteudo => this.persistirNota(conteudo));
+  }
+
+  ngOnDestroy(): void {
+    this.notaSub.unsubscribe();
+  }
+
+  carregarNota(licaoId: number): void {
+    this.notaConteudo = '';
+    this.notaStatus = 'idle';
+    this.http.get<{ conteudo: string }>(`/api/nota/${licaoId}`).subscribe({
+      next: r => { this.notaConteudo = r.conteudo; this.cdr.detectChanges(); }
+    });
+  }
+
+  onNotaChange(valor: string): void {
+    this.notaStatus = 'idle';
+    this.notaChange$.next(valor);
+  }
+
+  private persistirNota(conteudo: string): void {
+    if (!this.licaoSelecionada) return;
+    this.notaStatus = 'salvando';
+    this.cdr.detectChanges();
+    this.http.post(`/api/nota/${this.licaoSelecionada.id}`, { conteudo }).subscribe({
+      next: () => { this.notaStatus = 'salvo'; this.cdr.detectChanges(); },
+      error: () => { this.notaStatus = 'idle'; this.cdr.detectChanges(); }
+    });
+  }
+
+  toggleNota(): void {
+    this.notaAberta = !this.notaAberta;
   }
 
   get indiceAtual(): number {
@@ -93,6 +140,7 @@ export class LicaoDetail implements OnInit {
     this.licaoSelecionada = licao;
     this.mensagemConclusao = '';
     this.sidebarAberta = false;
+    this.carregarNota(licao.id);
     setTimeout(() => this.contentArea?.nativeElement?.scrollTo({ top: 0, behavior: 'smooth' }), 0);
   }
 
