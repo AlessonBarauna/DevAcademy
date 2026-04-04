@@ -27,4 +27,5 @@ export interface UsuarioResponseDto {
   streakAtual?: number;
   streakMaximo?: number;
   ultimoEstudo?: string;
+  streakFreeze?: number;
 }

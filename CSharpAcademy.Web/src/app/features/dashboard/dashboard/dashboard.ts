@@ -26,6 +26,7 @@ export class Dashboard implements OnInit, OnDestroy {
   missoesDiarias: MissaoDiaria[] = [];
   carregando = true;
   erroModulos = '';
+  usandoFreeze = false;
   heatmapSemanas: { data: Date; count: number; nivel: number }[][] = [];
   private sub = new Subscription();
 
@@ -198,6 +199,19 @@ export class Dashboard implements OnInit, OnDestroy {
 
   irParaModulo(modulo: Modulo): void {
     this.router.navigate(['/modulos', modulo.id]);
+  }
+
+  usarStreakFreeze(): void {
+    if (this.usandoFreeze) return;
+    this.usandoFreeze = true;
+    this.http.post('/api/auth/streak-freeze', {}).subscribe({
+      next: () => {
+        this.authService.sincronizarPerfil();
+        this.usandoFreeze = false;
+        this.cdr.detectChanges();
+      },
+      error: () => { this.usandoFreeze = false; this.cdr.detectChanges(); }
+    });
   }
 
   logout(): void {
