@@ -12,7 +12,9 @@ import { ThemeService } from '../../../core/services/theme';
 })
 export class Ranking implements OnInit {
   itens: RankingItem[] = [];
+  itensSemanal: RankingItem[] = [];
   carregando = true;
+  aba: 'geral' | 'semanal' = 'geral';
 
   get top10(): RankingItem[] {
     return this.itens.filter(i => !i.euMesmo || i.posicao <= 10);
@@ -36,13 +38,30 @@ export class Ranking implements OnInit {
 
   ngOnInit(): void {
     this.http.get<RankingItem[]>('/api/ranking').subscribe({
-      next: itens => {
-        this.itens = itens;
-        this.carregando = false;
-        this.cdr.detectChanges();
-      },
+      next: itens => { this.itens = itens; this.carregando = false; this.cdr.detectChanges(); },
       error: () => { this.carregando = false; this.cdr.detectChanges(); }
     });
+    this.http.get<RankingItem[]>('/api/ranking/semanal').subscribe({
+      next: itens => { this.itensSemanal = itens; this.cdr.detectChanges(); }
+    });
+  }
+
+  get itensAtivos(): RankingItem[] {
+    return this.aba === 'geral' ? this.itens : this.itensSemanal;
+  }
+
+  get top10Ativo(): RankingItem[] {
+    return this.itensAtivos.filter(i => !i.euMesmo || i.posicao <= 10);
+  }
+
+  get euForaDoTopAtivo(): RankingItem | null {
+    const eu = this.itensAtivos.find(i => i.euMesmo);
+    return eu && eu.posicao > 10 ? eu : null;
+  }
+
+  trocarAba(aba: 'geral' | 'semanal'): void {
+    this.aba = aba;
+    this.cdr.detectChanges();
   }
 
   medalha(posicao: number): string {
