@@ -1,0 +1,105 @@
+<div class="exame-page">
+
+  <!-- INTRO -->
+  <div class="exame-intro" *ngIf="fase === 'intro'">
+    <div class="intro-card">
+      <div class="intro-icon">📝</div>
+      <h1>Exame: {{ tituloModulo }}</h1>
+      <p class="intro-desc">Responda <strong>{{ totalQuestoes }} questões</strong> em até <strong>5 minutos</strong>.</p>
+      <ul class="intro-regras">
+        <li>⏱️ O tempo é contado globalmente — gerencie bem</li>
+        <li>✅ Cada acerto conta para sua nota final</li>
+        <li>🏅 Nota A: 90%+ &nbsp;|&nbsp; B: 75%+ &nbsp;|&nbsp; C: 60%+ &nbsp;|&nbsp; F: abaixo</li>
+      </ul>
+      <div class="intro-acoes">
+        <button class="btn-comecar" (click)="iniciarExame()">▶ Começar Exame</button>
+        <button class="btn-voltar" (click)="voltar()">← Voltar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTÃO -->
+  <div class="exame-questao" *ngIf="fase === 'questao' && questaoAtual">
+    <header class="exame-header">
+      <span class="progresso-texto">{{ indiceAtual + 1 }} / {{ totalQuestoes }}</span>
+      <div class="progresso-bar">
+        <div class="progresso-fill" [style.width.%]="((indiceAtual + 1) / totalQuestoes) * 100"></div>
+      </div>
+      <span class="timer" [class.urgente]="tempoRestante <= 60">⏱ {{ tempoFormatado }}</span>
+    </header>
+
+    <div class="questao-card">
+      <p class="enunciado">{{ questaoAtual.enunciado }}</p>
+
+      <!-- Múltipla escolha -->
+      <div class="opcoes" *ngIf="isMultiplaEscolha && questaoAtual.correta === null">
+        <button
+          class="opcao-btn"
+          *ngFor="let op of opcoes"
+          [class.selecionada]="opcaoSelecionada === op"
+          (click)="opcaoSelecionada = op">
+          {{ op }}
+        </button>
+      </div>
+
+      <!-- Digitação -->
+      <div class="campo-texto" *ngIf="!isMultiplaEscolha && questaoAtual.correta === null">
+        <input
+          type="text"
+          [(ngModel)]="respostaDigitada"
+          placeholder="Digite sua resposta..."
+          (keyup.enter)="responder()"
+          class="input-resposta" />
+      </div>
+
+      <!-- Feedback -->
+      <div class="feedback" *ngIf="questaoAtual.correta !== null" [class.acerto]="questaoAtual.correta" [class.erro]="!questaoAtual.correta">
+        <span class="feedback-icone">{{ questaoAtual.correta ? '✅' : '❌' }}</span>
+        <span *ngIf="questaoAtual.correta">Correto!</span>
+        <span *ngIf="!questaoAtual.correta">Resposta correta: <strong>{{ questaoAtual.respostaCorreta }}</strong></span>
+      </div>
+
+      <div class="questao-acoes">
+        <button
+          class="btn-responder"
+          *ngIf="questaoAtual.correta === null"
+          (click)="responder()"
+          [disabled]="enviando || (!opcaoSelecionada && !respostaDigitada.trim())">
+          {{ enviando ? 'Verificando...' : 'Responder' }}
+        </button>
+        <button
+          class="btn-avancar"
+          *ngIf="questaoAtual.correta !== null"
+          (click)="avancar()">
+          {{ indiceAtual < totalQuestoes - 1 ? 'Próxima →' : 'Ver resultado' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div class="exame-resultado" *ngIf="fase === 'resultado'">
+    <div class="resultado-card">
+      <div class="nota-circulo" [class]="'nota-' + nota">{{ nota }}</div>
+      <h2>{{ notaLabel }}</h2>
+      <p class="resultado-subtitulo">{{ acertos }} de {{ totalQuestoes }} questões corretas ({{ percentual }}%)</p>
+
+      <div class="resultado-lista">
+        <div
+          class="resultado-item"
+          *ngFor="let q of questoes; let i = index"
+          [class.acerto]="q.correta"
+          [class.erro]="!q.correta">
+          <span class="resultado-num">{{ i + 1 }}</span>
+          <span class="resultado-icone">{{ q.correta ? '✅' : '❌' }}</span>
+          <span class="resultado-enunciado">{{ q.enunciado }}</span>
+        </div>
+      </div>
+
+      <div class="resultado-acoes">
+        <button class="btn-voltar-modulo" (click)="voltar()">← Voltar ao módulo</button>
+      </div>
+    </div>
+  </div>
+
+</div>

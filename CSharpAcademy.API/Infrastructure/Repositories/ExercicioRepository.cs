@@ -15,6 +15,13 @@ public class ExercicioRepository(AppDbContext ctx) : IExercicioRepository
     public async Task<Exercicio?> ObterPorIdAsync(int id)
         => await ctx.Exercicios.FindAsync(id);
 
+    public async Task<IEnumerable<Exercicio>> ObterAleatoriosPorModuloAsync(int moduloId, int quantidade)
+        => await ctx.Exercicios
+            .Where(e => ctx.Licoes.Any(l => l.Id == e.LicaoId && l.ModuloId == moduloId))
+            .OrderBy(_ => Guid.NewGuid())
+            .Take(quantidade)
+            .ToListAsync();
+
     public async Task<IEnumerable<Exercicio>> ObterAleatoriosDeConcluidasAsync(int usuarioId, int quantidade)
     {
         var licoesConcluidas = await ctx.Progressos

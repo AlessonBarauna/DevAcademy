@@ -22,10 +22,13 @@
       </div>
       <div class="hero-acoes">
         <button class="btn-comecar" (click)="comecar()" [disabled]="licoes.length === 0">
-          {{ modulo.licoesCompletadas === 0 ? '▶ Começar' : moduloConcluido ? '↺ Revisar' : '▶ Continuar' }}
+          {{ modulo.licoesCompletadas === 0 ? '&#9654; Começar' : moduloConcluido ? '&#8635; Revisar' : '&#9654; Continuar' }}
+        </button>
+        <button class="btn-exame" (click)="irParaExame()" *ngIf="modulo.licoesCompletadas > 0" title="Testar seus conhecimentos">
+          &#128221; Fazer Exame
         </button>
         <button class="btn-certificado" *ngIf="moduloConcluido" (click)="verCertificado()">
-          🏆 Ver Certificado
+          &#127942; Ver Certificado
         </button>
       </div>
     </div>

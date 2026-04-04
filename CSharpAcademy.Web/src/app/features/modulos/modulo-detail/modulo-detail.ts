@@ -53,6 +53,11 @@ export class ModuloDetail implements OnInit {
     return this.licoes.find(l => !l.completada) ?? this.licoes[0] ?? null;
   }
 
+  get moduloConcluido(): boolean {
+    return !!this.modulo && this.modulo.totalLicoes > 0
+      && this.modulo.licoesCompletadas >= this.modulo.totalLicoes;
+  }
+
   entrarNaLicao(licao: Licao): void {
     this.router.navigate(['/modulos', this.moduloId, 'licoes'], {
       queryParams: { licaoId: licao.id }
@@ -65,9 +70,8 @@ export class ModuloDetail implements OnInit {
     }
   }
 
-  get moduloConcluido(): boolean {
-    return !!this.modulo && this.modulo.totalLicoes > 0
-      && this.modulo.licoesCompletadas >= this.modulo.totalLicoes;
+  irParaExame(): void {
+    this.router.navigate(['/modulos', this.moduloId, 'exame']);
   }
 
   verCertificado(): void {

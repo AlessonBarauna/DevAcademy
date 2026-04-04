@@ -123,6 +123,20 @@
 
 .hero-acoes { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 
+.btn-exame {
+  background: transparent;
+  color: var(--yellow);
+  border: 1px solid rgba(220, 220, 170, 0.4);
+  padding: 9px 20px;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.btn-exame:hover { border-color: var(--yellow); background: rgba(220,220,170,0.06); }
+
 .btn-certificado {
   background: none;
   border: 1px solid var(--yellow);

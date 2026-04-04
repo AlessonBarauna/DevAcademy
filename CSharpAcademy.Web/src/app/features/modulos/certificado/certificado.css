@@ -67,7 +67,6 @@
   box-shadow: 0 4px 40px rgba(0,0,0,0.3);
 }
 
-/* Marca d'água */
 .cert-watermark {
   position: absolute;
   font-size: 280px;
@@ -82,7 +81,6 @@
   line-height: 1;
 }
 
-/* Borda decorativa interna */
 .certificado::before {
   content: '';
   position: absolute;
@@ -92,7 +90,6 @@
   pointer-events: none;
 }
 
-/* Topo */
 .cert-topo {
   display: flex;
   justify-content: space-between;
@@ -117,7 +114,6 @@
   border-radius: 10px;
 }
 
-/* Corpo */
 .cert-corpo { text-align: center; }
 
 .cert-declara {
@@ -161,7 +157,6 @@
   line-height: 1.5;
 }
 
-/* Stats */
 .cert-stats {
   display: flex;
   justify-content: center;
@@ -191,7 +186,6 @@
 
 .cert-divider { width: 1px; height: 36px; background: var(--border); }
 
-/* Rodapé */
 .cert-rodape {
   display: flex;
   justify-content: space-between;
@@ -217,7 +211,6 @@
 .data-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
 .data-val { font-size: 13px; font-family: var(--font-mono); color: var(--text); font-weight: 600; }
 
-/* ── Impressão ──────────────────────────────────────────────────────── */
 @media print {
   .no-print { display: none !important; }
 

@@ -1,6 +1,5 @@
 <div class="cert-page">
 
-  <!-- Controles (ocultos na impressão) -->
   <div class="cert-controles no-print">
     <button class="btn-voltar" (click)="voltar()">← Voltar</button>
     <button class="btn-imprimir" (click)="imprimir()" *ngIf="certificado">🖨️ Salvar / Imprimir</button>
@@ -13,7 +12,6 @@
     <button class="btn-voltar" (click)="voltar()">← Voltar ao módulo</button>
   </div>
 
-  <!-- Certificado -->
   <div class="certificado" *ngIf="certificado">
 
     <div class="cert-topo">
