@@ -14,6 +14,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Progresso> Progressos => Set<Progresso>();
     public DbSet<Conquista> Conquistas => Set<Conquista>();
     public DbSet<MissaoDiaria> MissoesDiarias => Set<MissaoDiaria>();
+    public DbSet<NotaLicao> NotasLicao => Set<NotaLicao>();
 
     // AI
     public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
@@ -40,6 +41,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         modelBuilder.Entity<Progresso>()
             .HasIndex(p => new { p.UsuarioId, p.LicaoId }).IsUnique();
+
+        modelBuilder.Entity<NotaLicao>()
+            .HasIndex(n => new { n.UsuarioId, n.LicaoId }).IsUnique();
 
         // Seed Módulos
         modelBuilder.Entity<Modulo>().HasData(
