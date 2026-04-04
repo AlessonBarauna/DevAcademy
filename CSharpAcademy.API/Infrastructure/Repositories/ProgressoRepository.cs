@@ -27,6 +27,22 @@ public class ProgressoRepository(AppDbContext ctx) : IProgressoRepository
     public async Task<Progresso?> ObterAsync(int usuarioId, int licaoId)
         => await ctx.Progressos.FirstOrDefaultAsync(p => p.UsuarioId == usuarioId && p.LicaoId == licaoId);
 
+    public async Task<IEnumerable<(int UsuarioId, int XpSemanal)>> ObterXpSemanalAsync()
+    {
+        // Segunda-feira da semana atual (UTC)
+        var hoje = DateTime.UtcNow.Date;
+        var diasDesdeSegunda = ((int)hoje.DayOfWeek + 6) % 7; // converte domingo=0 para segunda=0
+        var inicioSemana = hoje.AddDays(-diasDesdeSegunda);
+
+        var lista = await ctx.Progressos
+            .Where(p => p.Completada && p.DataConclusao >= inicioSemana)
+            .GroupBy(p => p.UsuarioId)
+            .Select(g => new { UsuarioId = g.Key, XpSemanal = g.Sum(p => p.XPGanho) })
+            .ToListAsync();
+
+        return lista.Select(x => (x.UsuarioId, x.XpSemanal));
+    }
+
     public async Task<IEnumerable<Progresso>> ObterRevisoesHojeAsync(int usuarioId)
         => await ctx.Progressos
             .Include(p => p.Licao)

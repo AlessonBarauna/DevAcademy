@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth';
 import { ThemeService } from '../../../core/services/theme';
 import { ConquistaDto, UsuarioResponseDto } from '../../../core/models/auth.model';
+import { AnalyticsModulo } from '../../../core/models/analytics.model';
 
 @Component({
   selector: 'app-perfil',
@@ -15,9 +16,14 @@ import { ConquistaDto, UsuarioResponseDto } from '../../../core/models/auth.mode
 export class Perfil implements OnInit, OnDestroy {
   usuario: UsuarioResponseDto | null = null;
   conquistas: ConquistaDto[] = [];
+  analytics: AnalyticsModulo[] = [];
   carregando = true;
   heatmapSemanas: { data: Date; count: number; nivel: number }[][] = [];
   private sub = new Subscription();
+
+  readonly radarSize = 200;
+  readonly radarCenter = 100;
+  readonly radarRadius = 75;
 
   readonly nivelLabels: Record<number, string> = {
     1: 'Iniciante', 2: 'Intermediário', 3: 'Avançado', 4: 'Especialista',
@@ -49,6 +55,10 @@ export class Perfil implements OnInit, OnDestroy {
 
     this.http.get<{ data: string; contagem: number }[]>('/api/auth/atividade').subscribe({
       next: atividade => { this.heatmapSemanas = this.buildHeatmap(atividade); this.cdr.detectChanges(); }
+    });
+
+    this.http.get<AnalyticsModulo[]>('/api/auth/analytics').subscribe({
+      next: a => { this.analytics = a; this.cdr.detectChanges(); }
     });
   }
 
@@ -94,6 +104,48 @@ export class Perfil implements OnInit, OnDestroy {
     const limite = this.xpParaSubir;
     if (nivelAtual === 4) return 100;
     return Math.min(100, Math.round(((xp - base) / (limite - base)) * 100));
+  }
+
+  /** Ponto (x,y) de um eixo do radar dado índice e valor 0-1 */
+  radarPonto(indice: number, valor: number): { x: number; y: number } {
+    const n = this.analytics.length || 1;
+    const angulo = (indice * 2 * Math.PI) / n - Math.PI / 2;
+    return {
+      x: this.radarCenter + valor * this.radarRadius * Math.cos(angulo),
+      y: this.radarCenter + valor * this.radarRadius * Math.sin(angulo),
+    };
+  }
+
+  /** Pontos da área preenchida */
+  get radarAreaPath(): string {
+    if (!this.analytics.length) return '';
+    return this.analytics
+      .map((a, i) => {
+        const p = this.radarPonto(i, a.percentualAcerto / 100);
+        return `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+      })
+      .join(' ') + ' Z';
+  }
+
+  /** Linhas da grade (círculos de referência) em 25%, 50%, 75%, 100% */
+  radarGradePath(nivel: number): string {
+    if (!this.analytics.length) return '';
+    const v = nivel / 100;
+    return this.analytics
+      .map((_, i) => {
+        const p = this.radarPonto(i, v);
+        return `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+      })
+      .join(' ') + ' Z';
+  }
+
+  /** Posição do label de cada eixo */
+  radarLabel(indice: number): { x: number; y: number } {
+    return this.radarPonto(indice, 1.25);
+  }
+
+  get analyticsComDados(): AnalyticsModulo[] {
+    return this.analytics.filter(a => a.totalRespostas > 0);
   }
 
   ngOnDestroy(): void {

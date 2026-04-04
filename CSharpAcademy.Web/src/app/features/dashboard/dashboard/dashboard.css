@@ -352,6 +352,120 @@ nav a:hover { color: var(--text); background: var(--bg-hover); }
 .loading { color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; }
 .erro-msg { color: var(--red); padding: 10px 0; font-size: 12px; font-family: var(--font-mono); }
 
+/* Missões Diárias */
+.missoes-section {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.missoes-section h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.missoes-contador {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.missoes-lista { display: flex; flex-direction: column; gap: 10px; }
+
+.missao-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  transition: opacity 0.2s;
+}
+
+.missao-item.concluida { opacity: 0.6; }
+
+.missao-icone { font-size: 20px; flex-shrink: 0; }
+
+.missao-info { flex: 1; min-width: 0; }
+
+.missao-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.missao-desc { font-size: 12px; color: var(--text); }
+
+.missao-xp {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--yellow);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.missao-barra {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.missao-fill {
+  height: 100%;
+  background: var(--blue);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.missao-fill.completa { background: var(--green); }
+
+.missao-progresso {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.missao-check {
+  font-size: 16px;
+  color: var(--green);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Desafio Rápido CTA */
+.desafio-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--bg-panel) 85%, var(--yellow)), var(--bg-panel));
+  border: 1px solid color-mix(in srgb, var(--yellow) 30%, var(--border));
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.desafio-cta:hover { border-color: var(--yellow); transform: translateY(-1px); }
+
+.desafio-cta-info { display: flex; align-items: center; gap: 14px; }
+.desafio-cta-icone { font-size: 28px; }
+.desafio-cta-titulo { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.desafio-cta-sub { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); }
+.desafio-cta-arrow { font-size: 18px; color: var(--yellow); font-weight: 700; }
+
 /* SRS — Revisões Pendentes */
 .revisoes-section {
   background: var(--bg-panel);

@@ -1,8 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModuloService } from '../../../core/services/modulo';
-import { AuthService } from '../../../core/services/auth';
-import { Modulo } from '../../../core/models/modulo.model';
+import { HttpClient } from '@angular/common/http';
+
+interface CertificadoData {
+  nomeAluno: string;
+  moduloTitulo: string;
+  moduloDescricao: string;
+  nivel: string;
+  totalLicoes: number;
+  xpGanho: number;
+  dataConclusao: string;
+  emitidoEm: string;
+}
 
 @Component({
   selector: 'app-certificado',
@@ -11,33 +20,40 @@ import { Modulo } from '../../../core/models/modulo.model';
   styleUrl: './certificado.css',
 })
 export class Certificado implements OnInit {
-  modulo: Modulo | null = null;
-  nomeUsuario = '';
-  dataHoje = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
+  certificado: CertificadoData | null = null;
+  carregando = true;
+  erro = '';
   moduloId!: number;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private moduloService: ModuloService,
-    private authService: AuthService
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.moduloId = +this.route.snapshot.params['moduloId'];
-    this.moduloService.getModulos().subscribe(mods => {
-      this.modulo = mods.find(m => m.id === this.moduloId) ?? null;
-    });
-    this.authService.usuario$.subscribe(u => {
-      this.nomeUsuario = u?.nome ?? '';
+    this.http.get<CertificadoData>(`/api/certificado/${this.moduloId}`).subscribe({
+      next: c => { this.certificado = c; this.carregando = false; this.cdr.detectChanges(); },
+      error: err => {
+        this.erro = err.status === 400
+          ? 'Conclua todas as lições do módulo para obter o certificado.'
+          : 'Erro ao carregar certificado.';
+        this.carregando = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
-  imprimir(): void {
-    window.print();
-  }
+  imprimir(): void { window.print(); }
 
-  voltar(): void {
-    this.router.navigate(['/modulos', this.moduloId]);
+  voltar(): void { this.router.navigate(['/modulos', this.moduloId]); }
+
+  nivelIcone(nivel: string): string {
+    const mapa: Record<string, string> = {
+      Iniciante: '🌱', Intermediario: '⚡', Avancado: '🔥', Especialista: '💎'
+    };
+    return mapa[nivel] ?? '📘';
   }
 }

@@ -1,24 +1,60 @@
-<div class="certificado-page">
-  <div class="acoes no-print">
+<div class="cert-page">
+
+  <div class="cert-controles no-print">
     <button class="btn-voltar" (click)="voltar()">← Voltar</button>
-    <button class="btn-imprimir" (click)="imprimir()">🖨️ Imprimir / Salvar PDF</button>
+    <button class="btn-imprimir" (click)="imprimir()" *ngIf="certificado">🖨️ Salvar / Imprimir</button>
   </div>
 
-  <div class="certificado" *ngIf="modulo">
-    <div class="cert-borda">
-      <div class="cert-topo">
-        <span class="cert-logo">&#123; C# &#125;</span>
-        <span class="cert-titulo-app">CSharp Academy</span>
-      </div>
+  <div class="loading no-print" *ngIf="carregando">Carregando certificado...</div>
 
-      <h1 class="cert-titulo">Certificado de Conclusão</h1>
-      <p class="cert-declara">Certificamos que</p>
-      <h2 class="cert-nome">{{ nomeUsuario }}</h2>
-      <p class="cert-declara">concluiu com êxito o módulo</p>
-      <h3 class="cert-modulo">{{ modulo.titulo }}</h3>
-      <p class="cert-data">{{ dataHoje }}</p>
+  <div class="erro no-print" *ngIf="erro">
+    <p>{{ erro }}</p>
+    <button class="btn-voltar" (click)="voltar()">← Voltar ao módulo</button>
+  </div>
 
-      <div class="cert-selo">🏆</div>
+  <div class="certificado" *ngIf="certificado">
+
+    <div class="cert-topo">
+      <span class="cert-logo">&#127891; C# Academy</span>
+      <span class="cert-tipo">Certificado de Conclusão</span>
     </div>
+
+    <div class="cert-corpo">
+      <p class="cert-declara">Certificamos que</p>
+      <h1 class="cert-nome">{{ certificado.nomeAluno }}</h1>
+      <p class="cert-concluiu">concluiu com êxito o módulo</p>
+      <h2 class="cert-modulo">{{ certificado.moduloTitulo }}</h2>
+      <p class="cert-descricao">{{ certificado.moduloDescricao }}</p>
+
+      <div class="cert-stats">
+        <div class="cert-stat">
+          <span class="cert-stat-val">{{ certificado.totalLicoes }}</span>
+          <span class="cert-stat-label">Lições</span>
+        </div>
+        <div class="cert-divider"></div>
+        <div class="cert-stat">
+          <span class="cert-stat-val">{{ certificado.xpGanho }} XP</span>
+          <span class="cert-stat-label">Conquistados</span>
+        </div>
+        <div class="cert-divider"></div>
+        <div class="cert-stat">
+          <span class="cert-stat-val">{{ nivelIcone(certificado.nivel) }} {{ certificado.nivel }}</span>
+          <span class="cert-stat-label">Nível</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cert-rodape">
+      <div class="cert-assinatura">
+        <div class="assinatura-linha"></div>
+        <span>C# Academy</span>
+      </div>
+      <div class="cert-data">
+        <span class="data-label">Concluído em</span>
+        <span class="data-val">{{ certificado.dataConclusao }}</span>
+      </div>
+    </div>
+
+    <div class="cert-watermark">C#</div>
   </div>
 </div>

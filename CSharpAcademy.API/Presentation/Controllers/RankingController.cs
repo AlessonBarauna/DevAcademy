@@ -9,7 +9,9 @@ namespace CSharpAcademy.API.Presentation.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class RankingController(IUsuarioRepository usuarioRepo) : ControllerBase
+public class RankingController(
+    IUsuarioRepository usuarioRepo,
+    IProgressoRepository progressoRepo) : ControllerBase
 {
     private int UsuarioId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
@@ -51,5 +53,59 @@ public class RankingController(IUsuarioRepository usuarioRepo) : ControllerBase
         }
 
         return Ok(resultado);
+    }
+
+    /// <summary>Ranking por XP ganho na semana atual (segunda a domingo)</summary>
+    [HttpGet("semanal")]
+    public async Task<IActionResult> ObterRankingSemanal()
+    {
+        var xpSemanal = (await progressoRepo.ObterXpSemanalAsync())
+            .OrderByDescending(x => x.XpSemanal)
+            .ToList();
+
+        if (!xpSemanal.Any()) return Ok(Array.Empty<RankingItemDto>());
+
+        // Carrega apenas os usuários que aparecem no ranking
+        var idsNoRanking = xpSemanal.Take(10).Select(x => x.UsuarioId).ToList();
+        var todos = (await usuarioRepo.ObterRankingAsync(9999)).ToList();
+        var mapaUsuarios = todos.ToDictionary(u => u.Id);
+
+        var top10 = xpSemanal
+            .Take(10)
+            .Select((x, idx) => mapaUsuarios.TryGetValue(x.UsuarioId, out var u) ? new RankingItemDto
+            {
+                Posicao = idx + 1,
+                Id = u.Id,
+                Nome = u.Nome,
+                Xp = x.XpSemanal,
+                NivelAtual = u.NivelAtual,
+                StreakAtual = u.StreakAtual,
+                EuMesmo = u.Id == UsuarioId
+            } : null)
+            .Where(x => x != null)
+            .ToList();
+
+        var euNoTop = top10.Any(u => u!.EuMesmo);
+        if (!euNoTop)
+        {
+            var meuXp = xpSemanal.FirstOrDefault(x => x.UsuarioId == UsuarioId);
+            var minhaPosicao = xpSemanal.FindIndex(x => x.UsuarioId == UsuarioId) + 1;
+            var eu = await usuarioRepo.ObterPorIdAsync(UsuarioId);
+            if (eu != null && minhaPosicao > 0)
+            {
+                top10.Add(new RankingItemDto
+                {
+                    Posicao = minhaPosicao,
+                    Id = eu.Id,
+                    Nome = eu.Nome,
+                    Xp = meuXp.XpSemanal,
+                    NivelAtual = eu.NivelAtual,
+                    StreakAtual = eu.StreakAtual,
+                    EuMesmo = true
+                });
+            }
+        }
+
+        return Ok(top10);
     }
 }

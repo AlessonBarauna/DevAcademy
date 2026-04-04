@@ -67,6 +67,65 @@
     </section>
 
     <!-- Conquistas -->
+    <!-- Analytics de Aprendizado -->
+    <section class="analytics-section" *ngIf="analytics.length > 0">
+      <h3>📊 Analytics de Aprendizado</h3>
+
+      <!-- Radar SVG -->
+      <div class="radar-wrap" *ngIf="analyticsComDados.length >= 3">
+        <svg [attr.width]="radarSize" [attr.height]="radarSize" class="radar-svg">
+          <!-- Grade de referência -->
+          <path *ngFor="let n of [25,50,75,100]"
+            [attr.d]="radarGradePath(n)"
+            class="radar-grade" />
+
+          <!-- Eixos -->
+          <line *ngFor="let a of analytics; let i = index"
+            [attr.x1]="radarCenter" [attr.y1]="radarCenter"
+            [attr.x2]="radarPonto(i, 1).x" [attr.y2]="radarPonto(i, 1).y"
+            class="radar-eixo" />
+
+          <!-- Área preenchida -->
+          <path [attr.d]="radarAreaPath" class="radar-area" />
+
+          <!-- Labels -->
+          <text *ngFor="let a of analytics; let i = index"
+            [attr.x]="radarLabel(i).x" [attr.y]="radarLabel(i).y"
+            class="radar-label" text-anchor="middle" dominant-baseline="middle">
+            {{ a.moduloTitulo.split(' ')[0] }}
+          </text>
+        </svg>
+
+        <!-- Legenda de % -->
+        <div class="radar-legenda">
+          <div class="radar-legenda-item" *ngFor="let a of analytics">
+            <span class="legenda-titulo">{{ a.moduloTitulo }}</span>
+            <span class="legenda-valor" [class.sem-dados]="a.totalRespostas === 0">
+              {{ a.totalRespostas > 0 ? a.percentualAcerto + '%' : 'sem dados' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fallback: barras quando menos de 3 módulos com dados -->
+      <div class="analytics-barras" *ngIf="analyticsComDados.length < 3">
+        <div class="analytics-barra-item" *ngFor="let a of analytics">
+          <div class="barra-label">
+            <span>{{ a.moduloTitulo }}</span>
+            <span class="barra-pct">{{ a.totalRespostas > 0 ? a.percentualAcerto + '%' : '—' }}</span>
+          </div>
+          <div class="barra-track">
+            <div class="barra-fill"
+              [style.width.%]="a.percentualAcerto"
+              [class.barra-boa]="a.percentualAcerto >= 70"
+              [class.barra-media]="a.percentualAcerto >= 40 && a.percentualAcerto < 70"
+              [class.barra-baixa]="a.percentualAcerto < 40 && a.totalRespostas > 0">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="conquistas-section">
       <h3>🏅 Conquistas</h3>
       <div class="loading" *ngIf="carregando">Carregando...</div>

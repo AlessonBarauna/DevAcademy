@@ -60,6 +60,41 @@
       </div>
     </section>
 
+    <!-- Missões Diárias -->
+    <section class="missoes-section" *ngIf="missoesDiarias.length > 0">
+      <h3>🎯 Missões Diárias
+        <span class="missoes-contador">{{ missoesConcluidasHoje }}/{{ missoesDiarias.length }} concluídas</span>
+      </h3>
+      <div class="missoes-lista">
+        <div class="missao-item" *ngFor="let m of missoesDiarias" [class.concluida]="m.concluida">
+          <div class="missao-icone">{{ iconeMissao(m.tipo) }}</div>
+          <div class="missao-info">
+            <div class="missao-header">
+              <span class="missao-desc">{{ m.descricao }}</span>
+              <span class="missao-xp">+{{ m.xpBonus }} XP</span>
+            </div>
+            <div class="missao-barra">
+              <div class="missao-fill" [style.width.%]="m.percentual" [class.completa]="m.concluida"></div>
+            </div>
+            <span class="missao-progresso">{{ m.progresso }}/{{ m.meta }}</span>
+          </div>
+          <span class="missao-check" *ngIf="m.concluida">✓</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Desafio Rápido CTA -->
+    <section class="desafio-cta" routerLink="/desafio-rapido">
+      <div class="desafio-cta-info">
+        <span class="desafio-cta-icone">⚡</span>
+        <div>
+          <div class="desafio-cta-titulo">Desafio Rápido</div>
+          <div class="desafio-cta-sub">5 exercícios • 60 segundos • dos seus módulos</div>
+        </div>
+      </div>
+      <span class="desafio-cta-arrow">→</span>
+    </section>
+
     <!-- Revisões pendentes (SRS) -->
     <section class="revisoes-section" *ngIf="revisoesPendentes.length > 0">
       <h3>🔁 Revisões Pendentes <span class="revisoes-badge">{{ totalRevisoesPendentes }}</span></h3>
