@@ -1,7 +1,8 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { AuthService } from '../../../core/services/auth';
 import { ModuloService } from '../../../core/services/modulo';
 import { ThemeService } from '../../../core/services/theme';
@@ -28,6 +29,13 @@ export class Dashboard implements OnInit, OnDestroy {
   erroModulos = '';
   heatmapSemanas: { data: Date; count: number; nivel: number }[][] = [];
   private sub = new Subscription();
+
+  // Busca global
+  termoBusca = '';
+  resultadosBusca: { modulos: any[], licoes: any[] } = { modulos: [], licoes: [] };
+  buscaAberta = false;
+  buscando = false;
+  private busca$ = new Subject<string>();
 
   readonly nivelLabels: Record<number, string> = {
     1: 'Iniciante',
@@ -63,6 +71,26 @@ export class Dashboard implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authService.sincronizarPerfil();
+    this.sub.add(
+      this.busca$.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(q => {
+          if (q.trim().length < 2) {
+            this.resultadosBusca = { modulos: [], licoes: [] };
+            this.buscando = false;
+            this.cdr.detectChanges();
+            return [];
+          }
+          this.buscando = true;
+          this.cdr.detectChanges();
+          return this.http.get<{ modulos: any[], licoes: any[] }>(`/api/busca?q=${encodeURIComponent(q)}`);
+        })
+      ).subscribe({
+        next: r => { this.resultadosBusca = r; this.buscando = false; this.cdr.detectChanges(); },
+        error: () => { this.buscando = false; this.cdr.detectChanges(); }
+      })
+    );
     this.sub.add(
       this.authService.usuario$.subscribe(u => {
         this.usuario = u;
@@ -198,6 +226,29 @@ export class Dashboard implements OnInit, OnDestroy {
 
   irParaModulo(modulo: Modulo): void {
     this.router.navigate(['/modulos', modulo.id]);
+  }
+
+  onBuscaInput(): void {
+    this.buscaAberta = true;
+    this.busca$.next(this.termoBusca);
+  }
+
+  fecharBusca(): void {
+    setTimeout(() => { this.buscaAberta = false; this.cdr.detectChanges(); }, 150);
+  }
+
+  get temResultados(): boolean {
+    return this.resultadosBusca.modulos.length > 0 || this.resultadosBusca.licoes.length > 0;
+  }
+
+  irParaModuloBusca(id: number): void {
+    this.buscaAberta = false;
+    this.router.navigate(['/modulos', id]);
+  }
+
+  irParaLicaoBusca(moduloId: number, licaoId: number): void {
+    this.buscaAberta = false;
+    this.router.navigate(['/modulos', moduloId, 'licoes'], { queryParams: { licaoId } });
   }
 
   logout(): void {

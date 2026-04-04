@@ -1,6 +1,56 @@
 <div class="dash-page">
   <header class="dash-header">
     <div class="logo">&#127891; C# Academy</div>
+
+    <div class="busca-wrap">
+      <div class="busca-input-wrap">
+        <span class="busca-icone">&#128269;</span>
+        <input
+          class="busca-input"
+          type="text"
+          placeholder="Buscar módulos e lições..."
+          [(ngModel)]="termoBusca"
+          (input)="onBuscaInput()"
+          (focus)="buscaAberta = true"
+          (blur)="fecharBusca()" />
+        <span class="busca-spinner" *ngIf="buscando">⟳</span>
+      </div>
+
+      <div class="busca-dropdown" *ngIf="buscaAberta && termoBusca.trim().length >= 2">
+        <div class="busca-vazio" *ngIf="!buscando && !temResultados">
+          Nenhum resultado para "{{ termoBusca }}"
+        </div>
+
+        <div *ngIf="resultadosBusca.modulos.length > 0">
+          <div class="busca-grupo-label">Módulos</div>
+          <div
+            class="busca-item"
+            *ngFor="let m of resultadosBusca.modulos"
+            (mousedown)="irParaModuloBusca(m.id)">
+            <span class="busca-item-icone">&#128218;</span>
+            <div class="busca-item-info">
+              <span class="busca-item-titulo">{{ m.titulo }}</span>
+              <span class="busca-item-sub">{{ m.nivelMinimo }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="resultadosBusca.licoes.length > 0">
+          <div class="busca-grupo-label">Lições</div>
+          <div
+            class="busca-item"
+            *ngFor="let l of resultadosBusca.licoes"
+            (mousedown)="irParaLicaoBusca(l.moduloId, l.id)">
+            <span class="busca-item-icone">&#128196;</span>
+            <div class="busca-item-info">
+              <span class="busca-item-titulo">{{ l.titulo }}</span>
+              <span class="busca-item-sub">{{ l.moduloTitulo }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <nav>
       <a routerLink="/modulos">Módulos</a>
       <a routerLink="/ranking">🏆 Ranking</a>
