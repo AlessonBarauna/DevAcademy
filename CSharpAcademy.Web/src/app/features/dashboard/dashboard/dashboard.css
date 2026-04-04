@@ -80,9 +80,27 @@ nav a:hover { color: var(--text); background: var(--bg-hover); }
   padding: 9px 20px;
   font-size: 12px;
   font-family: var(--font-mono);
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 .streak-risco-banner strong { color: var(--warning); }
+
+.btn-streak-freeze {
+  background: rgba(100, 180, 255, 0.12);
+  border: 1px solid rgba(100, 180, 255, 0.35);
+  color: #7ec8ff;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-streak-freeze:hover:not(:disabled) { background: rgba(100, 180, 255, 0.22); }
+.btn-streak-freeze:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* Main content */
 .dash-content {
