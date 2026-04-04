@@ -1,0 +1,287 @@
+.exame-page {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 16px;
+  font-family: var(--font-ui);
+}
+
+/* INTRO */
+.intro-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px 36px;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+}
+
+.intro-icon { font-size: 48px; margin-bottom: 12px; }
+
+.intro-card h1 {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.intro-desc {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.intro-regras {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.intro-regras li {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+}
+
+.intro-acoes { display: flex; gap: 12px; justify-content: center; }
+
+/* QUESTÃO */
+.exame-questao { width: 100%; max-width: 640px; }
+
+.exame-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.progresso-texto {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.progresso-bar {
+  flex: 1;
+  height: 4px;
+  background: var(--bg-card);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progresso-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+.timer {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.timer.urgente { color: var(--red); font-weight: 700; }
+
+.questao-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.enunciado {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.opcoes { display: flex; flex-direction: column; gap: 8px; }
+
+.opcao-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.opcao-btn:hover { border-color: var(--accent); }
+.opcao-btn.selecionada { border-color: var(--accent); background: rgba(0,122,204,0.08); }
+
+.input-resposta {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.input-resposta:focus { border-color: var(--accent); }
+
+.feedback {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.feedback.acerto { background: rgba(78, 201, 176, 0.12); color: var(--teal); border: 1px solid rgba(78,201,176,0.3); }
+.feedback.erro { background: rgba(244, 71, 71, 0.1); color: var(--red); border: 1px solid rgba(244,71,71,0.3); }
+.feedback-icone { font-size: 16px; }
+
+.questao-acoes { display: flex; justify-content: flex-end; }
+
+/* RESULTADO */
+.exame-resultado { width: 100%; max-width: 560px; }
+
+.resultado-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.nota-circulo {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 900;
+  border: 3px solid;
+}
+
+.nota-A { border-color: var(--teal); color: var(--teal); background: rgba(78,201,176,0.1); }
+.nota-B { border-color: var(--accent); color: var(--accent); background: rgba(0,122,204,0.08); }
+.nota-C { border-color: var(--yellow); color: var(--yellow); background: rgba(220,220,170,0.1); }
+.nota-F { border-color: var(--red); color: var(--red); background: rgba(244,71,71,0.08); }
+
+.resultado-card h2 {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  margin: 0;
+  color: var(--text);
+}
+
+.resultado-subtitulo {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin: 0;
+}
+
+.resultado-lista {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.resultado-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+}
+
+.resultado-item.acerto { border-color: rgba(78,201,176,0.3); }
+.resultado-item.erro { border-color: rgba(244,71,71,0.2); }
+
+.resultado-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  min-width: 16px;
+  text-align: center;
+}
+
+.resultado-icone { font-size: 14px; }
+
+.resultado-enunciado {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resultado-acoes { width: 100%; display: flex; justify-content: center; }
+
+/* Botões comuns */
+.btn-comecar, .btn-voltar, .btn-responder, .btn-avancar, .btn-voltar-modulo {
+  padding: 9px 20px;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: opacity 0.15s, border-color 0.15s;
+}
+
+.btn-comecar, .btn-responder, .btn-avancar {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.btn-comecar:hover, .btn-responder:hover:not(:disabled), .btn-avancar:hover { opacity: 0.85; }
+.btn-responder:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn-voltar, .btn-voltar-modulo {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-dim);
+}
+
+.btn-voltar:hover, .btn-voltar-modulo:hover { border-color: var(--accent); color: var(--text); }

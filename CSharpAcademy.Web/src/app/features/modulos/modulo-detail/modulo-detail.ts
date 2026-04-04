@@ -65,6 +65,10 @@ export class ModuloDetail implements OnInit {
     }
   }
 
+  irParaExame(): void {
+    this.router.navigate(['/modulos', this.moduloId, 'exame']);
+  }
+
   voltar(): void {
     this.router.navigate(['/modulos']);
   }

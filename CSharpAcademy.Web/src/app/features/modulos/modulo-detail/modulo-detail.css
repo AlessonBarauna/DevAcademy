@@ -121,6 +121,22 @@
 .btn-comecar:hover:not(:disabled) { background: #1a85c4; }
 .btn-comecar:disabled { opacity: 0.4; cursor: not-allowed; }
 
+.hero-acoes { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.btn-exame {
+  background: transparent;
+  color: var(--yellow);
+  border: 1px solid rgba(220, 220, 170, 0.4);
+  padding: 9px 20px;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.btn-exame:hover { border-color: var(--yellow); background: rgba(220,220,170,0.06); }
+
 /* ── Lições ──────────────────────────────────────── */
 .licoes-section h2 {
   font-size: 10px;
