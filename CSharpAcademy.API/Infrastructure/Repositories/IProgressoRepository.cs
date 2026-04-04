@@ -8,6 +8,7 @@ public interface IProgressoRepository
     Task<IEnumerable<(DateOnly Data, int Contagem)>> ObterAtividadePorDiaAsync(int usuarioId, DateTime desde);
     Task<Progresso?> ObterAsync(int usuarioId, int licaoId);
     Task<IEnumerable<Progresso>> ObterRevisoesHojeAsync(int usuarioId);
+    Task<IEnumerable<(int UsuarioId, int XpSemanal)>> ObterXpSemanalAsync();
     Task AdicionarAsync(Progresso progresso);
     Task AtualizarAsync(Progresso progresso);
     Task<bool> SalvarAsync();
