@@ -1,0 +1,124 @@
+.certificado-page {
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 32px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  font-family: var(--font-ui);
+}
+
+.acoes {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 700px;
+}
+
+.btn-voltar, .btn-imprimir {
+  padding: 8px 18px;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.btn-voltar { background: transparent; color: var(--text-dim); }
+.btn-voltar:hover { border-color: var(--accent); color: var(--text); }
+
+.btn-imprimir { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-imprimir:hover { opacity: 0.85; }
+
+.certificado {
+  width: 100%;
+  max-width: 700px;
+}
+
+.cert-borda {
+  background: var(--bg-panel);
+  border: 2px solid var(--yellow);
+  border-radius: var(--radius-lg);
+  padding: 48px 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.cert-topo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.cert-logo {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--accent);
+}
+
+.cert-titulo-app {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.cert-titulo {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--yellow);
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.cert-declara {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin: 0;
+}
+
+.cert-nome {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  font-family: Georgia, serif;
+}
+
+.cert-modulo {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--teal);
+  font-weight: 600;
+  margin: 0;
+}
+
+.cert-data {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin-top: 8px;
+}
+
+.cert-selo {
+  font-size: 40px;
+  margin-top: 8px;
+}
+
+@media print {
+  .no-print { display: none !important; }
+  .certificado-page { background: #fff; padding: 0; }
+  .cert-borda { border: 2px solid #c8a400; color: #000; background: #fff; }
+  .cert-nome { color: #000; }
+  .cert-titulo { color: #c8a400; }
+  .cert-modulo { color: #007acc; }
+}

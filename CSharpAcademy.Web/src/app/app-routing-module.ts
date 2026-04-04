@@ -10,6 +10,7 @@ import { Dashboard } from './features/dashboard/dashboard/dashboard';
 import { Ranking } from './features/ranking/ranking/ranking';
 import { Perfil } from './features/perfil/perfil/perfil';
 import { ExameView } from './features/modulos/exame-view/exame-view';
+import { Certificado } from './features/modulos/certificado/certificado';
 import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'modulos', component: ModuloList, canActivate: [AuthGuard] },
   { path: 'modulos/:moduloId', component: ModuloDetail, canActivate: [AuthGuard] },
   { path: 'modulos/:moduloId/exame', component: ExameView, canActivate: [AuthGuard] },
+  { path: 'modulos/:moduloId/certificado', component: Certificado, canActivate: [AuthGuard] },
   { path: 'modulos/:moduloId/licoes', component: LicaoDetail, canActivate: [AuthGuard] },
   { path: 'modulos/:moduloId/licoes/:licaoId/exercicios', component: ExercicioView, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/login' }

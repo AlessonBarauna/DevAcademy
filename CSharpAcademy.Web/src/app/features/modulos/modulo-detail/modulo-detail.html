@@ -27,6 +27,9 @@
         <button class="btn-exame" (click)="irParaExame()" *ngIf="modulo.licoesCompletadas > 0" title="Testar seus conhecimentos">
           &#128221; Fazer Exame
         </button>
+        <button class="btn-certificado" *ngIf="moduloConcluido" (click)="verCertificado()">
+          &#127942; Ver Certificado
+        </button>
       </div>
     </div>
 

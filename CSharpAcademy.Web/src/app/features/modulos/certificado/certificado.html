@@ -1,0 +1,24 @@
+<div class="certificado-page">
+  <div class="acoes no-print">
+    <button class="btn-voltar" (click)="voltar()">← Voltar</button>
+    <button class="btn-imprimir" (click)="imprimir()">🖨️ Imprimir / Salvar PDF</button>
+  </div>
+
+  <div class="certificado" *ngIf="modulo">
+    <div class="cert-borda">
+      <div class="cert-topo">
+        <span class="cert-logo">&#123; C# &#125;</span>
+        <span class="cert-titulo-app">CSharp Academy</span>
+      </div>
+
+      <h1 class="cert-titulo">Certificado de Conclusão</h1>
+      <p class="cert-declara">Certificamos que</p>
+      <h2 class="cert-nome">{{ nomeUsuario }}</h2>
+      <p class="cert-declara">concluiu com êxito o módulo</p>
+      <h3 class="cert-modulo">{{ modulo.titulo }}</h3>
+      <p class="cert-data">{{ dataHoje }}</p>
+
+      <div class="cert-selo">🏆</div>
+    </div>
+  </div>
+</div>

@@ -65,8 +65,17 @@ export class ModuloDetail implements OnInit {
     }
   }
 
+  get moduloConcluido(): boolean {
+    return !!this.modulo && this.modulo.totalLicoes > 0
+      && this.modulo.licoesCompletadas >= this.modulo.totalLicoes;
+  }
+
   irParaExame(): void {
     this.router.navigate(['/modulos', this.moduloId, 'exame']);
+  }
+
+  verCertificado(): void {
+    this.router.navigate(['/modulos', this.moduloId, 'certificado']);
   }
 
   voltar(): void {

@@ -10,9 +10,10 @@ import { ModuloDetail } from './modulo-detail/modulo-detail';
 import { LicaoDetail } from './licao-detail/licao-detail';
 import { AssistantChat } from '../assistant/assistant-chat/assistant-chat';
 import { ExameView } from './exame-view/exame-view';
+import { Certificado } from './certificado/certificado';
 
 @NgModule({
-  declarations: [ModuloList, ModuloDetail, LicaoDetail, AssistantChat, ExameView],
+  declarations: [ModuloList, ModuloDetail, LicaoDetail, AssistantChat, ExameView, Certificado],
   imports: [CommonModule, FormsModule, RouterModule, ModulosRoutingModule, MarkdownModule.forChild()],
 })
 export class ModulosModule {}
