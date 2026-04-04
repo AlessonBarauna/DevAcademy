@@ -43,10 +43,11 @@ Toda nova funcionalidade **obrigatoriamente** segue este fluxo:
    git add .
    ```
 
-4. **Commit semântico em português, formato curto:**
+4. **Commit semântico em português, formato curto — sem co-autoria do assistente:**
    ```bash
    git commit -m "feat: descrição curta da funcionalidade"
    ```
+   > ⚠️ Nunca adicione `Co-Authored-By` ou qualquer menção ao assistente nas mensagens de commit.
 
 5. **Subir a branch:**
    ```bash
