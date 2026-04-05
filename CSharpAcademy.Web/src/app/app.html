@@ -1,4 +1,6 @@
-<router-outlet></router-outlet>
+<div [@routeAnimations]="getRouteAnimation(o)" style="position:relative">
+  <router-outlet #o="outlet"></router-outlet>
+</div>
 <app-toast></app-toast>
 <app-pomodoro></app-pomodoro>
 <app-atalhos></app-atalhos>
