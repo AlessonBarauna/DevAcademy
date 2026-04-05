@@ -18,6 +18,16 @@ public class LicaoRepository(AppDbContext ctx) : ILicaoRepository
             .Include(l => l.Modulo)
             .FirstOrDefaultAsync(l => l.Id == id && l.Ativo);
 
+    public async Task<IEnumerable<Licao>> BuscarAsync(string termo)
+        => await ctx.Licoes
+            .Include(l => l.Modulo)
+            .Where(l => l.Ativo && (
+                EF.Functions.Like(l.Titulo, $"%{termo}%") ||
+                EF.Functions.Like(l.Descricao, $"%{termo}%")))
+            .OrderBy(l => l.ModuloId).ThenBy(l => l.Ordem)
+            .Take(8)
+            .ToListAsync();
+
     public async Task<bool> SalvarAsync()
         => await ctx.SaveChangesAsync() > 0;
 }

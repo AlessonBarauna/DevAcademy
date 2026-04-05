@@ -18,6 +18,15 @@ public class ModuloRepository(AppDbContext ctx) : IModuloRepository
             .Include(m => m.Licoes)
             .FirstOrDefaultAsync(m => m.Id == id && m.Ativo);
 
+    public async Task<IEnumerable<Modulo>> BuscarAsync(string termo)
+        => await ctx.Modulos
+            .Where(m => m.Ativo && (
+                EF.Functions.Like(m.Titulo, $"%{termo}%") ||
+                EF.Functions.Like(m.Descricao, $"%{termo}%")))
+            .OrderBy(m => m.Ordem)
+            .Take(5)
+            .ToListAsync();
+
     public async Task<bool> SalvarAsync()
         => await ctx.SaveChangesAsync() > 0;
 }
