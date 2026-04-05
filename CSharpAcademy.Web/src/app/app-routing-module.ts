@@ -13,6 +13,7 @@ import { Dashboard } from './features/dashboard/dashboard/dashboard';
 import { Ranking } from './features/ranking/ranking/ranking';
 import { Perfil } from './features/perfil/perfil/perfil';
 import { LigaPage } from './features/liga/liga-page/liga-page';
+import { AnalyticsPage } from './features/analytics/analytics-page/analytics-page';
 import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
@@ -30,6 +31,7 @@ const routes: Routes = [
   { path: 'modulos/:moduloId/licoes/:licaoId/exercicios', component: ExercicioView, canActivate: [AuthGuard] },
   { path: 'desafio-rapido', component: DesafioRapido, canActivate: [AuthGuard] },
   { path: 'liga', component: LigaPage, canActivate: [AuthGuard] },
+  { path: 'analytics', component: AnalyticsPage, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/login' }
 ];
 

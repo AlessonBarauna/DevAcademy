@@ -1,0 +1,117 @@
+<div class="analytics-page">
+  <header class="analytics-topbar">
+    <button class="btn-voltar" (click)="voltar()">&#8592; Dashboard</button>
+    <span class="analytics-titulo">📊 Meu Desempenho</span>
+  </header>
+
+  <div class="analytics-content">
+
+    <!-- Skeleton -->
+    <ng-container *ngIf="carregando">
+      <div class="stats-grid">
+        <div class="sk sk-w-100" style="height:80px;border-radius:10px" *ngFor="let i of [1,2,3,4]"></div>
+      </div>
+      <div class="sk sk-w-100" style="height:280px;border-radius:10px;margin-top:20px"></div>
+    </ng-container>
+
+    <ng-container *ngIf="!carregando">
+
+      <!-- Empty state -->
+      <div class="empty-state" *ngIf="dados.length === 0">
+        <div class="empty-icone">📈</div>
+        <h2>Sem dados ainda</h2>
+        <p>Responda exercícios para ver seu desempenho aqui.</p>
+        <button class="btn-modulos" (click)="voltar()">Ir para Módulos</button>
+      </div>
+
+      <ng-container *ngIf="dados.length > 0">
+
+        <!-- Cards de resumo -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-valor">{{ percentualGeral }}%</div>
+            <div class="stat-label">Acerto Geral</div>
+            <div class="stat-bar"><div class="stat-fill" [style.width.%]="percentualGeral" [class.fill-ok]="percentualGeral>=80" [class.fill-warn]="percentualGeral>=60&&percentualGeral<80" [class.fill-bad]="percentualGeral<60"></div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-valor">{{ totalRespostas }}</div>
+            <div class="stat-label">Respostas Totais</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-valor">{{ totalCorretas }}</div>
+            <div class="stat-label">Corretas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-valor">{{ modulosAtivos }}</div>
+            <div class="stat-label">Módulos Ativos</div>
+          </div>
+        </div>
+
+        <!-- Destaques -->
+        <div class="destaques" *ngIf="melhorModulo || moduloParaMelhorar">
+          <div class="destaque destaque-ok" *ngIf="melhorModulo">
+            <span class="destaque-icone">🏆</span>
+            <div>
+              <div class="destaque-label">Melhor módulo</div>
+              <div class="destaque-titulo">{{ melhorModulo.moduloTitulo }}</div>
+              <div class="destaque-valor">{{ melhorModulo.percentualAcerto }}% de acerto</div>
+            </div>
+          </div>
+          <div class="destaque destaque-warn" *ngIf="moduloParaMelhorar">
+            <span class="destaque-icone">🎯</span>
+            <div>
+              <div class="destaque-label">Para melhorar</div>
+              <div class="destaque-titulo">{{ moduloParaMelhorar.moduloTitulo }}</div>
+              <div class="destaque-valor">{{ moduloParaMelhorar.percentualAcerto }}% de acerto</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráfico de barras -->
+        <section class="chart-section">
+          <h3>Acerto por Módulo</h3>
+          <div class="chart-wrap">
+            <canvas baseChart
+              [data]="barData"
+              [options]="barOptions"
+              type="bar">
+            </canvas>
+          </div>
+        </section>
+
+        <!-- Gráfico radar (só com 3+ módulos) -->
+        <section class="chart-section" *ngIf="dados.length >= 3">
+          <h3>Radar de Competências</h3>
+          <div class="chart-wrap chart-wrap-radar">
+            <canvas baseChart
+              [data]="radarData"
+              [options]="radarOptions"
+              type="radar">
+            </canvas>
+          </div>
+        </section>
+
+        <!-- Tabela detalhada -->
+        <section class="tabela-section">
+          <h3>Detalhes por Módulo</h3>
+          <div class="tabela-item" *ngFor="let d of dados">
+            <div class="tabela-nome">{{ d.moduloTitulo }}</div>
+            <div class="tabela-barra-wrap">
+              <div class="tabela-barra">
+                <div class="tabela-fill"
+                  [style.width.%]="d.percentualAcerto"
+                  [class.fill-ok]="d.percentualAcerto>=80"
+                  [class.fill-warn]="d.percentualAcerto>=60&&d.percentualAcerto<80"
+                  [class.fill-bad]="d.percentualAcerto<60">
+                </div>
+              </div>
+              <span class="tabela-pct">{{ d.percentualAcerto }}%</span>
+            </div>
+            <span class="tabela-meta">{{ d.totalCorretas }}/{{ d.totalRespostas }}</span>
+          </div>
+        </section>
+
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
