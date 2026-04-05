@@ -17,6 +17,7 @@ import { AnalyticsPage } from './features/analytics/analytics-page/analytics-pag
 import { Onboarding } from './features/auth/onboarding/onboarding';
 import { PlaygroundPage } from './features/playground/playground-page/playground-page';
 import { ProjetosPage } from './features/projetos/projetos-page/projetos-page';
+import { GlossarioPage } from './features/glossario/glossario-page/glossario-page';
 import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
@@ -38,6 +39,7 @@ const routes: Routes = [
   { path: 'onboarding', component: Onboarding, canActivate: [AuthGuard] },
   { path: 'playground', component: PlaygroundPage, canActivate: [AuthGuard] },
   { path: 'projetos', component: ProjetosPage, canActivate: [AuthGuard] },
+  { path: 'glossario', component: GlossarioPage, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/login' }
 ];
 

@@ -1,0 +1,70 @@
+<div class="gl-page">
+
+  <!-- Header -->
+  <header class="gl-header">
+    <button class="btn-voltar" (click)="voltar()">&#8592; Dashboard</button>
+    <div class="gl-header-centro">
+      <span class="gl-titulo">📖 Glossário C#</span>
+      <span class="gl-contagem">{{ totalVisible }} termo{{ totalVisible !== 1 ? 's' : '' }}</span>
+    </div>
+  </header>
+
+  <!-- Busca -->
+  <div class="gl-busca-wrap">
+    <div class="gl-busca-inner">
+      <span class="gl-busca-icone">🔍</span>
+      <input
+        class="gl-busca-input"
+        type="text"
+        [(ngModel)]="busca"
+        placeholder="Buscar termo, definição ou exemplo..."
+        autocomplete="off">
+      <button class="gl-busca-limpar" *ngIf="busca" (click)="limparBusca()">✕</button>
+    </div>
+  </div>
+
+  <!-- Categorias -->
+  <div class="gl-categorias">
+    <button
+      class="gl-cat-btn"
+      *ngFor="let cat of categorias"
+      [class.ativa]="categoriaAtiva === cat"
+      (click)="categoriaAtiva = cat">
+      {{ cat }}
+    </button>
+  </div>
+
+  <!-- Lista -->
+  <div class="gl-lista">
+
+    <div class="gl-vazio" *ngIf="termosFiltrados.length === 0">
+      <div class="gl-vazio-icone">🔍</div>
+      <p>Nenhum termo encontrado para "<strong>{{ busca }}</strong>".</p>
+    </div>
+
+    <div
+      class="gl-item"
+      *ngFor="let t of termosFiltrados"
+      [class.expandido]="termoExpandido === t.termo"
+      (click)="toggleTermo(t.termo)">
+
+      <div class="gl-item-header">
+        <div class="gl-item-esquerda">
+          <span class="gl-tag">{{ t.categoria }}</span>
+          <span class="gl-termo">{{ t.termo }}</span>
+        </div>
+        <span class="gl-chevron">{{ termoExpandido === t.termo ? '▲' : '▼' }}</span>
+      </div>
+
+      <div class="gl-item-corpo" *ngIf="termoExpandido === t.termo">
+        <p class="gl-definicao">{{ t.definicao }}</p>
+        <div class="gl-exemplo-wrap" *ngIf="t.exemplo">
+          <span class="gl-exemplo-label">Exemplo</span>
+          <pre class="gl-exemplo-pre">{{ t.exemplo }}</pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

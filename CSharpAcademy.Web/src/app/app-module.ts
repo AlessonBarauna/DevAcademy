@@ -16,6 +16,7 @@ import { LigaModule } from './features/liga/liga-module';
 import { AnalyticsModule } from './features/analytics/analytics-module';
 import { PlaygroundModule } from './features/playground/playground-module';
 import { ProjetosModule } from './features/projetos/projetos-module';
+import { GlossarioModule } from './features/glossario/glossario-module';
 import { MarkdownModule } from 'ngx-markdown';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
@@ -39,6 +40,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AnalyticsModule,
     PlaygroundModule,
     ProjetosModule,
+    GlossarioModule,
     MarkdownModule.forRoot(),
     
       ServiceWorkerModule.register('ngsw-worker.js', {
