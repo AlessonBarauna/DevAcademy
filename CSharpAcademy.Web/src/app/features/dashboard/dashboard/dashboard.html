@@ -53,6 +53,7 @@
 
     <nav>
       <a routerLink="/modulos">Módulos</a>
+      <a routerLink="/liga">⚔️ Liga</a>
       <a routerLink="/ranking">🏆 Ranking</a>
       <a routerLink="/perfil">👤 Perfil</a>
       <button class="btn-tema" (click)="themeService.toggle()" [title]="themeService.isLight ? 'Modo escuro' : 'Modo claro'">
@@ -63,7 +64,10 @@
   </header>
 
   <div class="streak-risco-banner" *ngIf="streakEmRisco">
-    🔥 Seu streak de <strong>{{ usuario?.streakAtual }} dia(s)</strong> está em risco! Estude hoje para mantê-lo.
+    <span>🔥 Seu streak de <strong>{{ usuario?.streakAtual }} dia(s)</strong> está em risco! Estude hoje para mantê-lo.</span>
+    <button class="btn-streak-freeze" *ngIf="(usuario?.streakFreeze ?? 0) > 0" (click)="usarStreakFreeze()" [disabled]="usandoFreeze">
+      ❄️ Usar Streak Freeze ({{ usuario?.streakFreeze }})
+    </button>
   </div>
 
   <div class="dash-content" *ngIf="usuario">

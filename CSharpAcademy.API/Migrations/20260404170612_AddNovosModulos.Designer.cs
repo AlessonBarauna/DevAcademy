@@ -3,6 +3,7 @@ using System;
 using CSharpAcademy.API.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CSharpAcademy.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260404170612_AddNovosModulos")]
+    partial class AddNovosModulos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.5");
@@ -2453,38 +2456,6 @@ namespace CSharpAcademy.API.Migrations
                         });
                 });
 
-            modelBuilder.Entity("CSharpAcademy.API.Domain.NotaLicao", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("AtualizadoEm")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Conteudo")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("LicaoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LicaoId");
-
-                    b.HasIndex("UsuarioId", "LicaoId")
-                        .IsUnique();
-
-                    b.ToTable("NotasLicao");
-                });
-
             modelBuilder.Entity("CSharpAcademy.API.Domain.Progresso", b =>
                 {
                     b.Property<int>("Id")
@@ -2588,9 +2559,6 @@ namespace CSharpAcademy.API.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("StreakAtual")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("StreakFreeze")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("StreakMaximo")
@@ -2744,25 +2712,6 @@ namespace CSharpAcademy.API.Migrations
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("CSharpAcademy.API.Domain.NotaLicao", b =>
-                {
-                    b.HasOne("CSharpAcademy.API.Domain.Licao", "Licao")
-                        .WithMany()
-                        .HasForeignKey("LicaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CSharpAcademy.API.Domain.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Licao");
 
                     b.Navigation("Usuario");
                 });

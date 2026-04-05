@@ -1,0 +1,65 @@
+<div class="liga-page">
+  <header class="liga-topbar">
+    <button class="btn-voltar" (click)="voltar()">&#8592; Dashboard</button>
+    <span class="liga-topbar-titulo">⚔️ Ligas Semanais</span>
+  </header>
+
+  <div class="liga-content">
+    <div class="loading" *ngIf="carregando">Carregando...</div>
+
+    <ng-container *ngIf="!carregando && liga">
+
+      <!-- Cabeçalho da liga -->
+      <div class="liga-header" [class]="ligaCorClasse(liga.liga)">
+        <div class="liga-icone">{{ liga.ligaIcone }}</div>
+        <div class="liga-info">
+          <h1 class="liga-nome">Liga {{ liga.liga }}</h1>
+          <p class="liga-periodo">Semana {{ liga.semanaInicio }} – {{ liga.semanaFim }}</p>
+        </div>
+        <div class="liga-meu-xp">
+          <div class="meu-xp-valor">{{ liga.meuXpSemana }} XP</div>
+          <div class="meu-xp-label">seus XP esta semana</div>
+          <div class="minha-posicao">{{ liga.minhaPosicao }}º de {{ liga.totalParticipantes }}</div>
+        </div>
+      </div>
+
+      <!-- Dica de promoção -->
+      <div class="promocao-dica" *ngIf="proximaLiga(liga.liga)">
+        ⬆️ Avance para a <strong>{{ proximaLiga(liga.liga) }}</strong> completando mais lições e subindo de nível
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="leaderboard">
+        <h3 class="leaderboard-titulo">🏆 Classificação da Semana</h3>
+        <div class="leaderboard-lista">
+          <div
+            class="leaderboard-item"
+            *ngFor="let p of liga.participantes"
+            [class.eu-mesmo]="p.euMesmo"
+            [class.fora-top]="p.posicao > 15">
+
+            <span class="posicao-badge">{{ medalha(p.posicao) }}</span>
+
+            <div class="participante-info">
+              <span class="participante-nome">
+                {{ p.nome }}
+                <span class="eu-tag" *ngIf="p.euMesmo">você</span>
+              </span>
+              <span class="participante-streak" *ngIf="p.streakAtual > 0">🔥 {{ p.streakAtual }}</span>
+            </div>
+
+            <div class="participante-xp">
+              <div class="xp-barra-wrap">
+                <div class="xp-barra">
+                  <div class="xp-barra-fill" [style.width.%]="xpPercent(p.xpSemana, liga.participantes)"></div>
+                </div>
+              </div>
+              <span class="xp-valor">{{ p.xpSemana }} XP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </ng-container>
+  </div>
+</div>
