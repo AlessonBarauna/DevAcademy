@@ -1,3 +1,32 @@
+/* XP Float Animation */
+.xp-float-container {
+  position: fixed;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.xp-float {
+  color: var(--accent);
+  font-size: 22px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  animation: xpFloatUp 1.2s ease-out forwards;
+  text-shadow: 0 0 12px rgba(0, 200, 150, 0.6);
+}
+
+@keyframes xpFloatUp {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  30%  { opacity: 1; transform: translateY(-20px) scale(1.2); }
+  100% { opacity: 0; transform: translateY(-70px) scale(0.8); }
+}
+
 .ex-page {
   min-height: 100vh;
   background: var(--bg);

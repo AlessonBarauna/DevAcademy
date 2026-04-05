@@ -1,4 +1,12 @@
 <div class="ex-page">
+
+  <!-- XP Floats -->
+  <div class="xp-float-container">
+    <div class="xp-float" *ngFor="let f of xpFloats" [attr.data-id]="f.id">
+      +{{ f.valor }} XP
+    </div>
+  </div>
+
   <div class="ex-header">
     <button class="btn-voltar" (click)="voltarParaLicao()">&#8592; Voltar</button>
     <span class="progresso">{{ indiceAtual + 1 }} / {{ exercicios.length }}</span>

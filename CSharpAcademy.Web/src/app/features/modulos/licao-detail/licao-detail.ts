@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModuloService } from '../../../core/services/modulo';
 import { AuthService } from '../../../core/services/auth';
+import { AnimacaoService } from '../../../core/services/animacao';
 import { ConquistaResultDto, Licao, Modulo } from '../../../core/models/modulo.model';
 
 @Component({
@@ -23,12 +24,14 @@ export class LicaoDetail implements OnInit {
   toastsConquistas: ConquistaResultDto[] = [];
   sidebarAberta = false;
   scrollProgress = 0;
+  levelUpNivel: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private moduloService: ModuloService,
     private authService: AuthService,
+    private animacao: AnimacaoService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -128,8 +131,13 @@ export class LicaoDetail implements OnInit {
         if (idx >= 0) this.licoes[idx].completada = true;
         this.concluindo = false;
         if (!result.jaConcluidaAntes) {
+          const nivelAnterior = this.authService.usuarioAtual?.nivelAtual ?? 1;
           this.authService.atualizarProgresso(result.xpTotal, result.novoNivel, result.streakAtual);
           this.mensagemConclusao = `+${result.xpGanho} XP! Nível ${result.novoNivel} 🔥 ${result.streakAtual} dia(s) de streak`;
+          this.animacao.dispararConfetti();
+          if (result.novoNivel > nivelAnterior) {
+            this.levelUpNivel = result.novoNivel;
+          }
           if (result.novasConquistas?.length) {
             this.exibirToastsConquistas(result.novasConquistas);
           }
