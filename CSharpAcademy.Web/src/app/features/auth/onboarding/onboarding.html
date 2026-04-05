@@ -1,0 +1,117 @@
+<div class="onboarding-page">
+
+  <!-- INTRO -->
+  <div class="ob-card ob-intro" *ngIf="etapa === 'intro'">
+    <div class="ob-logo">🎓</div>
+    <h1 class="ob-titulo">Bem-vindo à C# Academy!</h1>
+    <p class="ob-sub">Vamos descobrir seu nível de conhecimento com <strong>5 perguntas rápidas</strong> para personalizar sua jornada de aprendizado.</p>
+
+    <div class="ob-niveis">
+      <div class="ob-nivel-item">
+        <span>🌱</span>
+        <div>
+          <div class="ob-nivel-nome">Iniciante</div>
+          <div class="ob-nivel-desc">Começando do zero</div>
+        </div>
+      </div>
+      <div class="ob-nivel-item">
+        <span>📚</span>
+        <div>
+          <div class="ob-nivel-nome">Intermediário</div>
+          <div class="ob-nivel-desc">Conceitos básicos dominados</div>
+        </div>
+      </div>
+      <div class="ob-nivel-item">
+        <span>🚀</span>
+        <div>
+          <div class="ob-nivel-nome">Avançado</div>
+          <div class="ob-nivel-desc">Conhecimento sólido</div>
+        </div>
+      </div>
+      <div class="ob-nivel-item">
+        <span>💎</span>
+        <div>
+          <div class="ob-nivel-nome">Expert</div>
+          <div class="ob-nivel-desc">Domínio completo de C#</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ob-acoes">
+      <button class="btn-ob-primary" (click)="iniciarQuiz()" [disabled]="perguntas.length === 0">
+        {{ perguntas.length === 0 ? 'Carregando...' : 'Começar teste ›' }}
+      </button>
+      <button class="btn-ob-skip" (click)="pularOnboarding()">Pular — sou iniciante</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="ob-card ob-quiz" *ngIf="etapa === 'quiz' && perguntaAtual">
+    <div class="ob-progress-wrap">
+      <div class="ob-progress-bar">
+        <div class="ob-progress-fill" [style.width.%]="progresso"></div>
+      </div>
+      <span class="ob-progress-label">{{ indiceAtual + 1 }}/{{ perguntas.length }}</span>
+    </div>
+
+    <div class="ob-pergunta">{{ perguntaAtual.texto }}</div>
+
+    <div class="ob-opcoes">
+      <button
+        class="ob-opcao"
+        *ngFor="let opcao of perguntaAtual.opcoes; let i = index"
+        [class.selecionada]="respostaSelecionada === i"
+        [class.bloqueada]="respondida"
+        (click)="selecionarResposta(i)">
+        <span class="ob-opcao-letra">{{ ['A','B','C','D'][i] }}</span>
+        <span class="ob-opcao-texto">{{ opcao }}</span>
+      </button>
+    </div>
+
+    <div class="ob-acoes-quiz">
+      <button
+        class="btn-ob-primary"
+        [disabled]="respostaSelecionada === null || respondida"
+        (click)="confirmarResposta()">
+        {{ respondida ? 'Próxima...' : 'Confirmar' }}
+      </button>
+      <button class="btn-ob-skip" (click)="pularOnboarding()">Sair</button>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div class="ob-card ob-resultado" *ngIf="etapa === 'resultado' && resultado">
+    <div class="ob-resultado-icone">{{ iconesNivel[resultado.nivelAtual] }}</div>
+    <h2 class="ob-resultado-titulo">Seu nível inicial</h2>
+    <div class="ob-resultado-nivel">{{ resultado.nomeNivel }}</div>
+    <div class="ob-resultado-score">
+      {{ resultado.acertos }} de {{ resultado.total }} perguntas corretas
+    </div>
+
+    <div class="ob-resultado-barras">
+      <div class="ob-resultado-barra" *ngFor="let n of [1, 2, 3, 4]" [class.ativa]="n <= resultado.nivelAtual"></div>
+    </div>
+
+    <p class="ob-resultado-msg" *ngIf="resultado.nivelAtual === 1">
+      Ótimo começo! Vamos construir seu conhecimento do zero, passo a passo.
+    </p>
+    <p class="ob-resultado-msg" *ngIf="resultado.nivelAtual === 2">
+      Você já tem uma boa base! Os módulos intermediários estão desbloqueados para você.
+    </p>
+    <p class="ob-resultado-msg" *ngIf="resultado.nivelAtual === 3">
+      Impressionante! Você demonstrou conhecimento avançado em C#.
+    </p>
+    <p class="ob-resultado-msg" *ngIf="resultado.nivelAtual === 4">
+      Expert detectado! Você acertou tudo — bem-vindo ao topo!
+    </p>
+
+    <button class="btn-ob-primary" (click)="irParaDashboard()">Ir para o Dashboard →</button>
+  </div>
+
+  <!-- Loading -->
+  <div class="ob-card ob-loading" *ngIf="carregando">
+    <div class="ob-spinner">⟳</div>
+    <p>Calculando seu nível...</p>
+  </div>
+
+</div>
