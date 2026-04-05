@@ -10,5 +10,8 @@ public interface IMissaoRepository
     Task<int> ContarExerciciosCorretosHojeAsync(int usuarioId);
     Task<int> ContarLicoesConcluidasHojeAsync(int usuarioId);
     Task<int> SomarXpGanhoHojeAsync(int usuarioId);
+    Task<int> ContarExerciciosCorretosNaSemanaAsync(int usuarioId);
+    Task<int> ContarLicoesConcluidasNaSemanaAsync(int usuarioId);
+    Task<int> SomarXpGanhoNaSemanaAsync(int usuarioId);
     Task<bool> SalvarAsync();
 }

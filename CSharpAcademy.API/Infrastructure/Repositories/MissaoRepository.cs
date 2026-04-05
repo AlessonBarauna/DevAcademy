@@ -47,6 +47,37 @@ public class MissaoRepository(AppDbContext ctx) : IMissaoRepository
             .SumAsync(p => p.XPGanho);
     }
 
+    public async Task<int> ContarExerciciosCorretosNaSemanaAsync(int usuarioId)
+    {
+        var inicio = InicioSemana();
+        return await ctx.RespostasUsuarios
+            .Where(r => r.UsuarioId == usuarioId && r.Correta && r.DataResposta >= inicio)
+            .CountAsync();
+    }
+
+    public async Task<int> ContarLicoesConcluidasNaSemanaAsync(int usuarioId)
+    {
+        var inicio = InicioSemana();
+        return await ctx.Progressos
+            .Where(p => p.UsuarioId == usuarioId && p.Completada && p.DataConclusao >= inicio)
+            .CountAsync();
+    }
+
+    public async Task<int> SomarXpGanhoNaSemanaAsync(int usuarioId)
+    {
+        var inicio = InicioSemana();
+        return await ctx.Progressos
+            .Where(p => p.UsuarioId == usuarioId && p.Completada && p.DataConclusao >= inicio)
+            .SumAsync(p => p.XPGanho);
+    }
+
+    private static DateTime InicioSemana()
+    {
+        var hoje = DateTime.UtcNow.Date;
+        var diasDesdeSegunda = ((int)hoje.DayOfWeek + 6) % 7; // seg=0 ... dom=6
+        return hoje.AddDays(-diasDesdeSegunda);
+    }
+
     public async Task<bool> SalvarAsync()
         => await ctx.SaveChangesAsync() > 0;
 }

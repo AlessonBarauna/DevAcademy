@@ -1,0 +1,175 @@
+<div class="mt-page">
+
+  <!-- Header -->
+  <header class="mt-header">
+    <button class="btn-voltar" (click)="voltar()">&#8592; Dashboard</button>
+    <span class="mt-titulo">🎯 Metas Semanais</span>
+    <button class="btn-editar" (click)="abrirEdicao()" *ngIf="!editando">✏️ Editar</button>
+  </header>
+
+  <!-- Loading -->
+  <div class="mt-loading" *ngIf="carregando">
+    <div class="mt-spinner">⟳</div>
+    <p>Carregando progresso...</p>
+  </div>
+
+  <!-- Conteúdo -->
+  <div class="mt-body" *ngIf="!carregando && progresso">
+
+    <!-- Semana info -->
+    <div class="mt-semana-info">
+      <span class="mt-semana-label">{{ semanaLabel }}</span>
+      <span class="mt-dias-restantes">{{ diasRestantes }} dia{{ diasRestantes !== 1 ? 's' : '' }} restante{{ diasRestantes !== 1 ? 's' : '' }}</span>
+    </div>
+
+    <!-- Cards de metas -->
+    <div class="mt-cards">
+
+      <!-- Lições -->
+      <div class="mt-card" [class.mt-card-ok]="status(progresso.licoesNaSemana, metas.licoes) === 'ok'">
+        <div class="mt-card-header">
+          <span class="mt-card-icone">📚</span>
+          <div class="mt-card-info">
+            <span class="mt-card-nome">Lições concluídas</span>
+            <span class="mt-card-nums">
+              <strong>{{ progresso.licoesNaSemana }}</strong> / {{ metas.licoes }}
+            </span>
+          </div>
+          <span class="mt-badge mt-badge-ok"    *ngIf="status(progresso.licoesNaSemana, metas.licoes) === 'ok'">✓ Meta!</span>
+          <span class="mt-badge mt-badge-perto" *ngIf="status(progresso.licoesNaSemana, metas.licoes) === 'perto'">Quase lá!</span>
+        </div>
+        <div class="mt-barra-wrap">
+          <div class="mt-barra-fundo">
+            <div class="mt-barra-fill"
+              [style.width.%]="pct(progresso.licoesNaSemana, metas.licoes)"
+              [class.mt-fill-ok]="status(progresso.licoesNaSemana, metas.licoes) === 'ok'"
+              [class.mt-fill-perto]="status(progresso.licoesNaSemana, metas.licoes) === 'perto'">
+            </div>
+          </div>
+          <span class="mt-pct">{{ pct(progresso.licoesNaSemana, metas.licoes) }}%</span>
+        </div>
+      </div>
+
+      <!-- XP -->
+      <div class="mt-card" [class.mt-card-ok]="status(progresso.xpNaSemana, metas.xp) === 'ok'">
+        <div class="mt-card-header">
+          <span class="mt-card-icone">⚡</span>
+          <div class="mt-card-info">
+            <span class="mt-card-nome">XP ganho</span>
+            <span class="mt-card-nums">
+              <strong>{{ progresso.xpNaSemana }}</strong> / {{ metas.xp }} XP
+            </span>
+          </div>
+          <span class="mt-badge mt-badge-ok"    *ngIf="status(progresso.xpNaSemana, metas.xp) === 'ok'">✓ Meta!</span>
+          <span class="mt-badge mt-badge-perto" *ngIf="status(progresso.xpNaSemana, metas.xp) === 'perto'">Quase lá!</span>
+        </div>
+        <div class="mt-barra-wrap">
+          <div class="mt-barra-fundo">
+            <div class="mt-barra-fill"
+              [style.width.%]="pct(progresso.xpNaSemana, metas.xp)"
+              [class.mt-fill-ok]="status(progresso.xpNaSemana, metas.xp) === 'ok'"
+              [class.mt-fill-perto]="status(progresso.xpNaSemana, metas.xp) === 'perto'">
+            </div>
+          </div>
+          <span class="mt-pct">{{ pct(progresso.xpNaSemana, metas.xp) }}%</span>
+        </div>
+      </div>
+
+      <!-- Exercícios -->
+      <div class="mt-card" [class.mt-card-ok]="status(progresso.exerciciosNaSemana, metas.exercicios) === 'ok'">
+        <div class="mt-card-header">
+          <span class="mt-card-icone">🎯</span>
+          <div class="mt-card-info">
+            <span class="mt-card-nome">Exercícios corretos</span>
+            <span class="mt-card-nums">
+              <strong>{{ progresso.exerciciosNaSemana }}</strong> / {{ metas.exercicios }}
+            </span>
+          </div>
+          <span class="mt-badge mt-badge-ok"    *ngIf="status(progresso.exerciciosNaSemana, metas.exercicios) === 'ok'">✓ Meta!</span>
+          <span class="mt-badge mt-badge-perto" *ngIf="status(progresso.exerciciosNaSemana, metas.exercicios) === 'perto'">Quase lá!</span>
+        </div>
+        <div class="mt-barra-wrap">
+          <div class="mt-barra-fundo">
+            <div class="mt-barra-fill"
+              [style.width.%]="pct(progresso.exerciciosNaSemana, metas.exercicios)"
+              [class.mt-fill-ok]="status(progresso.exerciciosNaSemana, metas.exercicios) === 'ok'"
+              [class.mt-fill-perto]="status(progresso.exerciciosNaSemana, metas.exercicios) === 'perto'">
+            </div>
+          </div>
+          <span class="mt-pct">{{ pct(progresso.exerciciosNaSemana, metas.exercicios) }}%</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Resumo conquistas -->
+    <div class="mt-resumo">
+      <div class="mt-resumo-item">
+        <span class="mt-resumo-val">{{ pct(progresso.licoesNaSemana, metas.licoes) + pct(progresso.xpNaSemana, metas.xp) + pct(progresso.exerciciosNaSemana, metas.exercicios) | number:'1.0-0' }}%</span>
+        <span class="mt-resumo-label">progresso total</span>
+      </div>
+      <div class="mt-resumo-sep"></div>
+      <div class="mt-resumo-item">
+        <span class="mt-resumo-val">
+          {{ (status(progresso.licoesNaSemana, metas.licoes) === 'ok' ? 1 : 0)
+           + (status(progresso.xpNaSemana, metas.xp) === 'ok' ? 1 : 0)
+           + (status(progresso.exerciciosNaSemana, metas.exercicios) === 'ok' ? 1 : 0) }}/3
+        </span>
+        <span class="mt-resumo-label">metas atingidas</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal de edição -->
+  <div class="mt-modal-overlay" *ngIf="editando" (click)="cancelarEdicao()">
+    <div class="mt-modal" (click)="$event.stopPropagation()">
+      <div class="mt-modal-titulo">Definir metas da semana</div>
+
+      <!-- Meta lições -->
+      <div class="mt-campo">
+        <label class="mt-campo-label">📚 Lições por semana</label>
+        <div class="mt-presets">
+          <button
+            class="mt-preset"
+            *ngFor="let v of presetsLicoes"
+            [class.ativo]="metasTemp.licoes === v"
+            (click)="metasTemp.licoes = v">{{ v }}</button>
+        </div>
+        <input class="mt-input-num" type="number" [(ngModel)]="metasTemp.licoes" min="1" max="50">
+      </div>
+
+      <!-- Meta XP -->
+      <div class="mt-campo">
+        <label class="mt-campo-label">⚡ XP por semana</label>
+        <div class="mt-presets">
+          <button
+            class="mt-preset"
+            *ngFor="let v of presetsXp"
+            [class.ativo]="metasTemp.xp === v"
+            (click)="metasTemp.xp = v">{{ v }}</button>
+        </div>
+        <input class="mt-input-num" type="number" [(ngModel)]="metasTemp.xp" min="10" max="5000">
+      </div>
+
+      <!-- Meta exercícios -->
+      <div class="mt-campo">
+        <label class="mt-campo-label">🎯 Exercícios por semana</label>
+        <div class="mt-presets">
+          <button
+            class="mt-preset"
+            *ngFor="let v of presetsExercicios"
+            [class.ativo]="metasTemp.exercicios === v"
+            (click)="metasTemp.exercicios = v">{{ v }}</button>
+        </div>
+        <input class="mt-input-num" type="number" [(ngModel)]="metasTemp.exercicios" min="1" max="200">
+      </div>
+
+      <div class="mt-modal-acoes">
+        <button class="btn-cancelar" (click)="cancelarEdicao()">Cancelar</button>
+        <button class="btn-salvar-meta" (click)="salvarMetas()">Salvar metas</button>
+      </div>
+    </div>
+  </div>
+
+</div>
