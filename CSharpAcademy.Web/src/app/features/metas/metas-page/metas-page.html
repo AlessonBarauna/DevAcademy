@@ -7,10 +7,16 @@
     <button class="btn-editar" (click)="abrirEdicao()" *ngIf="!editando">✏️ Editar</button>
   </header>
 
-  <!-- Loading -->
-  <div class="mt-loading" *ngIf="carregando">
-    <div class="mt-spinner">⟳</div>
-    <p>Carregando progresso...</p>
+  <!-- Skeleton -->
+  <div class="mt-body" *ngIf="carregando">
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+      <div class="sk sk-w-100" style="height:110px;border-radius:10px;flex:1;min-width:200px" *ngFor="let i of [1,2,3]"></div>
+    </div>
+    <div class="sk-card sk-mb-8" style="margin-top:16px;display:flex;flex-direction:column;gap:10px" *ngFor="let i of [1,2]">
+      <div class="sk sk-title sk-w-33"></div>
+      <div class="sk sk-text sk-w-75"></div>
+      <div class="sk sk-text sk-w-100"></div>
+    </div>
   </div>
 
   <!-- Conteúdo -->

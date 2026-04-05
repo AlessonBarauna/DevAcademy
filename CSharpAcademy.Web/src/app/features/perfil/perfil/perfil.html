@@ -7,6 +7,25 @@
     </button>
   </header>
 
+  <!-- Skeleton do perfil -->
+  <div class="perfil-content" *ngIf="carregando && !usuario">
+    <section class="perfil-card">
+      <div class="sk sk-avatar" style="width:64px;height:64px;flex-shrink:0"></div>
+      <div class="info" style="flex:1;display:flex;flex-direction:column;gap:10px">
+        <div class="sk sk-title sk-w-33"></div>
+        <div class="sk sk-text sk-w-50"></div>
+        <div class="sk sk-text sk-w-75"></div>
+      </div>
+    </section>
+    <section class="sk-card sk-mb-8" style="display:flex;gap:16px">
+      <div class="sk sk-w-100" style="height:60px;border-radius:8px" *ngFor="let i of [1,2,3,4]"></div>
+    </section>
+    <section class="sk-card">
+      <div class="sk sk-title sk-w-33 sk-mb-12"></div>
+      <div class="sk sk-text sk-w-100 sk-mb-8" *ngFor="let i of [1,2,3]"></div>
+    </section>
+  </div>
+
   <div class="perfil-content" *ngIf="usuario">
 
     <!-- Cartão principal -->
