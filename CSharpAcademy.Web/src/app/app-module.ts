@@ -1,4 +1,4 @@
-import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { NgModule, provideBrowserGlobalErrorListeners, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -17,6 +17,7 @@ import { AnalyticsModule } from './features/analytics/analytics-module';
 import { MarkdownModule } from 'ngx-markdown';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [App],
@@ -34,6 +35,14 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
     LigaModule,
     AnalyticsModule,
     MarkdownModule.forRoot(),
+    
+      ServiceWorkerModule.register('ngsw-worker.js', {
+        enabled: !isDevMode(),
+        // Register the ServiceWorker as soon as the application is stable
+        // or after 30 seconds (whichever comes first).
+        registrationStrategy: 'registerWhenStable:30000'
+      })
+    ,
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

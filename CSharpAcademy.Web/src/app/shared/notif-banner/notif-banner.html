@@ -1,0 +1,11 @@
+<div class="notif-banner" *ngIf="visivel">
+  <span class="notif-banner-icone">🔔</span>
+  <div class="notif-banner-texto">
+    <strong>Ativar lembretes de estudo?</strong>
+    <span>Receba notificações quando seu streak estiver em risco.</span>
+  </div>
+  <div class="notif-banner-acoes">
+    <button class="btn-notif-sim" (click)="permitir()" [disabled]="respondido">Ativar</button>
+    <button class="btn-notif-nao" (click)="dispensar()">Agora não</button>
+  </div>
+</div>

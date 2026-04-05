@@ -64,6 +64,8 @@
     </nav>
   </header>
 
+  <app-notif-banner></app-notif-banner>
+
   <div class="streak-risco-banner" *ngIf="streakEmRisco">
     <span>🔥 Seu streak de <strong>{{ usuario?.streakAtual }} dia(s)</strong> está em risco! Estude hoje para mantê-lo.</span>
     <button class="btn-streak-freeze" *ngIf="(usuario?.streakFreeze ?? 0) > 0" (click)="usarStreakFreeze()" [disabled]="usandoFreeze">

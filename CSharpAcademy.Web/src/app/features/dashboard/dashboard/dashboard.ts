@@ -8,6 +8,7 @@ import { ModuloService } from '../../../core/services/modulo';
 import { ThemeService } from '../../../core/services/theme';
 import { RevisaoService } from '../../../core/services/revisao';
 import { MissaoService } from '../../../core/services/missao';
+import { NotificacaoService } from '../../../core/services/notificacao';
 import { MissaoDiaria } from '../../../core/models/missao.model';
 import { Modulo } from '../../../core/models/modulo.model';
 import { RevisaoPendente } from '../../../core/models/revisao.model';
@@ -60,7 +61,8 @@ export class Dashboard implements OnInit, OnDestroy {
     private http: HttpClient,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    private notifService: NotificacaoService
   ) {}
 
   get streakEmRisco(): boolean {
@@ -131,6 +133,14 @@ export class Dashboard implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       }
     });
+
+    this.sub.add(
+      this.authService.usuario$.subscribe(u => {
+        if (u && this.notifService.permissaoConcedida) {
+          this.notifService.agendarLembreteDiario(u.streakAtual ?? 0);
+        }
+      })
+    );
   }
 
   buildHeatmap(atividade: { data: string; contagem: number }[]): { data: Date; count: number; nivel: number }[][] {
