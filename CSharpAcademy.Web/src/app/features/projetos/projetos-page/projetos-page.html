@@ -1,0 +1,77 @@
+<div class="proj-page">
+
+  <header class="proj-topbar">
+    <button class="btn-voltar" (click)="voltar()">&#8592; Dashboard</button>
+    <span class="proj-titulo">🛠️ Projetos Práticos</span>
+    <div class="proj-topbar-stats" *ngIf="!carregando">
+      <span class="proj-stat">{{ totalConcluidos }}/{{ projetos.length }} concluídos</span>
+      <span class="proj-stat-xp" *ngIf="xpTotal > 0">+{{ xpTotal }} XP</span>
+    </div>
+  </header>
+
+  <div class="proj-content">
+
+    <!-- Skeleton -->
+    <ng-container *ngIf="carregando">
+      <div class="sk-card sk-mb-8" *ngFor="let i of [1,2,3]">
+        <div class="sk sk-title sk-w-50 sk-mb-12"></div>
+        <div class="sk sk-text sk-w-75 sk-mb-8"></div>
+        <div class="sk sk-text sk-w-100"></div>
+      </div>
+    </ng-container>
+
+    <!-- Intro -->
+    <div class="proj-intro" *ngIf="!carregando">
+      <p>Aplique na prática o que aprendeu. Cada projeto tem um checklist de tarefas para guiar sua implementação no <strong>Playground</strong>.</p>
+    </div>
+
+    <!-- Lista de projetos -->
+    <div class="proj-card" *ngFor="let p of projetos" [class.concluido]="p.concluido">
+
+      <!-- Header do card -->
+      <div class="proj-card-header" (click)="toggleProjeto(p.id)">
+        <div class="proj-card-info">
+          <div class="proj-card-titulo-wrap">
+            <span class="proj-card-titulo">{{ p.titulo }}</span>
+            <span class="proj-dif" [class]="corDificuldade(p.dificuldade)">{{ p.dificuldade }}</span>
+            <span class="proj-xp">+{{ p.xpRecompensa }} XP</span>
+          </div>
+          <p class="proj-card-desc">{{ p.descricao }}</p>
+          <div class="proj-barra-wrap">
+            <div class="proj-barra">
+              <div class="proj-barra-fill" [style.width.%]="p.percentual" [class.completa]="p.concluido"></div>
+            </div>
+            <span class="proj-barra-label">{{ p.tarefasConcluidas }}/{{ p.totalTarefas }}</span>
+          </div>
+        </div>
+        <div class="proj-card-toggle">
+          <span class="proj-check" *ngIf="p.concluido">✓</span>
+          <span class="proj-seta" *ngIf="!p.concluido">{{ projetoAberto === p.id ? '▲' : '▼' }}</span>
+        </div>
+      </div>
+
+      <!-- Checklist (expandível) -->
+      <div class="proj-tarefas" *ngIf="projetoAberto === p.id || p.concluido">
+        <div class="proj-tarefas-header">
+          <span>Checklist</span>
+          <button class="btn-playground" (click)="router.navigate(['/playground'])">⚡ Abrir Playground</button>
+        </div>
+        <div
+          class="proj-tarefa"
+          *ngFor="let t of p.tarefas"
+          [class.concluida]="t.concluida"
+          [class.pendente]="!t.concluida"
+          (click)="concluirTarefa(p, t)">
+          <span class="proj-tarefa-check">{{ t.concluida ? '✓' : '○' }}</span>
+          <span class="proj-tarefa-desc">{{ t.descricao }}</span>
+        </div>
+
+        <div class="proj-concluido-msg" *ngIf="p.concluido">
+          🎉 Projeto concluído! +{{ p.xpRecompensa }} XP ganhos.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
