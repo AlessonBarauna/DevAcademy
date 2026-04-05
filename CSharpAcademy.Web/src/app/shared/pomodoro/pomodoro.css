@@ -1,11 +1,11 @@
 .pomo-wrap {
   position: fixed;
   bottom: 24px;
-  right: 24px;
+  left: 24px;
   z-index: 300;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 10px;
 }
 
