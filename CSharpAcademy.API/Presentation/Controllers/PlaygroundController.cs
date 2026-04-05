@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using System.Text.RegularExpressions;
 
 namespace CSharpAcademy.API.Presentation.Controllers;
 
@@ -39,14 +40,20 @@ public class PlaygroundController : ControllerBase
         {
             using var cts = new CancellationTokenSource(TimeoutMs);
 
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(a => !a.IsDynamic && !string.IsNullOrWhiteSpace(a.Location))
+                .ToArray();
+
             var options = ScriptOptions.Default
+                .AddReferences(assemblies)
                 .AddImports(
                     "System",
                     "System.Collections.Generic",
                     "System.Linq",
                     "System.Text",
                     "System.IO",
-                    "System.Math"
+                    "System.Text.RegularExpressions",
+                    "System.Threading.Tasks"
                 )
                 .WithOptimizationLevel(Microsoft.CodeAnalysis.OptimizationLevel.Debug)
                 .WithEmitDebugInformation(false);
