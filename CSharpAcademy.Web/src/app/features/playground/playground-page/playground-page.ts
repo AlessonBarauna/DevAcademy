@@ -20,8 +20,16 @@ export interface SnippetHistorico {
   dataIso: string;
 }
 
+export interface SnippetSalvo {
+  id: string;
+  nome: string;
+  codigo: string;
+  dataIso: string;
+}
+
 const CHAVE_HISTORICO = 'pg_historico';
 const CHAVE_RASCUNHO  = 'pg_rascunho';
+const CHAVE_SALVOS    = 'pg_salvos';
 const MAX_HISTORICO   = 20;
 
 @Component({
@@ -38,6 +46,12 @@ export class PlaygroundPage implements OnInit {
 
   historicoAberto = false;
   historico: SnippetHistorico[] = [];
+
+  salvosAberto = false;
+  snippetsSalvos: SnippetSalvo[] = [];
+  salvandoNome = '';
+  modalSalvarAberto = false;
+  abaSidebar: 'exemplos' | 'salvos' = 'exemplos';
 
   readonly exemplos: Exemplo[] = [
     {
@@ -147,6 +161,7 @@ Console.WriteLine($"Máximo: {maximo}");`
 
   ngOnInit(): void {
     this.carregarHistorico();
+    this.carregarSalvos();
     this.codigo = localStorage.getItem(CHAVE_RASCUNHO) ?? this.exemplos[0].codigo;
   }
 
@@ -261,6 +276,65 @@ Console.WriteLine($"Máximo: {maximo}");`
     this.resultado = null;
     this.salvarRascunho();
     this.cdr.detectChanges();
+  }
+
+  // ── Snippets Salvos ───────────────────────────────
+
+  private carregarSalvos(): void {
+    try {
+      this.snippetsSalvos = JSON.parse(localStorage.getItem(CHAVE_SALVOS) ?? '[]');
+    } catch {
+      this.snippetsSalvos = [];
+    }
+  }
+
+  abrirModalSalvar(): void {
+    this.salvandoNome = this.extrairTitulo(this.codigo);
+    this.modalSalvarAberto = true;
+    this.cdr.detectChanges();
+    // Foco no input após render
+    setTimeout(() => {
+      const input = document.querySelector<HTMLInputElement>('.modal-salvar-input');
+      input?.focus();
+      input?.select();
+    }, 50);
+  }
+
+  confirmarSalvar(): void {
+    const nome = this.salvandoNome.trim();
+    if (!nome || !this.codigo.trim()) return;
+
+    const item: SnippetSalvo = {
+      id: Date.now().toString(),
+      nome,
+      codigo: this.codigo,
+      dataIso: new Date().toISOString(),
+    };
+
+    this.snippetsSalvos = [item, ...this.snippetsSalvos];
+    localStorage.setItem(CHAVE_SALVOS, JSON.stringify(this.snippetsSalvos));
+    this.modalSalvarAberto = false;
+    this.abaSidebar = 'salvos';
+    this.salvandoNome = '';
+    this.cdr.detectChanges();
+  }
+
+  carregarSnippetSalvo(s: SnippetSalvo): void {
+    this.codigo = s.codigo;
+    this.resultado = null;
+    this.salvarRascunho();
+    this.cdr.detectChanges();
+  }
+
+  removerSnippetSalvo(id: string, event: Event): void {
+    event.stopPropagation();
+    this.snippetsSalvos = this.snippetsSalvos.filter(s => s.id !== id);
+    localStorage.setItem(CHAVE_SALVOS, JSON.stringify(this.snippetsSalvos));
+    this.cdr.detectChanges();
+  }
+
+  get jaEstaNosSalvos(): boolean {
+    return this.snippetsSalvos.some(s => s.codigo === this.codigo);
   }
 
   // ── Utilitários ───────────────────────────────────
