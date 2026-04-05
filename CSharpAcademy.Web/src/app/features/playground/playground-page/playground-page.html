@@ -1,0 +1,104 @@
+<div class="pg-page">
+
+  <!-- Topbar -->
+  <header class="pg-topbar">
+    <button class="btn-voltar" (click)="voltar()">&#8592; Dashboard</button>
+    <span class="pg-titulo">⚡ Code Playground</span>
+    <div class="pg-topbar-acoes">
+      <span class="pg-info" *ngIf="resultado">
+        {{ resultado.tempoMs }}ms
+      </span>
+      <button class="btn-limpar" (click)="limpar()" title="Limpar editor">⌫</button>
+      <button class="btn-run" (click)="executar()" [disabled]="executando || !codigo.trim()">
+        <span *ngIf="!executando">▶ Executar</span>
+        <span *ngIf="executando">⟳ Rodando...</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="pg-body">
+
+    <!-- Sidebar de exemplos -->
+    <aside class="pg-sidebar">
+      <div class="pg-sidebar-titulo">Exemplos</div>
+      <button
+        class="pg-exemplo"
+        *ngFor="let ex of exemplos"
+        (click)="carregarExemplo(ex)">
+        {{ ex.titulo }}
+      </button>
+    </aside>
+
+    <!-- Painel principal -->
+    <div class="pg-main">
+
+      <!-- Abas mobile -->
+      <div class="pg-abas">
+        <button class="pg-aba" [class.ativa]="abas === 'editor'" (click)="abas = 'editor'">Editor</button>
+        <button class="pg-aba" [class.ativa]="abas === 'output'" (click)="abas = 'output'">
+          Output
+          <span class="pg-aba-badge pg-aba-ok" *ngIf="temSaida && !temErro">✓</span>
+          <span class="pg-aba-badge pg-aba-err" *ngIf="temErro">!</span>
+        </button>
+      </div>
+
+      <div class="pg-paineis">
+
+        <!-- Editor -->
+        <div class="pg-editor-wrap" [class.pg-hidden-mobile]="abas !== 'editor'">
+          <div class="pg-editor-header">
+            <span class="pg-editor-lang">C#</span>
+            <span class="pg-editor-linhas">{{ linhas }} linha(s)</span>
+          </div>
+          <div class="pg-editor-body">
+            <div class="pg-line-nums">
+              <div *ngFor="let i of [].constructor(linhas); let idx = index">{{ idx + 1 }}</div>
+            </div>
+            <textarea
+              class="pg-textarea"
+              [(ngModel)]="codigo"
+              spellcheck="false"
+              autocorrect="off"
+              autocapitalize="off"
+              (keydown.tab)="onTab($event)"
+              placeholder="// Escreva C# aqui...">
+            </textarea>
+          </div>
+        </div>
+
+        <!-- Output -->
+        <div class="pg-output-wrap" [class.pg-hidden-mobile]="abas !== 'output'">
+          <div class="pg-output-header">
+            <span>Saída</span>
+            <span class="pg-output-status pg-status-ok" *ngIf="temSaida && !temErro">✓ ok</span>
+            <span class="pg-output-status pg-status-err" *ngIf="temErro">✗ erro</span>
+          </div>
+
+          <!-- Idle -->
+          <div class="pg-output-idle" *ngIf="!resultado && !executando">
+            <div class="pg-output-idle-icone">⚡</div>
+            <p>Clique em <strong>Executar</strong> para rodar seu código.</p>
+          </div>
+
+          <!-- Loading -->
+          <div class="pg-output-idle" *ngIf="executando">
+            <div class="pg-spinner">⟳</div>
+            <p>Compilando e executando...</p>
+          </div>
+
+          <!-- Resultado com saída -->
+          <pre class="pg-output-pre pg-output-ok" *ngIf="resultado && temSaida">{{ resultado.saida }}</pre>
+
+          <!-- Resultado com saída + erro -->
+          <pre class="pg-output-pre pg-output-err" *ngIf="resultado && temErro">{{ resultado.erro }}</pre>
+
+          <!-- Sem saída e sem erro -->
+          <div class="pg-output-idle" *ngIf="resultado && !temSaida && !temErro">
+            <p class="pg-sem-saida">Código executado com sucesso, mas sem saída.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -14,6 +14,7 @@ import { PerfilModule } from './features/perfil/perfil-module';
 import { SharedModule } from './shared/shared-module';
 import { LigaModule } from './features/liga/liga-module';
 import { AnalyticsModule } from './features/analytics/analytics-module';
+import { PlaygroundModule } from './features/playground/playground-module';
 import { MarkdownModule } from 'ngx-markdown';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
@@ -34,6 +35,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     SharedModule,
     LigaModule,
     AnalyticsModule,
+    PlaygroundModule,
     MarkdownModule.forRoot(),
     
       ServiceWorkerModule.register('ngsw-worker.js', {
