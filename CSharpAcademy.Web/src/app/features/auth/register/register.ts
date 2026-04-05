@@ -26,7 +26,7 @@ export class Register {
     this.erro = '';
     this.carregando = true;
     this.auth.registrar({ nome: this.nome, email: this.email, senha: this.senha }).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: () => this.router.navigate(['/onboarding']),
       error: (err: HttpErrorResponse) => {
         this.erro = err.error?.mensagem ?? 'Erro ao criar conta. Verifique os dados.';
         this.carregando = false;
