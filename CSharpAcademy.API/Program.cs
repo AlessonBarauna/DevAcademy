@@ -89,7 +89,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<AppDbContext>();
 
-// ── CORS ──────────────────────────────────────────────────────────────────────
+// ── CORS (dev only — em produção o Angular é servido pelo próprio .NET) ───────
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
     ?? ["http://localhost:4200"];
 
@@ -107,12 +107,19 @@ using (var scope = app.Services.CreateScope())
 
 // ── Pipeline (ordem importa) ──────────────────────────────────────────────────
 app.UseMiddleware<ExceptionMiddleware>();   // 1. Captura exceções globais
-app.UseCors("Default");                    // 2. CORS antes de auth
+app.UseCors("Default");                    // 2. CORS (dev) antes de auth
 app.UseRateLimiter();                      // 3. Rate limiting
 app.MapOpenApi();                          // /openapi/v1.json
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapHealthChecks("/health");            // GET /health → { "status": "Healthy" }
+
+// ── SPA: serve o Angular em produção ───────────────────���─────────────────────
+app.UseDefaultFiles();   // index.html como padrão
+app.UseStaticFiles();    // serve wwwroot/
+
+// Fallback para rotas do Angular (ex: /dashboard, /modulos/1)
+app.MapFallbackToFile("index.html");
 
 app.Run();

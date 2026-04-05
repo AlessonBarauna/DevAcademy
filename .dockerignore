@@ -1,0 +1,12 @@
+**/.git
+**/.gitignore
+**/node_modules
+**/dist
+**/.angular
+CSharpAcademy.API/bin
+CSharpAcademy.API/obj
+CSharpAcademy.API/*.db
+CSharpAcademy.API/*.db-shm
+CSharpAcademy.API/*.db-wal
+**/CLAUDE.md
+**/*.md

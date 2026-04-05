@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: csharpacademy
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: Jwt__Key
+        generateValue: true          # Render gera automaticamente
+      - key: Jwt__Issuer
+        value: CSharpAcademy
+      - key: Jwt__Audience
+        value: CSharpAcademyUsers
+      - key: MistralAI__ApiKey
+        sync: false                  # Você preenche manualmente no dashboard
+    disk:
+      name: sqlite-data
+      mountPath: /data
+      sizeGB: 1
