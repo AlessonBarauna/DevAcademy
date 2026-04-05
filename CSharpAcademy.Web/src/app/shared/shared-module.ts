@@ -7,10 +7,11 @@ import { NotifBanner } from './notif-banner/notif-banner';
 import { ToastComponent } from './toast/toast';
 import { Pomodoro } from './pomodoro/pomodoro';
 import { Atalhos } from './atalhos/atalhos';
+import { NavProgress } from './nav-progress/nav-progress';
 
 @NgModule({
-  declarations: [LevelUpOverlay, NotifBanner, ToastComponent, Pomodoro, Atalhos],
+  declarations: [LevelUpOverlay, NotifBanner, ToastComponent, Pomodoro, Atalhos, NavProgress],
   imports: [CommonModule, FormsModule, RouterModule],
-  exports: [LevelUpOverlay, NotifBanner, ToastComponent, Pomodoro, Atalhos],
+  exports: [LevelUpOverlay, NotifBanner, ToastComponent, Pomodoro, Atalhos, NavProgress],
 })
 export class SharedModule {}

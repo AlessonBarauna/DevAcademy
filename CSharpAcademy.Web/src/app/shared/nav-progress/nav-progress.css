@@ -1,0 +1,25 @@
+.nav-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--teal);
+  z-index: 9999;
+  width: 0%;
+  animation: nav-progress-indeterminate 1.4s ease-in-out infinite;
+  box-shadow: 0 0 8px var(--teal);
+  transition: opacity 0.3s;
+}
+
+.nav-progress-bar.completo {
+  animation: none;
+  width: 100%;
+  opacity: 0;
+  transition: width 0.15s ease, opacity 0.3s ease 0.1s;
+}
+
+@keyframes nav-progress-indeterminate {
+  0%   { left: -40%; width: 40%; }
+  50%  { left: 30%;  width: 50%; }
+  100% { left: 100%; width: 30%; }
+}
