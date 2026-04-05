@@ -35,7 +35,9 @@
 
     <div class="licoes-section">
       <h2>Conteúdo do módulo</h2>
-      <div class="loading" *ngIf="carregando">Carregando lições...</div>
+      <div *ngIf="carregando" style="display:flex;flex-direction:column;gap:8px">
+        <div class="sk-card sk" *ngFor="let i of [1,2,3,4]" style="height:56px"></div>
+      </div>
       <div class="licao-list" *ngIf="!carregando">
         <div
           class="licao-row"

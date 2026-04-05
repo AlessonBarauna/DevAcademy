@@ -208,7 +208,15 @@
     <!-- Progresso por módulo -->
     <section class="modulos-progresso">
       <h3>Progresso por Módulo</h3>
-      <div class="loading" *ngIf="carregando">Carregando...</div>
+      <ng-container *ngIf="carregando">
+        <div class="sk-card sk-mb-8" *ngFor="let i of [1,2,3]">
+          <div class="sk-row sk-mb-12">
+            <div class="sk sk-title sk-w-50"></div>
+            <div class="sk sk-text sk-w-20" style="margin-left:auto"></div>
+          </div>
+          <div class="sk sk-text sk-w-100"></div>
+        </div>
+      </ng-container>
       <div class="erro-msg" *ngIf="erroModulos">{{ erroModulos }}</div>
       <div class="modulo-item" *ngFor="let m of modulos" (click)="irParaModulo(m)">
         <div class="modulo-info">
