@@ -385,3 +385,55 @@
   .streak-section { grid-template-columns: 1fr; }
   .radar-wrap { flex-direction: column; align-items: flex-start; }
 }
+
+
+/* ── Personalização ─────────────────────────────── */
+.personalizacao-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin: 0 24px 16px;
+}
+
+.personalizacao-section h3 {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 16px;
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+
+.pers-row { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+
+.pers-grupo { display: flex; flex-direction: column; gap: 8px; }
+
+.pers-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-family: var(--font-mono); }
+
+.pers-tema-btn {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: border-color 0.15s;
+  white-space: nowrap;
+}
+.pers-tema-btn:hover { border-color: var(--teal); }
+
+.pers-cores { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.pers-cor {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+  outline: none;
+}
+.pers-cor:hover { transform: scale(1.15); }
+.pers-cor.ativa { border-color: var(--text); transform: scale(1.15); box-shadow: 0 0 0 2px var(--bg-card); }

@@ -145,6 +145,32 @@
       </div>
     </section>
 
+    <!-- Personalização -->
+    <section class="personalizacao-section">
+      <h3>🎨 Personalização</h3>
+      <div class="pers-row">
+        <div class="pers-grupo">
+          <span class="pers-label">Tema</span>
+          <button class="pers-tema-btn" (click)="themeService.toggle()">
+            {{ themeService.isLight ? '🌙 Modo Escuro' : '☀️ Modo Claro' }}
+          </button>
+        </div>
+        <div class="pers-grupo">
+          <span class="pers-label">Cor de destaque</span>
+          <div class="pers-cores">
+            <button
+              class="pers-cor"
+              *ngFor="let cor of themeService.cores"
+              [style.background]="cor.valor"
+              [class.ativa]="themeService.corAtual.nome === cor.nome"
+              [title]="cor.nome"
+              (click)="themeService.definirCor(cor)">
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="conquistas-section">
       <h3>🏅 Conquistas</h3>
       <div *ngIf="carregando" style="display:flex;gap:10px;flex-wrap:wrap">
