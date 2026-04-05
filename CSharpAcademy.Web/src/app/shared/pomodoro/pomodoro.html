@@ -1,0 +1,53 @@
+<div class="pomo-wrap">
+
+  <!-- Widget expandido -->
+  <div class="pomo-card" [class.aberto]="aberto">
+
+    <div class="pomo-header">
+      <span class="pomo-titulo">Modo Foco</span>
+      <button class="pomo-close" (click)="toggleAberto()">✕</button>
+    </div>
+
+    <!-- Tabs de modo -->
+    <div class="pomo-tabs">
+      <button [class.ativo]="modo === 'foco'"       (click)="mudarModo('foco')">🍅 Foco</button>
+      <button [class.ativo]="modo === 'pausa'"      (click)="mudarModo('pausa')">☕ Pausa</button>
+      <button [class.ativo]="modo === 'pausa-longa'" (click)="mudarModo('pausa-longa')">🌿 Longa</button>
+    </div>
+
+    <!-- Timer ring -->
+    <div class="pomo-timer-wrap">
+      <svg class="pomo-ring" viewBox="0 0 100 100">
+        <circle class="pomo-ring-bg" cx="50" cy="50" r="44" />
+        <circle
+          class="pomo-ring-fill"
+          cx="50" cy="50" r="44"
+          [style.stroke-dashoffset]="277 - (277 * progresso / 100)" />
+      </svg>
+      <div class="pomo-display">
+        <span class="pomo-time">{{ minutos }}:{{ segundos }}</span>
+        <span class="pomo-label">{{ labelModo }}</span>
+      </div>
+    </div>
+
+    <!-- Controles -->
+    <div class="pomo-controles">
+      <button class="pomo-btn pomo-btn-reset" (click)="resetar()" title="Resetar">↺</button>
+      <button class="pomo-btn pomo-btn-play" (click)="toggleTimer()">
+        {{ rodando ? '⏸' : '▶' }}
+      </button>
+      <span class="pomo-contador">{{ pomodoros }} 🍅</span>
+    </div>
+
+    <div class="pomo-notif" *ngIf="!rodando && pomodoros === 0">
+      <button class="pomo-notif-btn" (click)="pedirPermissao()">🔔 Ativar notificações</button>
+    </div>
+  </div>
+
+  <!-- Botão flutuante -->
+  <button class="pomo-fab" (click)="toggleAberto()" [class.rodando]="rodando" [title]="rodando ? minutos + ':' + segundos : 'Modo Foco'">
+    <span *ngIf="!rodando">🍅</span>
+    <span *ngIf="rodando" class="pomo-fab-timer">{{ minutos }}:{{ segundos }}</span>
+  </button>
+
+</div>

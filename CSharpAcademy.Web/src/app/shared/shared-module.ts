@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { LevelUpOverlay } from './level-up-overlay/level-up-overlay';
 import { NotifBanner } from './notif-banner/notif-banner';
 import { ToastComponent } from './toast/toast';
+import { Pomodoro } from './pomodoro/pomodoro';
 
 @NgModule({
-  declarations: [LevelUpOverlay, NotifBanner, ToastComponent],
+  declarations: [LevelUpOverlay, NotifBanner, ToastComponent, Pomodoro],
   imports: [CommonModule],
-  exports: [LevelUpOverlay, NotifBanner, ToastComponent],
+  exports: [LevelUpOverlay, NotifBanner, ToastComponent, Pomodoro],
 })
 export class SharedModule {}
