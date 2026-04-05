@@ -5,9 +5,35 @@
     <button class="btn-voltar" (click)="voltar()">&#8592; Dashboard</button>
     <span class="pg-titulo">⚡ Code Playground</span>
     <div class="pg-topbar-acoes">
-      <span class="pg-info" *ngIf="resultado">
-        {{ resultado.tempoMs }}ms
-      </span>
+      <span class="pg-info" *ngIf="resultado">{{ resultado.tempoMs }}ms</span>
+
+      <!-- Histórico -->
+      <div class="pg-historico-wrap">
+        <button class="btn-historico" (click)="historicoAberto = !historicoAberto" [class.ativo]="historicoAberto"
+          [title]="historico.length + ' snippet(s) no histórico'">
+          🕐 {{ historico.length }}
+        </button>
+        <div class="pg-historico-dropdown" *ngIf="historicoAberto">
+          <div class="pg-historico-header">
+            <span>Histórico ({{ historico.length }}/20)</span>
+            <button class="btn-limpar-hist" (click)="limparHistorico()" *ngIf="historico.length > 0">Limpar</button>
+          </div>
+          <div class="pg-historico-vazio" *ngIf="historico.length === 0">
+            Nenhum snippet executado ainda.
+          </div>
+          <div
+            class="pg-historico-item"
+            *ngFor="let h of historico"
+            (click)="carregarDoHistorico(h)">
+            <div class="pg-hist-info">
+              <span class="pg-hist-titulo">{{ h.titulo }}</span>
+              <span class="pg-hist-data">{{ formatarData(h.dataIso) }}</span>
+            </div>
+            <button class="pg-hist-del" (click)="removerDoHistorico(h.id, $event)" title="Remover">✕</button>
+          </div>
+        </div>
+      </div>
+
       <button class="btn-limpar" (click)="limpar()" title="Limpar editor">⌫</button>
       <button class="btn-run" (click)="executar()" [disabled]="executando || !codigo.trim()">
         <span *ngIf="!executando">▶ Executar</span>
@@ -16,15 +42,15 @@
     </div>
   </header>
 
+  <!-- Overlay para fechar o histórico -->
+  <div class="pg-overlay" *ngIf="historicoAberto" (click)="historicoAberto = false"></div>
+
   <div class="pg-body">
 
     <!-- Sidebar de exemplos -->
     <aside class="pg-sidebar">
       <div class="pg-sidebar-titulo">Exemplos</div>
-      <button
-        class="pg-exemplo"
-        *ngFor="let ex of exemplos"
-        (click)="carregarExemplo(ex)">
+      <button class="pg-exemplo" *ngFor="let ex of exemplos" (click)="carregarExemplo(ex)">
         {{ ex.titulo }}
       </button>
     </aside>
@@ -37,7 +63,7 @@
         <button class="pg-aba" [class.ativa]="abas === 'editor'" (click)="abas = 'editor'">Editor</button>
         <button class="pg-aba" [class.ativa]="abas === 'output'" (click)="abas = 'output'">
           Output
-          <span class="pg-aba-badge pg-aba-ok" *ngIf="temSaida && !temErro">✓</span>
+          <span class="pg-aba-badge pg-aba-ok"  *ngIf="temSaida && !temErro">✓</span>
           <span class="pg-aba-badge pg-aba-err" *ngIf="temErro">!</span>
         </button>
       </div>
@@ -49,6 +75,7 @@
           <div class="pg-editor-header">
             <span class="pg-editor-lang">C#</span>
             <span class="pg-editor-linhas">{{ linhas }} linha(s)</span>
+            <span class="pg-rascunho-badge">● auto-salvo</span>
           </div>
           <div class="pg-editor-body">
             <div class="pg-line-nums">
@@ -57,6 +84,7 @@
             <textarea
               class="pg-textarea"
               [(ngModel)]="codigo"
+              (ngModelChange)="onCodigoChange()"
               spellcheck="false"
               autocorrect="off"
               autocapitalize="off"
@@ -70,29 +98,19 @@
         <div class="pg-output-wrap" [class.pg-hidden-mobile]="abas !== 'output'">
           <div class="pg-output-header">
             <span>Saída</span>
-            <span class="pg-output-status pg-status-ok" *ngIf="temSaida && !temErro">✓ ok</span>
+            <span class="pg-output-status pg-status-ok"  *ngIf="temSaida && !temErro">✓ ok</span>
             <span class="pg-output-status pg-status-err" *ngIf="temErro">✗ erro</span>
           </div>
-
-          <!-- Idle -->
           <div class="pg-output-idle" *ngIf="!resultado && !executando">
             <div class="pg-output-idle-icone">⚡</div>
             <p>Clique em <strong>Executar</strong> para rodar seu código.</p>
           </div>
-
-          <!-- Loading -->
           <div class="pg-output-idle" *ngIf="executando">
             <div class="pg-spinner">⟳</div>
             <p>Compilando e executando...</p>
           </div>
-
-          <!-- Resultado com saída -->
-          <pre class="pg-output-pre pg-output-ok" *ngIf="resultado && temSaida">{{ resultado.saida }}</pre>
-
-          <!-- Resultado com saída + erro -->
+          <pre class="pg-output-pre pg-output-ok"  *ngIf="resultado && temSaida">{{ resultado.saida }}</pre>
           <pre class="pg-output-pre pg-output-err" *ngIf="resultado && temErro">{{ resultado.erro }}</pre>
-
-          <!-- Sem saída e sem erro -->
           <div class="pg-output-idle" *ngIf="resultado && !temSaida && !temErro">
             <p class="pg-sem-saida">Código executado com sucesso, mas sem saída.</p>
           </div>
