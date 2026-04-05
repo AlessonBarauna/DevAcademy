@@ -12,9 +12,45 @@
   width: 100%;
   max-width: 760px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 8px;
   margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.cert-acoes {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.btn-acao {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn-acao:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.btn-acao:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-acao.copiado { border-color: var(--success, #89d185); color: var(--success, #89d185); }
+
+.btn-whatsapp:hover { border-color: #25d366 !important; color: #25d366 !important; }
+.btn-linkedin:hover { border-color: #0a66c2 !important; color: #0a66c2 !important; }
+.btn-download:hover { border-color: var(--accent) !important; color: var(--accent) !important; }
+
+@media (max-width: 600px) {
+  .cert-acoes { margin-left: 0; width: 100%; }
+  .btn-acao { flex: 1; justify-content: center; }
 }
 
 .btn-voltar {
