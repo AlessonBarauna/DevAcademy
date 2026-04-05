@@ -2,7 +2,7 @@
 FROM node:22-alpine AS angular-build
 WORKDIR /app
 COPY CSharpAcademy.Web/package*.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 COPY CSharpAcademy.Web/ ./
 RUN npm run build
 
