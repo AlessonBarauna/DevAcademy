@@ -158,9 +158,9 @@ export class ExercicioView implements OnInit, OnDestroy {
   responder(): void {
     if (!this.exercicioAtual || this.respondendo) return;
     this.pararTimer();
-    const resposta = this.tipoMultiplaEscolha || this.tipoVerdadeiroFalso
-      ? this.respostaSelecionada
-      : this.respostaTexto;
+    const usaSelecao = this.tipoMultiplaEscolha || this.tipoVerdadeiroFalso
+      || (this.tipoCorrigirCodigo && this.opcoes.length > 0);
+    const resposta = usaSelecao ? this.respostaSelecionada : this.respostaTexto;
     if (!resposta) return;
 
     this.respondendo = true;
