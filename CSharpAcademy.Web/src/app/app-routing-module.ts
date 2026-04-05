@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: 'glossario',  loadChildren: () => import('./features/glossario/glossario-module').then(m => m.GlossarioModule) },
   { path: 'metas',      loadChildren: () => import('./features/metas/metas-module').then(m => m.MetasModule) },
 
-  { path: '**', redirectTo: '/login' },
+  { path: '**', loadChildren: () => import('./features/not-found/not-found-module').then(m => m.NotFoundModule) },
 ];
 
 @NgModule({
