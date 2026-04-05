@@ -27,6 +27,7 @@ export class Dashboard implements OnInit, OnDestroy {
   missoesDiarias: MissaoDiaria[] = [];
   carregando = true;
   erroModulos = '';
+  usandoFreeze = false;
   heatmapSemanas: { data: Date; count: number; nivel: number }[][] = [];
   private sub = new Subscription();
 
@@ -249,6 +250,19 @@ export class Dashboard implements OnInit, OnDestroy {
   irParaLicaoBusca(moduloId: number, licaoId: number): void {
     this.buscaAberta = false;
     this.router.navigate(['/modulos', moduloId, 'licoes'], { queryParams: { licaoId } });
+  }
+
+  usarStreakFreeze(): void {
+    if (this.usandoFreeze) return;
+    this.usandoFreeze = true;
+    this.http.post('/api/auth/streak-freeze', {}).subscribe({
+      next: () => {
+        this.authService.sincronizarPerfil();
+        this.usandoFreeze = false;
+        this.cdr.detectChanges();
+      },
+      error: () => { this.usandoFreeze = false; this.cdr.detectChanges(); }
+    });
   }
 
   logout(): void {
