@@ -18,6 +18,7 @@ import { PlaygroundModule } from './features/playground/playground-module';
 import { ProjetosModule } from './features/projetos/projetos-module';
 import { MarkdownModule } from 'ngx-markdown';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
@@ -52,6 +53,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     provideCharts(withDefaultRegisterables())
   ],
   bootstrap: [App],
