@@ -12,8 +12,12 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 // ── Database ──────────────────────────────────────────────────────────────────
+// Em produção o Render injeta DATABASE_URL no formato postgresql://user:pass@host/db
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
+    ?? builder.Configuration.GetConnectionString("Default")!;
+
 builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+    opt.UseNpgsql(connectionString));
 
 // ── JWT Auth ──────────────────────────────────────────────────────────────────
 var jwtKey = builder.Configuration["Jwt:Key"]!;
@@ -98,11 +102,11 @@ builder.Services.AddCors(opt => opt.AddPolicy("Default", p =>
 
 var app = builder.Build();
 
-// ── Auto-migrate ──────────────────────────────────────────────────────────────
+// ── Auto-create schema ────────────────────────────────────────────────────────
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
+    db.Database.EnsureCreated();
 }
 
 // ── Pipeline (ordem importa) ──────────────────────────────────────────────────
