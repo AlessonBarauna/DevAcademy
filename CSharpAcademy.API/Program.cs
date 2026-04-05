@@ -12,15 +12,15 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 // ── Database ──────────────────────────────────────────────────────────────────
-// Render injeta DATABASE_URL como URI: postgresql://user:pass@host:port/db
-// Npgsql precisa do formato key=value, então convertemos aqui.
+// Em produção: DATABASE_URL vem como URI postgresql://user:pass@host:port/db
+// Em desenvolvimento: usa a connection string do appsettings.json (key=value)
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 string connectionString;
 
-if (!string.IsNullOrEmpty(databaseUrl))
+if (!string.IsNullOrEmpty(databaseUrl) && databaseUrl.StartsWith("postgres"))
 {
     var uri = new Uri(databaseUrl);
-    var userInfo = uri.UserInfo.Split(':');
+    var userInfo = uri.UserInfo.Split(':', 2);
     var port = uri.Port > 0 ? uri.Port : 5432;
     connectionString = $"Host={uri.Host};Port={port};Database={uri.AbsolutePath.TrimStart('/')};" +
                        $"Username={userInfo[0]};Password={userInfo[1]};" +
@@ -28,7 +28,10 @@ if (!string.IsNullOrEmpty(databaseUrl))
 }
 else
 {
-    connectionString = builder.Configuration.GetConnectionString("Default")!;
+    connectionString = builder.Configuration.GetConnectionString("Default")
+        ?? throw new InvalidOperationException(
+            "Connection string não configurada. " +
+            "Em produção, defina a variável de ambiente DATABASE_URL com a URI do PostgreSQL.");
 }
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
