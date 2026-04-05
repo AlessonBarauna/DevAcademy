@@ -20,7 +20,9 @@
       <button class="btn-voltar-modulos" (click)="voltarParaModulos()">&#8592; Módulos</button>
     </div>
     <h3>Lições</h3>
-    <div class="loading" *ngIf="carregando">Carregando...</div>
+    <div class="licao-skeleton" *ngIf="carregando">
+      <div class="sk sk-text sk-w-75 sk-mb-8" *ngFor="let i of [1,2,3,4,5]"></div>
+    </div>
     <ul *ngIf="!carregando">
       <li
         *ngFor="let l of licoes"
