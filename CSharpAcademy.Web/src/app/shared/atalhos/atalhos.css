@@ -1,0 +1,110 @@
+.atalhos-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
+  z-index: 800;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.atalhos-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 801;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  width: 340px;
+  max-width: calc(100vw - 32px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  animation: slideUp 0.18s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translate(-50%, calc(-50% + 16px)); }
+  to   { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.atalhos-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.atalhos-titulo {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--text);
+}
+
+.atalhos-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  transition: background 0.1s;
+}
+.atalhos-close:hover { background: var(--bg-hover); color: var(--text); }
+
+.atalhos-lista {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+}
+
+.atalho-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+  transition: background 0.1s;
+}
+.atalho-item:hover { background: var(--bg-hover); }
+
+.atalho-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+}
+
+.atalho-tecla {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
+.atalhos-dica {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  padding: 10px 20px 14px;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+.atalhos-dica kbd {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}

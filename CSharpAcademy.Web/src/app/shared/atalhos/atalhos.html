@@ -1,0 +1,16 @@
+<ng-container *ngIf="visivel">
+  <div class="atalhos-overlay" (click)="fechar()"></div>
+  <div class="atalhos-modal" role="dialog" aria-label="Atalhos de teclado">
+    <div class="atalhos-header">
+      <span class="atalhos-titulo">⌨️ Atalhos de Teclado</span>
+      <button class="atalhos-close" (click)="fechar()">✕</button>
+    </div>
+    <ul class="atalhos-lista">
+      <li *ngFor="let a of lista" class="atalho-item">
+        <span class="atalho-desc">{{ a.descricao }}</span>
+        <span class="atalho-tecla">{{ a.tecla }}</span>
+      </li>
+    </ul>
+    <p class="atalhos-dica">Pressione <kbd>?</kbd> para abrir/fechar</p>
+  </div>
+</ng-container>
