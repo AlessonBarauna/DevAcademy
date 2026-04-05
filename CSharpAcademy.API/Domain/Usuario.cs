@@ -18,6 +18,9 @@ public class Usuario
     public int Vidas { get; set; } = 5;
     public DateTime? UltimoRecargaVida { get; set; }
 
+    // Streak Freeze
+    public int StreakFreeze { get; set; } = 1;
+
     public ICollection<Progresso> Progressos { get; set; } = [];
     public ICollection<Conquista> Conquistas { get; set; } = [];
     public ICollection<AI.ChatMessage> ChatMessages { get; set; } = [];

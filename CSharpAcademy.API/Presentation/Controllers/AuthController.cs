@@ -25,7 +25,7 @@ public class AuthController(IUsuarioRepository usuarioRepo, IConfiguration confi
     {
         var usuario = await usuarioRepo.ObterPorIdAsync(UsuarioId);
         if (usuario == null) return NotFound();
-        return Ok(new { usuario.Id, usuario.Nome, usuario.Email, usuario.NivelAtual, Xp = usuario.XP, usuario.StreakAtual, usuario.StreakMaximo, UltimoEstudo = usuario.UltimoEstudo?.ToString("yyyy-MM-dd") });
+        return Ok(new { usuario.Id, usuario.Nome, usuario.Email, usuario.NivelAtual, Xp = usuario.XP, usuario.StreakAtual, usuario.StreakMaximo, UltimoEstudo = usuario.UltimoEstudo?.ToString("yyyy-MM-dd"), usuario.StreakFreeze });
     }
 
     [HttpGet("atividade")]
@@ -114,6 +114,22 @@ public class AuthController(IUsuarioRepository usuarioRepo, IConfiguration confi
         return Ok(MapParaDto(usuario));
     }
 
+    [HttpPost("streak-freeze")]
+    [Authorize]
+    public async Task<IActionResult> UsarStreakFreeze()
+    {
+        var usuario = await usuarioRepo.ObterPorIdAsync(UsuarioId);
+        if (usuario == null) return NotFound();
+        if (usuario.StreakFreeze <= 0) return BadRequest(new { mensagem = "Sem streak freezes disponíveis." });
+
+        usuario.StreakFreeze--;
+        usuario.UltimoEstudo = DateTime.UtcNow.Date;
+        await usuarioRepo.AtualizarAsync(usuario);
+        await usuarioRepo.SalvarAsync();
+
+        return Ok(new { streakFreeze = usuario.StreakFreeze, streakAtual = usuario.StreakAtual });
+    }
+
     private UsuarioResponseDto MapParaDto(Usuario usuario) => new()
     {
         Id = usuario.Id,
@@ -121,7 +137,8 @@ public class AuthController(IUsuarioRepository usuarioRepo, IConfiguration confi
         Email = usuario.Email,
         NivelAtual = usuario.NivelAtual,
         Xp = usuario.XP,
-        Token = GerarToken(usuario)
+        Token = GerarToken(usuario),
+        StreakFreeze = usuario.StreakFreeze
     };
 
     private string GerarToken(Usuario usuario)

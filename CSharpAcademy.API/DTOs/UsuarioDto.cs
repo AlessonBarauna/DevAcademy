@@ -40,4 +40,5 @@ public class UsuarioResponseDto
     public int NivelAtual { get; set; }
     public int Xp { get; set; }
     public string Token { get; set; } = string.Empty;
+    public int StreakFreeze { get; set; }
 }
