@@ -138,6 +138,22 @@ html, body {
 .sk-row   { display: flex; gap: 12px; align-items: center; }
 
 /* ================================================
+   Botão global de Início (Dashboard)
+   ================================================ */
+.btn-inicio {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.btn-inicio:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ================================================
    Scrollbar
    ================================================ */
 ::-webkit-scrollbar { width: 10px; height: 10px; }

@@ -18,6 +18,7 @@
   <aside class="sidebar" [class.aberta]="sidebarAberta">
     <div class="sidebar-topbar">
       <button class="btn-voltar-modulos" (click)="voltarParaModulos()">&#8592; Módulos</button>
+      <button class="btn-inicio" (click)="irParaDashboard()" title="Ir para o início">🏠</button>
     </div>
     <h3>Lições</h3>
     <div class="licao-skeleton" *ngIf="carregando">

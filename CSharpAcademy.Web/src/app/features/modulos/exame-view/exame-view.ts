@@ -181,6 +181,10 @@ export class ExameView implements OnInit, OnDestroy {
     this.router.navigate(['/modulos', this.moduloId]);
   }
 
+  irParaDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
   ngOnDestroy(): void {
     this.pararTimer();
   }

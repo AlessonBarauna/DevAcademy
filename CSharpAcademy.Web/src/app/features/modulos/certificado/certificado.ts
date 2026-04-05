@@ -50,6 +50,8 @@ export class Certificado implements OnInit {
 
   voltar(): void { this.router.navigate(['/modulos', this.moduloId]); }
 
+  irParaDashboard(): void { this.router.navigate(['/dashboard']); }
+
   nivelIcone(nivel: string): string {
     const mapa: Record<string, string> = {
       Iniciante: '🌱', Intermediario: '⚡', Avancado: '🔥', Especialista: '💎'

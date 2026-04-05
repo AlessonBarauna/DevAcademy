@@ -2,6 +2,7 @@
 
   <header class="detail-header">
     <button class="btn-voltar" (click)="voltar()">&#8592; Módulos</button>
+    <button class="btn-inicio" (click)="irParaDashboard()" title="Ir para o início">🏠 Início</button>
     <div class="header-meta" *ngIf="modulo">
       <span class="nivel-badge nivel-{{ modulo.nivelMinimo.toLowerCase() }}">{{ modulo.nivelMinimo }}</span>
     </div>

@@ -211,6 +211,10 @@ export class ExercicioView implements OnInit, OnDestroy {
     });
   }
 
+  irParaDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
   irParaProximaLicao(): void {
     if (this.proximaLicao) {
       this.router.navigate(['/modulos', this.moduloId, 'licoes'], {

@@ -78,6 +78,10 @@ export class ModuloDetail implements OnInit {
     this.router.navigate(['/modulos', this.moduloId, 'certificado']);
   }
 
+  irParaDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
   voltar(): void {
     this.router.navigate(['/modulos']);
   }

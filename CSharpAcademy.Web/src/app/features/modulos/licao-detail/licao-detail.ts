@@ -103,6 +103,10 @@ export class LicaoDetail implements OnInit {
     this.router.navigate(['/modulos', this.moduloId]);
   }
 
+  irParaDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
   irParaExercicios(): void {
     if (!this.licaoSelecionada) return;
     this.router.navigate(['/modulos', this.moduloId, 'licoes', this.licaoSelecionada.id, 'exercicios']);
