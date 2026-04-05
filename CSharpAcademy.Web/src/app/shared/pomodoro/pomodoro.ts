@@ -10,18 +10,29 @@ type Modo = 'foco' | 'pausa' | 'pausa-longa';
 })
 export class Pomodoro implements OnDestroy {
   aberto = false;
+  editando = false;
   rodando = false;
   modo: Modo = 'foco';
   pomodoros = 0;
 
-  private readonly duracoes: Record<Modo, number> = {
-    foco: 25 * 60,
-    pausa: 5 * 60,
-    'pausa-longa': 15 * 60,
-  };
+  // Durações em minutos (editáveis pelo usuário)
+  minutosFoco = 25;
+  minutosPausa = 5;
+  minutosPausaLonga = 15;
 
-  segundosRestantes = this.duracoes['foco'];
+  // Campos temporários durante edição
+  editFoco = 25;
+  editPausa = 5;
+  editPausaLonga = 15;
+
+  segundosRestantes = this.minutosFoco * 60;
   private intervalo: ReturnType<typeof setInterval> | null = null;
+
+  get duracaoAtual(): number {
+    if (this.modo === 'foco') return this.minutosFoco * 60;
+    if (this.modo === 'pausa') return this.minutosPausa * 60;
+    return this.minutosPausaLonga * 60;
+  }
 
   get minutos(): string {
     return String(Math.floor(this.segundosRestantes / 60)).padStart(2, '0');
@@ -32,7 +43,8 @@ export class Pomodoro implements OnDestroy {
   }
 
   get progresso(): number {
-    return ((this.duracoes[this.modo] - this.segundosRestantes) / this.duracoes[this.modo]) * 100;
+    const total = this.duracaoAtual;
+    return total > 0 ? ((total - this.segundosRestantes) / total) * 100 : 0;
   }
 
   get labelModo(): string {
@@ -46,14 +58,32 @@ export class Pomodoro implements OnDestroy {
 
   toggleAberto(): void {
     this.aberto = !this.aberto;
+    if (!this.aberto) this.editando = false;
   }
 
   toggleTimer(): void {
-    if (this.rodando) {
-      this.pausar();
-    } else {
-      this.iniciar();
-    }
+    if (this.rodando) this.pausar();
+    else this.iniciar();
+  }
+
+  abrirEdicao(): void {
+    this.pausar();
+    this.editFoco = this.minutosFoco;
+    this.editPausa = this.minutosPausa;
+    this.editPausaLonga = this.minutosPausaLonga;
+    this.editando = true;
+  }
+
+  salvarEdicao(): void {
+    this.minutosFoco = Math.max(1, Math.min(99, +this.editFoco || 25));
+    this.minutosPausa = Math.max(1, Math.min(99, +this.editPausa || 5));
+    this.minutosPausaLonga = Math.max(1, Math.min(99, +this.editPausaLonga || 15));
+    this.editando = false;
+    this.segundosRestantes = this.duracaoAtual;
+  }
+
+  cancelarEdicao(): void {
+    this.editando = false;
   }
 
   private iniciar(): void {
@@ -79,9 +109,9 @@ export class Pomodoro implements OnDestroy {
     this.pausar();
     if (this.modo === 'foco') {
       this.pomodoros++;
-      const proximoModo: Modo = this.pomodoros % 4 === 0 ? 'pausa-longa' : 'pausa';
-      this.notificar(`Pomodoro #${this.pomodoros} concluído! Hora de ${proximoModo === 'pausa-longa' ? 'uma pausa longa' : 'uma pausa curta'}.`);
-      this.mudarModo(proximoModo);
+      const proximo: Modo = this.pomodoros % 4 === 0 ? 'pausa-longa' : 'pausa';
+      this.notificar(`Pomodoro #${this.pomodoros} concluído! Hora de ${proximo === 'pausa-longa' ? 'uma pausa longa' : 'uma pausa curta'}.`);
+      this.mudarModo(proximo);
     } else {
       this.notificar('Pausa encerrada! Hora de focar.');
       this.mudarModo('foco');
@@ -92,12 +122,12 @@ export class Pomodoro implements OnDestroy {
   mudarModo(modo: Modo): void {
     this.pausar();
     this.modo = modo;
-    this.segundosRestantes = this.duracoes[modo];
+    this.segundosRestantes = this.duracaoAtual;
   }
 
   resetar(): void {
     this.pausar();
-    this.segundosRestantes = this.duracoes[this.modo];
+    this.segundosRestantes = this.duracaoAtual;
   }
 
   private notificar(msg: string): void {
