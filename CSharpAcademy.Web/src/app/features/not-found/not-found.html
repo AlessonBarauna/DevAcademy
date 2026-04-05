@@ -1,0 +1,38 @@
+<div class="nf-page">
+  <div class="nf-terminal">
+    <div class="nf-terminal-bar">
+      <span class="nf-dot nf-dot-red"></span>
+      <span class="nf-dot nf-dot-yellow"></span>
+      <span class="nf-dot nf-dot-green"></span>
+      <span class="nf-terminal-title">bash — C# Academy</span>
+    </div>
+    <div class="nf-body">
+      <div class="nf-line">
+        <span class="nf-prompt">$</span>
+        <span class="nf-cmd"> navigate <span class="nf-url">{{ path }}</span></span>
+      </div>
+      <div class="nf-error">
+        <span class="nf-err-code">404</span>
+        <span class="nf-err-msg">PageNotFoundException: rota não encontrada.</span>
+      </div>
+      <div class="nf-stack">
+        <p>at Router.navigate()</p>
+        <p>at <span class="nf-highlight">CSharpAcademy.navigate(url)</span></p>
+        <p>at <span class="nf-muted">AppRoutingModule.forRoot(routes)</span></p>
+      </div>
+      <div class="nf-sugestao">
+        <span class="nf-prompt">$</span>
+        <span class="nf-cmd"> sugestão: verifique a URL ou volte ao início</span>
+      </div>
+      <div class="nf-acoes">
+        <button class="nf-btn" (click)="voltar()">
+          {{ logado ? '→ Dashboard' : '→ Login' }}
+        </button>
+      </div>
+      <div class="nf-cursor-line">
+        <span class="nf-prompt">$</span>
+        <span class="nf-cursor">▌</span>
+      </div>
+    </div>
+  </div>
+</div>
