@@ -15,6 +15,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Conquista> Conquistas => Set<Conquista>();
     public DbSet<MissaoDiaria> MissoesDiarias => Set<MissaoDiaria>();
     public DbSet<NotaLicao> NotasLicao => Set<NotaLicao>();
+    public DbSet<ProjetoTarefaConcluida> ProjetoTarefasConcluidas => Set<ProjetoTarefaConcluida>();
 
     // AI
     public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
@@ -44,6 +45,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         modelBuilder.Entity<NotaLicao>()
             .HasIndex(n => new { n.UsuarioId, n.LicaoId }).IsUnique();
+
+        modelBuilder.Entity<ProjetoTarefaConcluida>()
+            .HasIndex(p => new { p.UsuarioId, p.ProjetoId, p.TarefaId }).IsUnique();
+
+        modelBuilder.Entity<ProjetoTarefaConcluida>()
+            .HasOne(p => p.Usuario).WithMany().HasForeignKey(p => p.UsuarioId).OnDelete(DeleteBehavior.Cascade);
 
         // Seed Módulos
         modelBuilder.Entity<Modulo>().HasData(
