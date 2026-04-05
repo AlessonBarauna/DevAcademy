@@ -6,18 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { AuthModule } from './features/auth/auth-module';
-import { ModulosModule } from './features/modulos/modulos-module';
-import { ExerciciosModule } from './features/exercicios/exercicios-module';
-import { DashboardModule } from './features/dashboard/dashboard-module';
-import { RankingModule } from './features/ranking/ranking-module';
-import { PerfilModule } from './features/perfil/perfil-module';
 import { SharedModule } from './shared/shared-module';
-import { LigaModule } from './features/liga/liga-module';
-import { AnalyticsModule } from './features/analytics/analytics-module';
-import { PlaygroundModule } from './features/playground/playground-module';
-import { ProjetosModule } from './features/projetos/projetos-module';
-import { GlossarioModule } from './features/glossario/glossario-module';
-import { MetasModule } from './features/metas/metas-module';
 import { MarkdownModule } from 'ngx-markdown';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
@@ -31,34 +20,19 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     FormsModule,
     AppRoutingModule,
     AuthModule,
-    ModulosModule,
-    ExerciciosModule,
-    DashboardModule,
-    RankingModule,
-    PerfilModule,
     SharedModule,
-    LigaModule,
-    AnalyticsModule,
-    PlaygroundModule,
-    ProjetosModule,
-    GlossarioModule,
-    MetasModule,
     MarkdownModule.forRoot(),
-    
-      ServiceWorkerModule.register('ngsw-worker.js', {
-        enabled: !isDevMode(),
-        // Register the ServiceWorker as soon as the application is stable
-        // or after 30 seconds (whichever comes first).
-        registrationStrategy: 'registerWhenStable:30000'
-      })
-    ,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    provideCharts(withDefaultRegisterables())
+    provideCharts(withDefaultRegisterables()),
   ],
   bootstrap: [App],
 })

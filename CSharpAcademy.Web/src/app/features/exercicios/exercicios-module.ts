@@ -2,12 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { ExercicioView } from './exercicio-view/exercicio-view';
 import { DesafioRapido } from './desafio-rapido/desafio-rapido';
 import { SharedModule } from '../../shared/shared-module';
+import { AuthGuard } from '../../core/guards/auth.guard';
 
 @NgModule({
-  declarations: [ExercicioView, DesafioRapido],
-  imports: [CommonModule, FormsModule, RouterModule, SharedModule],
+  declarations: [DesafioRapido],
+  imports: [
+    CommonModule, FormsModule, SharedModule,
+    RouterModule.forChild([{ path: '', component: DesafioRapido, canActivate: [AuthGuard] }]),
+  ],
 })
 export class ExerciciosModule {}
