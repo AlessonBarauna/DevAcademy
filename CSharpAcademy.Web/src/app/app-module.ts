@@ -13,8 +13,10 @@ import { RankingModule } from './features/ranking/ranking-module';
 import { PerfilModule } from './features/perfil/perfil-module';
 import { SharedModule } from './shared/shared-module';
 import { LigaModule } from './features/liga/liga-module';
+import { AnalyticsModule } from './features/analytics/analytics-module';
 import { MarkdownModule } from 'ngx-markdown';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
   declarations: [App],
@@ -30,12 +32,14 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     PerfilModule,
     SharedModule,
     LigaModule,
+    AnalyticsModule,
     MarkdownModule.forRoot(),
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(withInterceptorsFromDi()),
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    provideCharts(withDefaultRegisterables())
   ],
   bootstrap: [App],
 })
