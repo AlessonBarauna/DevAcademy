@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
@@ -39,14 +40,21 @@ public class PlaygroundController : ControllerBase
         {
             using var cts = new CancellationTokenSource(TimeoutMs);
 
+            // Referencia todos os assemblies carregados na AppDomain atual,
+            // garantindo acesso a System.Linq, System.Collections.Generic, etc.
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(a => !a.IsDynamic && !string.IsNullOrWhiteSpace(a.Location))
+                .ToArray();
+
             var options = ScriptOptions.Default
+                .AddReferences(assemblies)
                 .AddImports(
                     "System",
                     "System.Collections.Generic",
                     "System.Linq",
                     "System.Text",
                     "System.IO",
-                    "System.Math"
+                    "System.Text.RegularExpressions"
                 )
                 .WithOptimizationLevel(Microsoft.CodeAnalysis.OptimizationLevel.Debug)
                 .WithEmitDebugInformation(false);
