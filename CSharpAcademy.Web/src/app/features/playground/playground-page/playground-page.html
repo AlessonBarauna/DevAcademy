@@ -34,6 +34,12 @@
         </div>
       </div>
 
+      <!-- Salvar -->
+      <button class="btn-salvar" (click)="abrirModalSalvar()" [disabled]="!codigo.trim() || jaEstaNosSalvos"
+        [title]="jaEstaNosSalvos ? 'Já salvo' : 'Salvar snippet'">
+        {{ jaEstaNosSalvos ? '✓ Salvo' : '💾 Salvar' }}
+      </button>
+
       <button class="btn-limpar" (click)="limpar()" title="Limpar editor">⌫</button>
       <button class="btn-run" (click)="executar()" [disabled]="executando || !codigo.trim()">
         <span *ngIf="!executando">▶ Executar</span>
@@ -45,14 +51,61 @@
   <!-- Overlay para fechar o histórico -->
   <div class="pg-overlay" *ngIf="historicoAberto" (click)="historicoAberto = false"></div>
 
+  <!-- Modal Salvar -->
+  <div class="pg-modal-overlay" *ngIf="modalSalvarAberto" (click)="modalSalvarAberto = false">
+    <div class="pg-modal" (click)="$event.stopPropagation()">
+      <div class="pg-modal-titulo">Salvar snippet</div>
+      <input
+        class="modal-salvar-input"
+        type="text"
+        [(ngModel)]="salvandoNome"
+        placeholder="Nome do snippet..."
+        (keydown.enter)="confirmarSalvar()"
+        (keydown.escape)="modalSalvarAberto = false"
+        maxlength="60">
+      <div class="pg-modal-acoes">
+        <button class="btn-modal-cancelar" (click)="modalSalvarAberto = false">Cancelar</button>
+        <button class="btn-modal-salvar" (click)="confirmarSalvar()" [disabled]="!salvandoNome.trim()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
   <div class="pg-body">
 
-    <!-- Sidebar de exemplos -->
+    <!-- Sidebar de exemplos / salvos -->
     <aside class="pg-sidebar">
-      <div class="pg-sidebar-titulo">Exemplos</div>
-      <button class="pg-exemplo" *ngFor="let ex of exemplos" (click)="carregarExemplo(ex)">
-        {{ ex.titulo }}
-      </button>
+      <div class="pg-sidebar-abas">
+        <button class="pg-sidebar-aba" [class.ativa]="abaSidebar === 'exemplos'" (click)="abaSidebar = 'exemplos'">Exemplos</button>
+        <button class="pg-sidebar-aba" [class.ativa]="abaSidebar === 'salvos'" (click)="abaSidebar = 'salvos'">
+          Salvos
+          <span class="pg-sidebar-badge" *ngIf="snippetsSalvos.length > 0">{{ snippetsSalvos.length }}</span>
+        </button>
+      </div>
+
+      <!-- Lista de exemplos -->
+      <div *ngIf="abaSidebar === 'exemplos'">
+        <button class="pg-exemplo" *ngFor="let ex of exemplos" (click)="carregarExemplo(ex)">
+          {{ ex.titulo }}
+        </button>
+      </div>
+
+      <!-- Lista de salvos -->
+      <div *ngIf="abaSidebar === 'salvos'">
+        <div class="pg-salvos-vazio" *ngIf="snippetsSalvos.length === 0">
+          Nenhum snippet salvo ainda.<br>Use 💾 Salvar para guardar seu código.
+        </div>
+        <div
+          class="pg-salvo-item"
+          *ngFor="let s of snippetsSalvos"
+          (click)="carregarSnippetSalvo(s)"
+          [class.ativo]="s.codigo === codigo">
+          <div class="pg-salvo-info">
+            <span class="pg-salvo-nome">{{ s.nome }}</span>
+            <span class="pg-salvo-data">{{ formatarData(s.dataIso) }}</span>
+          </div>
+          <button class="pg-salvo-del" (click)="removerSnippetSalvo(s.id, $event)" title="Remover">✕</button>
+        </div>
+      </div>
     </aside>
 
     <!-- Painel principal -->
