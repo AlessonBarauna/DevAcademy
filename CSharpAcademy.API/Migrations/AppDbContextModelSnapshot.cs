@@ -2453,6 +2453,32 @@ namespace CSharpAcademy.API.Migrations
                         });
                 });
 
+            modelBuilder.Entity("CSharpAcademy.API.Domain.ProjetoTarefaConcluida", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DataConclusao")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProjetoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TarefaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId", "ProjetoId", "TarefaId")
+                        .IsUnique();
+
+                    b.ToTable("ProjetoTarefasConcluidas");
+                });
+
             modelBuilder.Entity("CSharpAcademy.API.Domain.NotaLicao", b =>
                 {
                     b.Property<int>("Id")
@@ -2738,6 +2764,17 @@ namespace CSharpAcademy.API.Migrations
                 });
 
             modelBuilder.Entity("CSharpAcademy.API.Domain.MissaoDiaria", b =>
+                {
+                    b.HasOne("CSharpAcademy.API.Domain.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("CSharpAcademy.API.Domain.ProjetoTarefaConcluida", b =>
                 {
                     b.HasOne("CSharpAcademy.API.Domain.Usuario", "Usuario")
                         .WithMany()

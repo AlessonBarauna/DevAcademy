@@ -16,6 +16,7 @@ import { LigaPage } from './features/liga/liga-page/liga-page';
 import { AnalyticsPage } from './features/analytics/analytics-page/analytics-page';
 import { Onboarding } from './features/auth/onboarding/onboarding';
 import { PlaygroundPage } from './features/playground/playground-page/playground-page';
+import { ProjetosPage } from './features/projetos/projetos-page/projetos-page';
 import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
@@ -36,6 +37,7 @@ const routes: Routes = [
   { path: 'analytics', component: AnalyticsPage, canActivate: [AuthGuard] },
   { path: 'onboarding', component: Onboarding, canActivate: [AuthGuard] },
   { path: 'playground', component: PlaygroundPage, canActivate: [AuthGuard] },
+  { path: 'projetos', component: ProjetosPage, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/login' }
 ];
 
