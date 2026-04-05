@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 
@@ -18,6 +19,7 @@ public class PlaygroundController : ControllerBase
     private const int MaxOutputChars = 4000;
 
     [HttpPost("executar")]
+    [EnableRateLimiting("playground")]
     public async Task<IActionResult> Executar([FromBody] PlaygroundDto dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Codigo))

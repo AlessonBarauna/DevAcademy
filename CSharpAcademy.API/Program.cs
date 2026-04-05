@@ -56,14 +56,26 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-// ── Rate Limiting — protege endpoints de IA (10 req/min por usuário) ──────────
+// ── Rate Limiting ─────────────────────────────────────────────────────────────
 builder.Services.AddRateLimiter(opt =>
 {
+    // IA: 10 req/min por usuário
     opt.AddPolicy("ai", context => RateLimitPartition.GetFixedWindowLimiter(
         partitionKey: context.User.Identity?.Name ?? context.Connection.RemoteIpAddress?.ToString() ?? "anon",
         factory: _ => new FixedWindowRateLimiterOptions
         {
             PermitLimit = 10,
+            Window = TimeSpan.FromMinutes(1),
+            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+            QueueLimit = 0
+        }));
+
+    // Playground: 20 execuções/min por usuário (execução de código é cara)
+    opt.AddPolicy("playground", context => RateLimitPartition.GetFixedWindowLimiter(
+        partitionKey: context.User.Identity?.Name ?? context.Connection.RemoteIpAddress?.ToString() ?? "anon",
+        factory: _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 20,
             Window = TimeSpan.FromMinutes(1),
             QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
             QueueLimit = 0
