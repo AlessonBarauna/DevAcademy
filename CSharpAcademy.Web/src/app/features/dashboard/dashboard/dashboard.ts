@@ -232,6 +232,10 @@ export class Dashboard implements OnInit, OnDestroy {
     return this.revisoesPendentes.length;
   }
 
+  scrollRevisoes(): void {
+    document.getElementById('revisoes-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   irParaRevisao(revisao: RevisaoPendente): void {
     this.router.navigate(['/modulos', revisao.moduloId, 'licoes', revisao.licaoId]);
   }

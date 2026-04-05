@@ -61,6 +61,10 @@
       <a routerLink="/metas">🎯 Metas</a>
       <a routerLink="/ranking">🏆 Ranking</a>
       <a routerLink="/perfil">👤 Perfil</a>
+      <a class="nav-revisoes" (click)="scrollRevisoes()" *ngIf="totalRevisoesPendentes > 0" href="#">
+        🔁 Revisões
+        <span class="nav-badge">{{ totalRevisoesPendentes }}</span>
+      </a>
       <button class="btn-tema" (click)="themeService.toggle()" [title]="themeService.isLight ? 'Modo escuro' : 'Modo claro'">
         {{ themeService.isLight ? '🌙' : '☀️' }}
       </button>
@@ -95,6 +99,10 @@
       <a routerLink="/metas"      (click)="menuAberto = false">🎯 Metas</a>
       <a routerLink="/ranking"    (click)="menuAberto = false">🏆 Ranking</a>
       <a routerLink="/perfil"     (click)="menuAberto = false">👤 Perfil</a>
+      <a class="nav-revisoes" (click)="scrollRevisoes(); menuAberto = false" *ngIf="totalRevisoesPendentes > 0" href="#">
+        🔁 Revisões
+        <span class="nav-badge">{{ totalRevisoesPendentes }}</span>
+      </a>
     </nav>
     <button class="nav-drawer-logout" (click)="logout()">Sair</button>
   </div>
@@ -188,7 +196,7 @@
     </section>
 
     <!-- Revisões pendentes (SRS) -->
-    <section class="revisoes-section" *ngIf="revisoesPendentes.length > 0">
+    <section class="revisoes-section" id="revisoes-section" *ngIf="revisoesPendentes.length > 0">
       <h3>🔁 Revisões Pendentes <span class="revisoes-badge">{{ totalRevisoesPendentes }}</span></h3>
       <p class="revisoes-subtitulo">Baseado em repetição espaçada — revise agora para fixar melhor.</p>
       <div class="revisoes-lista">
