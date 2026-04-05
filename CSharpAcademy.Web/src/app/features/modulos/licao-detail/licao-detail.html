@@ -1,3 +1,5 @@
+<app-level-up-overlay [novoNivel]="levelUpNivel" (fechar)="levelUpNivel = null"></app-level-up-overlay>
+
 <div class="conquista-toasts">
   <div class="conquista-toast" *ngFor="let t of toastsConquistas">
     <span class="toast-icone">{{ t.icone }}</span>

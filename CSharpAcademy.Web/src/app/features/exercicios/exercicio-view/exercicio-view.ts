@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModuloService } from '../../../core/services/modulo';
+import { AnimacaoService } from '../../../core/services/animacao';
 import { Exercicio, Licao, RespostaExercicioResult } from '../../../core/models/modulo.model';
 
 @Component({
@@ -28,11 +29,14 @@ export class ExercicioView implements OnInit, OnDestroy {
   vidasRestantes = 5;
   minutosParaRecarga = 0;
   private timerInterval: ReturnType<typeof setInterval> | null = null;
+  xpFloats: { id: number; valor: number }[] = [];
+  private xpFloatId = 0;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private moduloService: ModuloService,
+    private animacao: AnimacaoService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -168,6 +172,7 @@ export class ExercicioView implements OnInit, OnDestroy {
         if (res.correta) {
           this.totalXP += this.exercicioAtual!.xpRecompensa;
           this.acertos++;
+          this.mostrarXpFloat(this.exercicioAtual!.xpRecompensa);
         }
         this.respondendo = false;
         this.cdr.detectChanges();
@@ -186,7 +191,18 @@ export class ExercicioView implements OnInit, OnDestroy {
     } else {
       this.pararTimer();
       this.finalizou = true;
+      if (this.estrelas >= 2) this.animacao.dispararConfetti();
+      if (this.estrelas === 3) setTimeout(() => this.animacao.dispararConfettiModulo(), 600);
     }
+  }
+
+  mostrarXpFloat(valor: number): void {
+    const id = ++this.xpFloatId;
+    this.xpFloats.push({ id, valor });
+    setTimeout(() => {
+      this.xpFloats = this.xpFloats.filter(f => f.id !== id);
+      this.cdr.detectChanges();
+    }, 1200);
   }
 
   voltarParaLicao(): void {
