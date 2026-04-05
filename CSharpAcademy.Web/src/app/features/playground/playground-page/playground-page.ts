@@ -182,8 +182,11 @@ Console.WriteLine($"Máximo: {maximo}");`
         this.adicionarAoHistorico(this.codigo);
         this.cdr.detectChanges();
       },
-      error: () => {
-        this.resultado = { saida: null, erro: 'Erro ao conectar com o servidor.', tempoMs: 0 };
+      error: (err) => {
+        const msg = err?.status === 429
+          ? 'Limite de execuções atingido (20/min). Aguarde um momento.'
+          : 'Erro ao conectar com o servidor.';
+        this.resultado = { saida: null, erro: msg, tempoMs: 0 };
         this.abas = 'output';
         this.executando = false;
         this.cdr.detectChanges();
