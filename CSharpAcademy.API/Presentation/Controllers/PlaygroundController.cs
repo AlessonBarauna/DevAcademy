@@ -54,7 +54,8 @@ public class PlaygroundController : ControllerBase
                     "System.Linq",
                     "System.Text",
                     "System.IO",
-                    "System.Text.RegularExpressions"
+                    "System.Text.RegularExpressions",
+                    "System.Threading.Tasks"
                 )
                 .WithOptimizationLevel(Microsoft.CodeAnalysis.OptimizationLevel.Debug)
                 .WithEmitDebugInformation(false);
