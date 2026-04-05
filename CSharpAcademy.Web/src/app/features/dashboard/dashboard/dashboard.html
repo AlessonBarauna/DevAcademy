@@ -51,7 +51,7 @@
       </div>
     </div>
 
-    <nav>
+    <nav class="nav-desktop">
       <a routerLink="/modulos">Módulos</a>
       <a routerLink="/liga">⚔️ Liga</a>
       <a routerLink="/analytics">📊 Desempenho</a>
@@ -64,7 +64,36 @@
       </button>
       <button class="btn-logout" (click)="logout()">Sair</button>
     </nav>
+
+    <!-- Hambúrguer (mobile) -->
+    <div class="nav-mobile">
+      <button class="btn-tema" (click)="themeService.toggle()" [title]="themeService.isLight ? 'Modo escuro' : 'Modo claro'">
+        {{ themeService.isLight ? '🌙' : '☀️' }}
+      </button>
+      <button class="btn-hamburger" (click)="menuAberto = !menuAberto" [class.ativo]="menuAberto">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </header>
+
+  <!-- Drawer mobile -->
+  <div class="nav-drawer-overlay" *ngIf="menuAberto" (click)="menuAberto = false"></div>
+  <div class="nav-drawer" [class.aberto]="menuAberto">
+    <div class="nav-drawer-header">
+      <span class="nav-drawer-logo">🎓 C# Academy</span>
+      <button class="nav-drawer-close" (click)="menuAberto = false">✕</button>
+    </div>
+    <nav class="nav-drawer-nav">
+      <a routerLink="/modulos"    (click)="menuAberto = false">📚 Módulos</a>
+      <a routerLink="/liga"       (click)="menuAberto = false">⚔️ Liga</a>
+      <a routerLink="/analytics"  (click)="menuAberto = false">📊 Desempenho</a>
+      <a routerLink="/playground" (click)="menuAberto = false">⚡ Playground</a>
+      <a routerLink="/projetos"   (click)="menuAberto = false">🛠️ Projetos</a>
+      <a routerLink="/ranking"    (click)="menuAberto = false">🏆 Ranking</a>
+      <a routerLink="/perfil"     (click)="menuAberto = false">👤 Perfil</a>
+    </nav>
+    <button class="nav-drawer-logout" (click)="logout()">Sair</button>
+  </div>
 
   <app-notif-banner></app-notif-banner>
 

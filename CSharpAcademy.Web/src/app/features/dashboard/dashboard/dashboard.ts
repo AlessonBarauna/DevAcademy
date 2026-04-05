@@ -29,6 +29,7 @@ export class Dashboard implements OnInit, OnDestroy {
   carregando = true;
   erroModulos = '';
   usandoFreeze = false;
+  menuAberto = false;
   heatmapSemanas: { data: Date; count: number; nivel: number }[][] = [];
   private sub = new Subscription();
 
