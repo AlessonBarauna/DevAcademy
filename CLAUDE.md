@@ -29,11 +29,13 @@ Toda nova funcionalidade **obrigatoriamente** segue este fluxo:
 1. **Criar branch ANTES de qualquer código** — este é sempre o primeiro passo:
    ```bash
    git checkout master
+   git pull origin master
    git checkout -b feat/nome-da-feature
    ```
    Exemplos: `feat/desafio-rapido`, `feat/missoes-diarias`, `feat/skill-tree`
 
    > ⚠️ Nunca escreva código sem ter criado e entrado na branch primeiro.
+   > ⚠️ Sempre execute `git pull origin master` antes de criar a branch — o master pode ter recebido merges de outras features e criar a branch de uma base desatualizada gera conflitos evitáveis.
    > `git push` numa branch inexistente falha — a branch deve existir localmente antes do push.
 
 2. **Implementar** mantendo código limpo e seguindo o padrão do projeto.
