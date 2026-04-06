@@ -27,6 +27,7 @@ export class App {
   }
 
   getRouteAnimation(outlet: RouterOutlet): string {
-    return outlet?.activatedRouteData?.['animation'] ?? outlet?.activatedRoute?.snapshot?.url?.[0]?.path ?? '';
+    if (!outlet?.isActivated) return '';
+    return outlet.activatedRouteData?.['animation'] ?? outlet.activatedRoute?.snapshot?.url?.[0]?.path ?? '';
   }
 }
