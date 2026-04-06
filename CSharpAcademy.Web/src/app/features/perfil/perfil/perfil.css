@@ -386,6 +386,34 @@
   .radar-wrap { flex-direction: column; align-items: flex-start; }
 }
 
+@media (max-width: 480px) {
+  .perfil-page { padding-bottom: 80px; } /* espaço pro pomodoro */
+
+  .perfil-header { padding: 0 14px; }
+  .perfil-header h1 { font-size: 15px; }
+
+  .perfil-content { padding: 0; }
+
+  /* Heatmap: células menores + scroll suave */
+  .heatmap-wrap { padding: 12px; }
+  .heatmap-cell { width: 9px; height: 9px; }
+  .heatmap-grid { gap: 2px; -webkit-overflow-scrolling: touch; }
+  .heatmap-semana { gap: 2px; }
+
+  /* Conquistas: 2 cols em telas pequenas */
+  .conquistas-grid { grid-template-columns: repeat(2, 1fr); }
+  .conquista-badge { padding: 12px 10px; }
+
+  /* Analytics barras: padding menor */
+  .analytics-section { margin: 0 14px 14px; }
+  .radar-wrap svg { width: 200px; height: 200px; }
+
+  /* Streaks lado a lado mesmo em mobile pequeno */
+  .streak-section { grid-template-columns: repeat(2, 1fr); }
+  .streak-card { padding: 14px 12px; }
+  .streak-valor { font-size: 22px; }
+}
+
 
 /* ── Personalização ─────────────────────────────── */
 .personalizacao-section {

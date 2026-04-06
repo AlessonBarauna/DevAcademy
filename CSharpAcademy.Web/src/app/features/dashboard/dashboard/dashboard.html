@@ -230,17 +230,19 @@
     <section class="atividade-section" *ngIf="heatmapSemanas.length > 0">
       <h3>Atividade de Estudo</h3>
       <div class="heatmap-wrap">
-        <div class="heatmap-grid">
-          <div class="heatmap-semana" *ngFor="let semana of heatmapSemanas">
+        <div class="heatmap-grid" role="grid" aria-label="Heatmap de atividade de estudo">
+          <div class="heatmap-semana" role="row" *ngFor="let semana of heatmapSemanas">
             <div
+              role="gridcell"
               class="heatmap-cell"
               *ngFor="let dia of semana"
               [class]="'heatmap-cell-' + dia.nivel"
+              [attr.aria-label]="formatarDataHeatmap(dia.data) + (dia.count > 0 ? ': ' + dia.count + ' lição(ões)' : ': sem atividade')"
               [title]="formatarDataHeatmap(dia.data) + (dia.count > 0 ? ': ' + dia.count + ' lição(ões)' : '')">
             </div>
           </div>
         </div>
-        <div class="heatmap-legenda">
+        <div class="heatmap-legenda" aria-hidden="true">
           <span>Menos</span>
           <div class="heatmap-cell heatmap-cell-0"></div>
           <div class="heatmap-cell heatmap-cell-1"></div>

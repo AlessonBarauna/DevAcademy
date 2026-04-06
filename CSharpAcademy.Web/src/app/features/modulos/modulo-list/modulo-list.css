@@ -269,3 +269,41 @@
   white-space: nowrap;
   flex-shrink: 0;
 }
+
+/* ── Mobile ─────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .page-hero {
+    margin: 16px auto 12px;
+    padding: 0 16px 12px;
+  }
+
+  .page-hero h1 { font-size: 15px; }
+
+  .busca-wrap { max-width: 100%; }
+
+  .trilha { padding: 0 16px 48px; }
+
+  .trilha-node {
+    padding: 14px 14px;
+    gap: 12px;
+  }
+
+  .node-icone {
+    font-size: 22px;
+    min-width: 28px;
+  }
+
+  .node-titulo { font-size: 12px; }
+  .node-descricao { font-size: 10px; margin-bottom: 8px; }
+
+  /* Esconde o CTA de texto em telas pequenas — o card inteiro já é clicável */
+  .node-cta { display: none; }
+
+  .nivel-badge { font-size: 8px; padding: 2px 6px; }
+}
+
+@media (max-width: 400px) {
+  .page-topbar { padding: 0 12px; }
+  .trilha { padding: 0 10px 40px; }
+  .trilha-node { padding: 12px; }
+}

@@ -854,3 +854,31 @@ nav a:hover { color: var(--text); background: var(--bg-hover); }
   .perfil-card { flex-direction: column; text-align: center; }
   .busca-wrap { max-width: 150px; }
 }
+
+@media (max-width: 520px) {
+  .dash-content { margin: 16px auto; padding: 0 14px; gap: 14px; }
+
+  /* Stats: 2 cols em telas pequenas */
+  .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+  /* Heatmap: célula menor para caber sem scroll horizontal excessivo */
+  .heatmap-cell { width: 9px; height: 9px; }
+  .heatmap-grid { gap: 2px; }
+  .heatmap-semana { gap: 2px; }
+
+  /* Perfil card: avatar menor */
+  .avatar { width: 48px; height: 48px; font-size: 18px; }
+  .perfil-info h2 { font-size: 14px; }
+
+  /* Busca no header: esconder em telas muito pequenas */
+  .busca-wrap { display: none; }
+
+  /* Nav header: ajuste de padding */
+  .dash-header { padding: 0 14px; }
+}
+
+@media (max-width: 380px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .stat-card { padding: 10px 12px; }
+  .heatmap-cell { width: 8px; height: 8px; }
+}
