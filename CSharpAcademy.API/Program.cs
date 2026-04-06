@@ -81,6 +81,28 @@ builder.Services.AddRateLimiter(opt =>
             QueueLimit = 0
         }));
 
+    // Login: 10 tentativas/min por IP — proteção contra brute force
+    opt.AddPolicy("login", context => RateLimitPartition.GetFixedWindowLimiter(
+        partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "anon",
+        factory: _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 10,
+            Window = TimeSpan.FromMinutes(1),
+            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+            QueueLimit = 0
+        }));
+
+    // Registro: 5 contas/hora por IP — evita spam de contas
+    opt.AddPolicy("registro", context => RateLimitPartition.GetFixedWindowLimiter(
+        partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "anon",
+        factory: _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 5,
+            Window = TimeSpan.FromHours(1),
+            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+            QueueLimit = 0
+        }));
+
     opt.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
 
