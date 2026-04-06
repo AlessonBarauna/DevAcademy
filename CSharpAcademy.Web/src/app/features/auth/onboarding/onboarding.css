@@ -229,3 +229,25 @@
 }
 
 .btn-ob-skip:hover { color: var(--text); }
+
+@media (max-width: 560px) {
+  .onboarding-page { padding: 16px; align-items: flex-start; padding-top: 32px; }
+
+  .ob-card { padding: 28px 20px; }
+
+  .ob-logo { font-size: 44px; }
+  .ob-titulo { font-size: 18px; }
+  .ob-sub { font-size: 12px; }
+
+  .ob-niveis { grid-template-columns: 1fr; gap: 8px; }
+  .ob-nivel-item { padding: 10px; font-size: 18px; }
+
+  .ob-pergunta { font-size: 13px; }
+  .ob-opcao { padding: 12px 14px; font-size: 12px; }
+
+  .ob-resultado-icone { font-size: 48px; }
+  .ob-resultado-nivel { font-size: 22px; }
+
+  .ob-resultado-barras { gap: 6px; }
+  .ob-resultado-barra { width: 44px; }
+}

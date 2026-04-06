@@ -13,6 +13,7 @@ interface ResultadoOnboarding {
   nomeNivel: string;
   acertos: number;
   total: number;
+  jaFez?: boolean;
 }
 
 @Component({
@@ -94,6 +95,7 @@ export class Onboarding implements OnInit {
     this.carregando = true;
     this.http.post<ResultadoOnboarding>('/api/onboarding/definir-nivel', { respostas: this.respostas }).subscribe({
       next: res => {
+        if (res.jaFez) { this.router.navigate(['/dashboard']); return; }
         this.resultado = res;
         this.etapa = 'resultado';
         this.carregando = false;
@@ -105,5 +107,9 @@ export class Onboarding implements OnInit {
 
   irParaDashboard(): void {
     this.router.navigate(['/dashboard']);
+  }
+
+  irParaModulos(): void {
+    this.router.navigate(['/modulos']);
   }
 }
