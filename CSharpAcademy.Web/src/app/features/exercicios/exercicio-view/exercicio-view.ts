@@ -31,6 +31,8 @@ export class ExercicioView implements OnInit, OnDestroy {
   private timerInterval: ReturnType<typeof setInterval> | null = null;
   xpFloats: { id: number; valor: number }[] = [];
   private xpFloatId = 0;
+  historico: { exercicio: Exercicio; correta: boolean; tempoGasto: number; respostaCorreta: string; explicacao: string }[] = [];
+  private tempoInicio = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -74,6 +76,7 @@ export class ExercicioView implements OnInit, OnDestroy {
   iniciarTimer(): void {
     this.pararTimer();
     this.tempoRestante = this.tempoTotal;
+    this.tempoInicio = Date.now();
     this.timerInterval = setInterval(() => {
       this.tempoRestante--;
       this.cdr.detectChanges();
@@ -93,8 +96,10 @@ export class ExercicioView implements OnInit, OnDestroy {
 
   private onTimeout(): void {
     if (this.resultado || this.finalizou) return;
-    // Timeout: conta como erro, avança automaticamente
     this.resultado = { correta: false, respostaCorreta: null, explicacao: 'Tempo esgotado!', vidasRestantes: this.vidasRestantes, minutosParaRecarga: this.minutosParaRecarga };
+    if (this.exercicioAtual) {
+      this.historico.push({ exercicio: this.exercicioAtual, correta: false, tempoGasto: this.tempoTotal, respostaCorreta: this.exercicioAtual.respostaCorreta ?? '', explicacao: 'Tempo esgotado!' });
+    }
     this.cdr.detectChanges();
   }
 
@@ -145,6 +150,16 @@ export class ExercicioView implements OnInit, OnDestroy {
     return 0;
   }
 
+  get tempoMedio(): number {
+    if (this.historico.length === 0) return 0;
+    const total = this.historico.reduce((sum, h) => sum + h.tempoGasto, 0);
+    return Math.round(total / this.historico.length);
+  }
+
+  get erros(): typeof this.historico {
+    return this.historico.filter(h => !h.correta);
+  }
+
   get proximaLicao(): Licao | null {
     const idx = this.licoes.findIndex(l => l.id === this.licaoId);
     return idx >= 0 && idx < this.licoes.length - 1 ? this.licoes[idx + 1] : null;
@@ -163,6 +178,8 @@ export class ExercicioView implements OnInit, OnDestroy {
     const resposta = usaSelecao ? this.respostaSelecionada : this.respostaTexto;
     if (!resposta) return;
 
+    const tempoGasto = Math.round((Date.now() - this.tempoInicio) / 1000);
+    const exercicioRespondido = this.exercicioAtual;
     this.respondendo = true;
     this.moduloService.responderExercicio(this.licaoId, this.exercicioAtual.id, resposta).subscribe({
       next: res => {
@@ -170,10 +187,17 @@ export class ExercicioView implements OnInit, OnDestroy {
         this.vidasRestantes = res.vidasRestantes;
         this.minutosParaRecarga = res.minutosParaRecarga;
         if (res.correta) {
-          this.totalXP += this.exercicioAtual!.xpRecompensa;
+          this.totalXP += exercicioRespondido!.xpRecompensa;
           this.acertos++;
-          this.mostrarXpFloat(this.exercicioAtual!.xpRecompensa);
+          this.mostrarXpFloat(exercicioRespondido!.xpRecompensa);
         }
+        this.historico.push({
+          exercicio: exercicioRespondido!,
+          correta: res.correta,
+          tempoGasto,
+          respostaCorreta: res.respostaCorreta ?? '',
+          explicacao: res.explicacao ?? ''
+        });
         this.respondendo = false;
         this.cdr.detectChanges();
       },
