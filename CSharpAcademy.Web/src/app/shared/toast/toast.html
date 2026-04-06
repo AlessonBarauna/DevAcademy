@@ -1,10 +1,12 @@
-<div class="toast-container">
+<div class="toast-container" role="region" aria-label="Notificações" aria-live="polite">
   <div
-    class="toast"
-    *ngFor="let t of toasts"
-    [class]="'toast toast-' + t.tipo">
-    <span class="toast-icone">{{ icone(t.tipo) }}</span>
+    *ngFor="let t of toasts; trackBy: trackById"
+    [class]="'toast toast-' + t.tipo"
+    [class.saindo]="t.saindo"
+    role="alert"
+    [attr.aria-label]="t.mensagem">
+    <span class="toast-icone" aria-hidden="true">{{ icone(t.tipo) }}</span>
     <span class="toast-msg">{{ t.mensagem }}</span>
-    <button class="toast-close" (click)="fechar(t.id)">✕</button>
+    <button class="toast-close" (click)="fechar(t.id)" aria-label="Fechar notificação">✕</button>
   </div>
 </div>

@@ -25,6 +25,8 @@ export class ToastComponent implements OnInit, OnDestroy {
 
   fechar(id: number): void { this.toastService.remover(id); }
 
+  trackById(_: number, t: Toast): number { return t.id; }
+
   icone(tipo: string): string {
     return { erro: '✕', sucesso: '✓', aviso: '⚠', info: 'ℹ' }[tipo] ?? 'ℹ';
   }

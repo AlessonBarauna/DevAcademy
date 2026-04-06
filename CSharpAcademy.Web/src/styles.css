@@ -46,6 +46,17 @@
   --radius:    4px;
   --radius-md: 6px;
   --radius-lg: 8px;
+
+  /* Z-index scale — uso consistente em todo o app */
+  --z-base:    100;   /* elementos que sobem acima do fluxo normal */
+  --z-dropdown: 200;  /* dropdowns, tooltips */
+  --z-sticky:  300;   /* headers fixos, FABs */
+  --z-overlay: 800;   /* modais, painéis laterais */
+  --z-toast:   900;   /* notificações */
+  --z-top:     9999;  /* level-up, emergências */
+
+  /* Transição padrão */
+  --transition: 0.15s ease;
 }
 
 /* ================================================
@@ -102,6 +113,45 @@ html, body {
 }
 
 /* ================================================
+   Acessibilidade — Foco visível por teclado
+   ================================================ */
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+
+/* Remove outline quando navegando com mouse/toque */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ================================================
+   Touch — feedback de toque em mobile
+   ================================================ */
+button, [role="button"], a, input[type="submit"] {
+  -webkit-tap-highlight-color: transparent; /* remove highlight azul nativo do mobile */
+}
+
+button:active:not(:disabled),
+[role="button"]:active {
+  opacity: 0.8;
+  transform: scale(0.97);
+}
+
+/* ================================================
+   Respeita preferência de movimento reduzido
+   ================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ================================================
    Skeleton Loading
    ================================================ */
 @keyframes shimmer {
@@ -137,6 +187,20 @@ html, body {
 .sk-gap   { display: flex; flex-direction: column; gap: 10px; }
 .sk-row   { display: flex; gap: 12px; align-items: center; }
 
+/* Stagger — cada filho atrasa um pouco o shimmer */
+.sk-gap > .sk:nth-child(1) { animation-delay: 0ms; }
+.sk-gap > .sk:nth-child(2) { animation-delay: 80ms; }
+.sk-gap > .sk:nth-child(3) { animation-delay: 160ms; }
+.sk-gap > .sk:nth-child(4) { animation-delay: 240ms; }
+.sk-gap > .sk:nth-child(5) { animation-delay: 320ms; }
+
+/* Fade-out ao substituir skeleton por conteúdo real */
+@keyframes sk-fade-out { to { opacity: 0; } }
+.sk-saindo {
+  animation: sk-fade-out 0.2s ease forwards;
+  pointer-events: none;
+}
+
 /* ================================================
    Botão global de Início (Dashboard)
    ================================================ */
@@ -154,9 +218,11 @@ html, body {
 .btn-inicio:hover { color: var(--accent); border-color: var(--accent); }
 
 /* ================================================
-   Scrollbar
+   Scrollbar — desktop only (oculto em touch)
    ================================================ */
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: #424242; border-radius: var(--radius); border: 2px solid var(--bg); }
-::-webkit-scrollbar-thumb:hover { background: #555; }
+@media (hover: hover) {
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: #424242; border-radius: var(--radius); border: 2px solid var(--bg); }
+  ::-webkit-scrollbar-thumb:hover { background: #555; }
+}

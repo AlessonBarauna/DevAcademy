@@ -36,9 +36,20 @@ export class ThemeService {
     this.aplicar(novo);
   }
 
+  get usandoTemaDoSistema(): boolean {
+    return !localStorage.getItem('tema');
+  }
+
   inicializar(): void {
     this.aplicar(this._tema.value);
     this.aplicarCor(this._corAtual.value);
+
+    // Ouve mudanças de tema do sistema em tempo real (só quando o usuário não salvou preferência)
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+      if (!localStorage.getItem('tema')) {
+        this.aplicar(e.matches ? 'light' : 'dark');
+      }
+    });
   }
 
   definirCor(cor: CorDestaque): void {
@@ -61,7 +72,9 @@ export class ThemeService {
 
   private carregarTema(): Tema {
     const salvo = localStorage.getItem('tema') as Tema | null;
-    return salvo === 'light' ? 'light' : 'dark';
+    if (salvo === 'light' || salvo === 'dark') return salvo;
+    // Sem preferência salva — respeita a preferência do sistema operacional
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
   }
 
   private carregarCor(): CorDestaque {
