@@ -94,8 +94,8 @@ public class ExercicioController(
         return Ok(new
         {
             correta,
-            explicacao = correta ? null : exercicio.Explicacao,
-            respostaCorreta = correta ? exercicio.RespostaCorreta : null,
+            explicacao = exercicio.Explicacao,
+            respostaCorreta = exercicio.RespostaCorreta,
             vidasRestantes = usuario?.Vidas ?? VidasHelper.MaxVidas,
             minutosParaRecarga = usuario != null ? VidasHelper.MinutosParaProximaRecarga(usuario) : 0
         });

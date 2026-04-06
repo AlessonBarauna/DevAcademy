@@ -119,14 +119,20 @@
     </div>
 
     <!-- Feedback -->
-    <div class="feedback correta-msg" *ngIf="resultado?.correta">
-      ✓ Correto! +{{ exercicioAtual.xpRecompensa }} XP
-    </div>
-    <div class="feedback errada-msg" *ngIf="resultado && !resultado.correta">
-      ✗ Incorreto. {{ resultado.explicacao }}
-      <br><strong>Resposta: {{ resultado.respostaCorreta }}</strong>
-      <div class="dica" *ngIf="exercicioAtual.dicaTexto">
-        💡 <em>{{ exercicioAtual.dicaTexto }}</em>
+    <div class="feedback" *ngIf="resultado" [class.feedback-correta]="resultado.correta" [class.feedback-errada]="!resultado.correta">
+      <div class="feedback-status">
+        <span class="feedback-status-icone">{{ resultado.correta ? '✓' : '✗' }}</span>
+        <span class="feedback-status-texto">{{ resultado.correta ? 'Correto!' : 'Incorreto' }}</span>
+        <span class="feedback-xp" *ngIf="resultado.correta">+{{ exercicioAtual.xpRecompensa }} XP</span>
+      </div>
+      <div class="feedback-explicacao" *ngIf="resultado.explicacao">
+        {{ resultado.explicacao }}
+      </div>
+      <div class="feedback-resposta-correta" *ngIf="!resultado.correta && resultado.respostaCorreta">
+        Resposta correta: <strong>{{ resultado.respostaCorreta }}</strong>
+      </div>
+      <div class="feedback-dica" *ngIf="!resultado.correta && exercicioAtual.dicaTexto">
+        💡 {{ exercicioAtual.dicaTexto }}
       </div>
     </div>
 
