@@ -11,6 +11,16 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ── Sentry ────────────────────────────────────────────────────────────────────
+builder.WebHost.UseSentry(o =>
+{
+    o.Dsn = Environment.GetEnvironmentVariable("SENTRY_DSN") ?? "";
+    o.TracesSampleRate = 0.2;          // captura 20% das transações para performance
+    o.MinimumBreadcrumbLevel = LogLevel.Information;
+    o.MinimumEventLevel = LogLevel.Error;
+    o.SendDefaultPii = false;          // não envia dados pessoais (LGPD)
+});
+
 // ── Database ──────────────────────────────────────────────────────────────────
 // Em produção: DATABASE_URL vem como URI postgresql://user:pass@host:port/db
 // Em desenvolvimento: usa a connection string do appsettings.json (key=value)
