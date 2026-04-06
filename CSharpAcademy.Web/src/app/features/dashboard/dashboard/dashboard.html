@@ -166,6 +166,23 @@
       </div>
     </section>
 
+    <!-- Continuar estudando -->
+    <section class="continuar-card" *ngIf="moduloParaContinuar" (click)="irParaModulo(moduloParaContinuar!)">
+      <div class="continuar-info">
+        <span class="continuar-label">{{ moduloParaContinuar!.licoesCompletadas > 0 ? 'Continue de onde parou' : 'Comece por aqui' }}</span>
+        <span class="continuar-titulo">{{ moduloParaContinuar!.titulo }}</span>
+        <div class="continuar-barra-wrap">
+          <div class="continuar-barra">
+            <div class="continuar-fill"
+              [style.width.%]="moduloParaContinuar!.totalLicoes > 0 ? (moduloParaContinuar!.licoesCompletadas / moduloParaContinuar!.totalLicoes) * 100 : 0">
+            </div>
+          </div>
+          <span class="continuar-contagem">{{ moduloParaContinuar!.licoesCompletadas }}/{{ moduloParaContinuar!.totalLicoes }} lições</span>
+        </div>
+      </div>
+      <span class="continuar-arrow">→</span>
+    </section>
+
     <!-- Missões Diárias -->
     <section class="missoes-section" *ngIf="missoesDiarias.length > 0">
       <h3>🎯 Missões Diárias

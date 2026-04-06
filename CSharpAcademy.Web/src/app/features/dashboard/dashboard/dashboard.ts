@@ -228,6 +228,13 @@ export class Dashboard implements OnInit, OnDestroy {
     return mapa[tipo] ?? '🎯';
   }
 
+  get moduloParaContinuar(): Modulo | null {
+    if (this.carregando || this.modulos.length === 0) return null;
+    const emProgresso = this.modulos.find(m => m.licoesCompletadas > 0 && m.licoesCompletadas < m.totalLicoes);
+    if (emProgresso) return emProgresso;
+    return this.modulos.find(m => m.licoesCompletadas === 0 && m.totalLicoes > 0) ?? null;
+  }
+
   get totalRevisoesPendentes(): number {
     return this.revisoesPendentes.length;
   }
