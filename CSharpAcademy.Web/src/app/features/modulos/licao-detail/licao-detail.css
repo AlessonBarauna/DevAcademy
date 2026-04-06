@@ -517,3 +517,32 @@
 
   .btn-nav { max-width: 130px; }
 }
+
+@media (max-width: 480px) {
+  /* Sidebar z-index da escala */
+  .sidebar { z-index: var(--z-overlay, 800); }
+  .sidebar-overlay { z-index: calc(var(--z-overlay, 800) - 1); }
+
+  /* Conteúdo principal com padding mínimo */
+  .teoria.markdown-body,
+  .licao-header,
+  .acoes,
+  .nav-sequencial,
+  .mensagem-conclusao,
+  .banner-concluida {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  /* Botões de navegar ficam full-width em telas muito pequenas */
+  .nav-sequencial { flex-direction: column; gap: 8px; }
+  .btn-nav { max-width: 100%; }
+
+  /* Código dentro do markdown — scroll horizontal sem quebra */
+  .teoria.markdown-body pre {
+    font-size: 11px;
+  }
+
+  /* Breadcrumb mais compacto */
+  .breadcrumb { padding: 6px 12px; font-size: 10px; }
+}
