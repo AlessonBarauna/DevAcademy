@@ -25,6 +25,8 @@ export class LicaoDetail implements OnInit {
   sidebarAberta = false;
   scrollProgress = 0;
   levelUpNivel: number | null = null;
+  moduloConcluido: Modulo | null = null;
+  xpTotalModulo = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -144,6 +146,11 @@ export class LicaoDetail implements OnInit {
           }
           if (result.novasConquistas?.length) {
             this.exibirToastsConquistas(result.novasConquistas);
+          }
+          const todasConcluidas = this.licoes.every(l => l.completada);
+          if (todasConcluidas && this.modulo) {
+            this.xpTotalModulo = this.licoes.reduce((sum, l) => sum + l.xpRecompensa, 0);
+            setTimeout(() => { this.moduloConcluido = this.modulo; this.cdr.detectChanges(); }, 1800);
           }
         } else {
           this.mensagemConclusao = 'Lição já concluída anteriormente.';

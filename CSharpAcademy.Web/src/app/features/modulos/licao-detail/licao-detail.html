@@ -1,4 +1,10 @@
 <app-level-up-overlay [novoNivel]="levelUpNivel" (fechar)="levelUpNivel = null"></app-level-up-overlay>
+<app-modulo-conclusao
+  [modulo]="moduloConcluido"
+  [xpTotal]="xpTotalModulo"
+  (fechar)="moduloConcluido = null"
+  (irParaModulos)="voltarParaModulos()">
+</app-modulo-conclusao>
 
 <div class="conquista-toasts">
   <div class="conquista-toast" *ngFor="let t of toastsConquistas">
