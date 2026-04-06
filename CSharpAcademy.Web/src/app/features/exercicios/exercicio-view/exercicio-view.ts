@@ -99,7 +99,7 @@ export class ExercicioView implements OnInit, OnDestroy {
     if (this.resultado || this.finalizou) return;
     this.resultado = { correta: false, respostaCorreta: null, explicacao: 'Tempo esgotado!', vidasRestantes: this.vidasRestantes, minutosParaRecarga: this.minutosParaRecarga };
     if (this.exercicioAtual) {
-      this.historico.push({ exercicio: this.exercicioAtual, correta: false, tempoGasto: this.tempoTotal, respostaCorreta: this.exercicioAtual.respostaCorreta ?? '', explicacao: 'Tempo esgotado!' });
+      this.historico.push({ exercicio: this.exercicioAtual, correta: false, tempoGasto: this.tempoTotal, respostaCorreta: '', explicacao: 'Tempo esgotado!' });
     }
     this.cdr.detectChanges();
   }
