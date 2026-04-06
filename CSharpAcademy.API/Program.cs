@@ -143,16 +143,17 @@ using (var scope = app.Services.CreateScope())
 // ── Pipeline (ordem importa) ──────────────────────────────────────────────────
 app.UseMiddleware<ExceptionMiddleware>();   // 1. Captura exceções globais
 app.UseCors("Default");                    // 2. CORS (dev) antes de auth
-app.UseRateLimiter();                      // 3. Rate limiting
+
+// ── SPA: assets estáticos antes do routing (JS/CSS/index.html) ───────────────
+app.UseDefaultFiles();   // reescreve "/" → "/index.html"
+app.UseStaticFiles();    // serve wwwroot/ sem passar por auth/rate-limit
+
+app.UseRateLimiter();                      // 3. Rate limiting (só APIs)
 app.MapOpenApi();                          // /openapi/v1.json
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapHealthChecks("/health");            // GET /health → { "status": "Healthy" }
-
-// ── SPA: serve o Angular em produção ───────────────────���─────────────────────
-app.UseDefaultFiles();   // index.html como padrão
-app.UseStaticFiles();    // serve wwwroot/
 
 // Fallback para rotas do Angular (ex: /dashboard, /modulos/1)
 app.MapFallbackToFile("index.html");
