@@ -12,4 +12,5 @@ public interface IUsuarioRepository
     Task<bool> SalvarAsync();
     Task<IEnumerable<Usuario>> ObterRankingAsync(int top = 10);
     Task<int> ObterPosicaoRankingAsync(int usuarioId);
+    Task<Usuario?> ObterPorResetTokenAsync(string token);
 }
