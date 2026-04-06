@@ -30,6 +30,24 @@ public class LoginDto
     public string Senha { get; set; } = string.Empty;
 }
 
+public class EsqueciSenhaDto
+{
+    [Required(ErrorMessage = "E-mail é obrigatório.")]
+    [EmailAddress(ErrorMessage = "E-mail inválido.")]
+    public string Email { get; set; } = string.Empty;
+}
+
+public class RedefinirSenhaDto
+{
+    [Required]
+    public string Token { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Nova senha é obrigatória.")]
+    [MinLength(6, ErrorMessage = "Senha deve ter ao menos 6 caracteres.")]
+    [MaxLength(100)]
+    public string NovaSenha { get; set; } = string.Empty;
+}
+
 public record AtividadeDiaDto(string Data, int Contagem);
 
 public class UsuarioResponseDto

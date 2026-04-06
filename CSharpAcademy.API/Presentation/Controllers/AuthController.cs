@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using CSharpAcademy.API.Application.Services;
 using CSharpAcademy.API.Domain;
 using CSharpAcademy.API.DTOs;
 using CSharpAcademy.API.Infrastructure.Repositories;
@@ -115,6 +116,48 @@ public class AuthController(IUsuarioRepository usuarioRepo, IConfiguration confi
             return Unauthorized(new { mensagem = "E-mail ou senha inválidos." });
 
         return Ok(MapParaDto(usuario));
+    }
+
+    [HttpPost("esqueci-senha")]
+    [EnableRateLimiting("login")]
+    public async Task<IActionResult> EsqueciSenha(
+        [FromBody] EsqueciSenhaDto dto,
+        [FromServices] IEmailService emailService)
+    {
+        var usuario = await usuarioRepo.ObterPorEmailAsync(dto.Email);
+
+        // Sempre retorna 200 para não revelar se o e-mail existe
+        if (usuario == null)
+            return Ok(new { mensagem = "Se esse e-mail estiver cadastrado, você receberá um link em breve." });
+
+        var token = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32));
+        usuario.ResetToken = token;
+        usuario.ResetTokenExpira = DateTime.UtcNow.AddHours(1);
+        await usuarioRepo.AtualizarAsync(usuario);
+        await usuarioRepo.SalvarAsync();
+
+        var appUrl = config["AppUrl"] ?? "https://devacademy-wger.onrender.com";
+        var link = $"{appUrl}/redefinir-senha?token={token}";
+        await emailService.EnviarResetSenhaAsync(usuario.Email, usuario.Nome, link);
+
+        return Ok(new { mensagem = "Se esse e-mail estiver cadastrado, você receberá um link em breve." });
+    }
+
+    [HttpPost("redefinir-senha")]
+    public async Task<IActionResult> RedefinirSenha([FromBody] RedefinirSenhaDto dto)
+    {
+        var usuario = await usuarioRepo.ObterPorResetTokenAsync(dto.Token);
+
+        if (usuario == null || usuario.ResetTokenExpira < DateTime.UtcNow)
+            return BadRequest(new { mensagem = "Link inválido ou expirado." });
+
+        usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(dto.NovaSenha);
+        usuario.ResetToken = null;
+        usuario.ResetTokenExpira = null;
+        await usuarioRepo.AtualizarAsync(usuario);
+        await usuarioRepo.SalvarAsync();
+
+        return Ok(new { mensagem = "Senha redefinida com sucesso." });
     }
 
     [HttpPost("streak-freeze")]

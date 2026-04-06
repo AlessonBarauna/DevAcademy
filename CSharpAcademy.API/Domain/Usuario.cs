@@ -21,6 +21,10 @@ public class Usuario
     // Streak Freeze
     public int StreakFreeze { get; set; } = 1;
 
+    // Reset de senha
+    public string? ResetToken { get; set; }
+    public DateTime? ResetTokenExpira { get; set; }
+
     public ICollection<Progresso> Progressos { get; set; } = [];
     public ICollection<Conquista> Conquistas { get; set; } = [];
     public ICollection<AI.ChatMessage> ChatMessages { get; set; } = [];

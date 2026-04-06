@@ -116,6 +116,10 @@ builder.Services.AddRateLimiter(opt =>
     opt.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
 
+// ── HttpClient genérico (Resend, etc.) ───────────────────────────────────────
+builder.Services.AddHttpClient("resend");
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 // ── HttpClient para Groq ──────────────────────────────────────────────────────
 builder.Services.AddHttpClient<IMistralService, MistralService>(client =>
 {
@@ -168,7 +172,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated();
+    db.Database.Migrate();   // aplica migrations pendentes automaticamente no deploy
     await ContentSeeder.AtualizarSeNecessarioAsync(db);
 }
 

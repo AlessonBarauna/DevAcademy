@@ -34,6 +34,9 @@ public class UsuarioRepository(AppDbContext ctx) : IUsuarioRepository
             .Take(top)
             .ToListAsync();
 
+    public async Task<Usuario?> ObterPorResetTokenAsync(string token)
+        => await ctx.Usuarios.FirstOrDefaultAsync(u => u.ResetToken == token);
+
     public async Task<int> ObterPosicaoRankingAsync(int usuarioId)
     {
         var usuarios = await ctx.Usuarios
