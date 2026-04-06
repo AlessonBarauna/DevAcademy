@@ -18,13 +18,18 @@ RUN dotnet publish -c Release -o /publish
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 
+# ✅ INSTALAR AQUI (no runtime)
+RUN apt-get update && apt-get install -y \
+    libkrb5-3 \
+    libgssapi-krb5-2 \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copia o binário do .NET
 COPY --from=dotnet-build /publish ./
 
-# Copia o build do Angular para wwwroot (servido como arquivos estáticos)
+# Copia o build do Angular
 COPY --from=angular-build /app/dist/CSharpAcademy.Web/browser ./wwwroot
 
-# Cria o diretório persistente para o SQLite
 RUN mkdir -p /data
 
 ENV ASPNETCORE_ENVIRONMENT=Production
