@@ -57,6 +57,14 @@ export class AuthService {
     });
   }
 
+  esqueciSenha(email: string) {
+    return this.http.post(`${API}/auth/esqueci-senha`, { email });
+  }
+
+  redefinirSenha(token: string, novaSenha: string) {
+    return this.http.post(`${API}/auth/redefinir-senha`, { token, novaSenha });
+  }
+
   logout(): void {
     localStorage.removeItem('usuario');
     this._usuario.next(null);

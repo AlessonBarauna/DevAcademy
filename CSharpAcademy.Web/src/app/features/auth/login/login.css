@@ -134,6 +134,17 @@ h1 {
 .link-text a { color: var(--teal); text-decoration: none; }
 .link-text a:hover { text-decoration: underline; }
 
+.success-msg {
+  background: rgba(137, 209, 133, 0.08);
+  border: 1px solid rgba(137, 209, 133, 0.3);
+  color: var(--green);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+}
+
 .error-msg {
   background: rgba(244, 71, 71, 0.08);
   border: 1px solid rgba(244, 71, 71, 0.3);

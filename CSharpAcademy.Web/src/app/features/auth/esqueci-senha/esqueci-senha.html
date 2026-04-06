@@ -1,0 +1,28 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">🔑</div>
+    <h1>Recuperar senha</h1>
+    <p class="subtitle">informe seu e-mail cadastrado</p>
+
+    <ng-container *ngIf="!enviado">
+      <div class="error-msg" *ngIf="erro">{{ erro }}</div>
+
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" [(ngModel)]="email" placeholder="seu@email.com" (keyup.enter)="enviar()" />
+      </div>
+
+      <button class="btn-primary" (click)="enviar()" [disabled]="carregando || !email">
+        {{ carregando ? 'Enviando...' : 'Enviar link de recuperação' }}
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="enviado">
+      <div class="success-msg">
+        ✓ Se esse e-mail estiver cadastrado, você receberá um link em breve.
+      </div>
+    </ng-container>
+
+    <p class="link-text"><a routerLink="/login">← Voltar ao login</a></p>
+  </div>
+</div>

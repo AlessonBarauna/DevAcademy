@@ -1,0 +1,33 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">🔐</div>
+    <h1>Nova senha</h1>
+    <p class="subtitle">escolha uma senha segura</p>
+
+    <div class="error-msg" *ngIf="erro">{{ erro }}</div>
+
+    <ng-container *ngIf="!concluido && !erro">
+      <div class="form-group">
+        <label>Nova senha</label>
+        <input type="password" [(ngModel)]="novaSenha" placeholder="mínimo 6 caracteres" />
+      </div>
+      <div class="form-group">
+        <label>Confirmar senha</label>
+        <input type="password" [(ngModel)]="confirmarSenha" placeholder="repita a senha" (keyup.enter)="redefinir()" />
+      </div>
+
+      <button class="btn-primary" (click)="redefinir()"
+        [disabled]="carregando || !novaSenha || !confirmarSenha">
+        {{ carregando ? 'Salvando...' : 'Redefinir senha' }}
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="concluido">
+      <div class="success-msg">
+        ✓ Senha redefinida! Redirecionando para o login...
+      </div>
+    </ng-container>
+
+    <p class="link-text"><a routerLink="/login">← Voltar ao login</a></p>
+  </div>
+</div>
