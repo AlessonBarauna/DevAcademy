@@ -6,6 +6,7 @@ using CSharpAcademy.API.DTOs;
 using CSharpAcademy.API.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 using AtividadeDiaDto = CSharpAcademy.API.DTOs.AtividadeDiaDto;
 using ConquistaDto = CSharpAcademy.API.DTOs.ConquistaDto;
@@ -82,6 +83,7 @@ public class AuthController(IUsuarioRepository usuarioRepo, IConfiguration confi
     }
 
     [HttpPost("registrar")]
+    [EnableRateLimiting("registro")]
     public async Task<IActionResult> Registrar([FromBody] RegistrarUsuarioDto dto)
     {
         if (await usuarioRepo.ExisteEmailAsync(dto.Email))
@@ -104,6 +106,7 @@ public class AuthController(IUsuarioRepository usuarioRepo, IConfiguration confi
     }
 
     [HttpPost("login")]
+    [EnableRateLimiting("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
         var usuario = await usuarioRepo.ObterPorEmailAsync(dto.Email);
