@@ -31,6 +31,7 @@
       <div class="result-titulo">
         {{ percentualAcerto === 100 ? 'Perfeito!' : percentualAcerto >= 60 ? 'Muito bem!' : 'Continue praticando!' }}
       </div>
+
       <div class="result-score">
         <div class="score-item">
           <span class="score-val">{{ acertos }}/{{ exercicios.length }}</span>
@@ -46,8 +47,32 @@
           <span class="score-val xp-val">+{{ totalXP }}</span>
           <span class="score-label">XP ganho</span>
         </div>
+        <div class="score-divider"></div>
+        <div class="score-item">
+          <span class="score-val">{{ tempoMedio }}s</span>
+          <span class="score-label">Tempo médio</span>
+        </div>
       </div>
+
+      <!-- Erros para revisar -->
+      <div class="result-erros" *ngIf="erros.length > 0">
+        <div class="result-erros-titulo">📋 Para revisar ({{ erros.length }})</div>
+        <div class="result-erro-item" *ngFor="let e of erros">
+          <div class="erro-enunciado">{{ e.exercicio.enunciado }}</div>
+          <div class="erro-resposta-correta">
+            <span class="erro-label">Resposta:</span>
+            <strong>{{ e.respostaCorreta }}</strong>
+          </div>
+          <div class="erro-explicacao" *ngIf="e.explicacao && e.explicacao !== 'Tempo esgotado!'">
+            {{ e.explicacao }}
+          </div>
+        </div>
+      </div>
+
       <div class="result-acoes">
+        <button class="btn-tentar-novamente" *ngIf="percentualAcerto < 60" (click)="voltarParaLicao()">
+          ↺ Revisar lição
+        </button>
         <button class="btn-voltar-licao" (click)="voltarParaLicao()">&#8592; Voltar à Lição</button>
         <button class="btn-proxima-licao" *ngIf="proximaLicao" (click)="irParaProximaLicao()">
           {{ proximaLicao.titulo }} &#8594;
