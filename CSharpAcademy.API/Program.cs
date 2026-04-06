@@ -172,7 +172,16 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();   // aplica migrations pendentes automaticamente no deploy
+    db.Database.EnsureCreated();
+
+    // Colunas adicionadas após o deploy inicial — aplicadas manualmente para não
+    // quebrar bancos existentes que foram criados com EnsureCreated (sem histórico de migrations)
+    db.Database.ExecuteSqlRaw("""
+        ALTER TABLE "Usuarios"
+        ADD COLUMN IF NOT EXISTS "ResetToken" text,
+        ADD COLUMN IF NOT EXISTS "ResetTokenExpira" timestamp with time zone;
+    """);
+
     await ContentSeeder.AtualizarSeNecessarioAsync(db);
 }
 
