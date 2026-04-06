@@ -2,8 +2,10 @@
   <header class="ranking-header">
     <button class="btn-voltar" (click)="voltar()">← Dashboard</button>
     <h1>🏆 Ranking</h1>
-    <button class="btn-tema" (click)="themeService.toggle()" [title]="themeService.isLight ? 'Modo escuro' : 'Modo claro'">
-      {{ themeService.isLight ? '🌙' : '☀️' }}
+    <button class="btn-tema" (click)="themeService.toggle()"
+      [title]="themeService.isLight ? 'Modo escuro' : 'Modo claro'"
+      [attr.aria-label]="themeService.isLight ? 'Ativar modo escuro' : 'Ativar modo claro'">
+      <span aria-hidden="true">{{ themeService.isLight ? '🌙' : '☀️' }}</span>
     </button>
   </header>
 

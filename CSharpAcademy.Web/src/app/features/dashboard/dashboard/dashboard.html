@@ -65,29 +65,35 @@
         🔁 Revisões
         <span class="nav-badge">{{ totalRevisoesPendentes }}</span>
       </a>
-      <button class="btn-tema" (click)="themeService.toggle()" [title]="themeService.isLight ? 'Modo escuro' : 'Modo claro'">
-        {{ themeService.isLight ? '🌙' : '☀️' }}
+      <button class="btn-tema" (click)="themeService.toggle()"
+        [title]="themeService.isLight ? 'Modo escuro' : 'Modo claro'"
+        [attr.aria-label]="themeService.isLight ? 'Ativar modo escuro' : 'Ativar modo claro'">
+        <span aria-hidden="true">{{ themeService.isLight ? '🌙' : '☀️' }}</span>
       </button>
       <button class="btn-logout" (click)="logout()">Sair</button>
     </nav>
 
     <!-- Hambúrguer (mobile) -->
     <div class="nav-mobile">
-      <button class="btn-tema" (click)="themeService.toggle()" [title]="themeService.isLight ? 'Modo escuro' : 'Modo claro'">
-        {{ themeService.isLight ? '🌙' : '☀️' }}
+      <button class="btn-tema" (click)="themeService.toggle()"
+        [title]="themeService.isLight ? 'Modo escuro' : 'Modo claro'"
+        [attr.aria-label]="themeService.isLight ? 'Ativar modo escuro' : 'Ativar modo claro'">
+        <span aria-hidden="true">{{ themeService.isLight ? '🌙' : '☀️' }}</span>
       </button>
-      <button class="btn-hamburger" (click)="menuAberto = !menuAberto" [class.ativo]="menuAberto">
+      <button class="btn-hamburger" (click)="menuAberto = !menuAberto" [class.ativo]="menuAberto"
+        [attr.aria-label]="menuAberto ? 'Fechar menu' : 'Abrir menu'"
+        [attr.aria-expanded]="menuAberto">
         <span></span><span></span><span></span>
       </button>
     </div>
   </header>
 
   <!-- Drawer mobile -->
-  <div class="nav-drawer-overlay" *ngIf="menuAberto" (click)="menuAberto = false"></div>
-  <div class="nav-drawer" [class.aberto]="menuAberto">
+  <div class="nav-drawer-overlay" *ngIf="menuAberto" (click)="menuAberto = false" aria-hidden="true"></div>
+  <div class="nav-drawer" [class.aberto]="menuAberto" role="dialog" aria-label="Menu de navegação" [attr.aria-hidden]="!menuAberto">
     <div class="nav-drawer-header">
-      <span class="nav-drawer-logo">🎓 C# Academy</span>
-      <button class="nav-drawer-close" (click)="menuAberto = false">✕</button>
+      <span class="nav-drawer-logo" aria-hidden="true">🎓 C# Academy</span>
+      <button class="nav-drawer-close" (click)="menuAberto = false" aria-label="Fechar menu">✕</button>
     </div>
     <nav class="nav-drawer-nav">
       <a routerLink="/modulos"    (click)="menuAberto = false">📚 Módulos</a>

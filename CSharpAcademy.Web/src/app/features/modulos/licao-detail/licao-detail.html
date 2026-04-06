@@ -45,7 +45,12 @@
     </div>
 
     <nav class="breadcrumb" *ngIf="modulo">
-      <button class="btn-hamburger" (click)="toggleSidebar()" title="Menu lições">&#9776;</button>
+      <button class="btn-hamburger" (click)="toggleSidebar()"
+        title="Menu lições"
+        [attr.aria-label]="sidebarAberta ? 'Fechar menu de lições' : 'Abrir menu de lições'"
+        [attr.aria-expanded]="sidebarAberta">
+        <span aria-hidden="true">&#9776;</span>
+      </button>
       <span class="bc-item bc-link" (click)="voltarParaModulos()">{{ modulo.titulo }}</span>
       <span class="bc-sep">›</span>
       <span class="bc-item bc-current">{{ licaoSelecionada.titulo }}</span>
