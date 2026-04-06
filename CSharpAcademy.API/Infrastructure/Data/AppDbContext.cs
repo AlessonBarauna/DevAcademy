@@ -80,6 +80,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 Descricao = "Tipos primitivos, inferência com var, const, nullable e conversão de tipos",
                 ConteudoTeoricoMarkdown =
                     "## Variáveis e Tipos de Dados em C#\n\n" +
+                    "> 💡 **Cenário real**: Imagine que você está construindo um sistema de e-commerce. " +
+                    "Você precisa guardar o *nome* do produto (`\"Notebook\"`), o *preço* (`3499.99m`), " +
+                    "a *quantidade* em estoque (`5`) e se está *disponível* para venda (`true`). " +
+                    "Cada informação tem uma natureza diferente — C# exige que você declare o tipo correto " +
+                    "para cada dado, e isso é o que torna seu código seguro, rápido e livre de surpresas em produção.\n\n" +
                     "C# é **fortemente tipado**: toda variável tem um tipo definido em tempo de compilação. " +
                     "O compilador valida cada operação com base nesses tipos, eliminando erros antes de rodar o programa.\n\n" +
                     "### Tipos primitivos\n\n" +
@@ -108,7 +113,15 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                     "### Conversão de tipos\n\n" +
                     "```csharp\n// Implícita — sem perda de dados\nint  x = 100;\nlong y = x;   // long é maior, conversão automática\n\n" +
                     "// Explícita (cast) — pode perder dados\ndouble d = 9.99;\nint    i = (int)d;  // i = 9, parte decimal descartada\n\n" +
-                    "// Parsing seguro de strings\nbool ok = int.TryParse(\"abc\", out int val); // ok = false, val = 0 — nunca lança exceção\nint n   = int.Parse(\"42\");                  // lança FormatException se inválido\n```"
+                    "// Parsing seguro de strings\nbool ok = int.TryParse(\"abc\", out int val); // ok = false, val = 0 — nunca lança exceção\nint n   = int.Parse(\"42\");                  // lança FormatException se inválido\n```\n\n" +
+                    "### Guia rápido: qual tipo usar?\n\n" +
+                    "| Situação | Tipo recomendado | Por quê |\n|---|---|---|\n" +
+                    "| Contagem, IDs, índices | `int` | Suficiente para 99% dos casos |\n" +
+                    "| Valores monetários | `decimal` | Sem erro de arredondamento binário |\n" +
+                    "| Cálculos científicos | `double` | Alta precisão, mais rápido que decimal |\n" +
+                    "| Texto | `string` | Tipo nativo para sequências de caracteres |\n" +
+                    "| Sim/Não, flags | `bool` | Expressivo e sem ambiguidade |\n" +
+                    "| Datas e horas | `DateTime` | Nunca use string para armazenar datas! |"
             },
 
             new Licao
@@ -118,6 +131,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 Descricao = "if/else, operador ternário, switch expression, for, foreach e while",
                 ConteudoTeoricoMarkdown =
                     "## Controle de Fluxo em C#\n\n" +
+                    "> 💡 **Analogia**: Pense em um caixa de supermercado — *se* o cliente tem cartão fidelidade, " +
+                    "aplica 10% de desconto; *se não*, cobra o preço normal. *Para cada* item no carrinho, " +
+                    "registra a venda. *Enquanto* a fila não esvaziar, atende o próximo. " +
+                    "Essa tomada de decisão e repetição é exatamente o que o controle de fluxo faz no código.\n\n" +
                     "Controle de fluxo determina **quais instruções são executadas** e em que ordem.\n\n" +
                     "### if / else if / else\n\n" +
                     "```csharp\nif (nota >= 9)\n    Console.WriteLine(\"Excelente\");\nelse if (nota >= 7)\n    Console.WriteLine(\"Aprovado\");\nelse\n    Console.WriteLine(\"Reprovado\");\n```\n\n" +
@@ -138,7 +155,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                     "```csharp\n// while — verifica ANTES de executar (pode não executar nenhuma vez)\nint i = 0;\nwhile (i < 3) { Console.WriteLine(i); i++; }\n\n" +
                     "// do-while — executa pelo menos UMA vez\ndo {\n    Console.Write(\"Tente novamente: \");\n    entrada = Console.ReadLine();\n} while (entrada != \"sair\");\n```\n\n" +
                     "### break e continue\n\n" +
-                    "```csharp\nforeach (var n in numeros)\n{\n    if (n == 0) continue;  // pula para a próxima iteração\n    if (n < 0)  break;     // encerra o loop completamente\n    Console.WriteLine(100 / n);\n}\n```"
+                    "```csharp\nforeach (var n in numeros)\n{\n    if (n == 0) continue;  // pula para a próxima iteração\n    if (n < 0)  break;     // encerra o loop completamente\n    Console.WriteLine(100 / n);\n}\n```\n\n" +
+                    "### Guia: qual estrutura usar?\n\n" +
+                    "| Situação | Use |\n|---|---|\n" +
+                    "| Uma condição simples | `if/else` |\n" +
+                    "| Expressão que retorna valor | Operador ternário `? :` |\n" +
+                    "| Comparar variável contra N valores constantes | `switch expression` |\n" +
+                    "| Quantidade de iterações conhecida | `for` |\n" +
+                    "| Percorrer coleção sem precisar do índice | `foreach` |\n" +
+                    "| Repetir enquanto condição for verdadeira | `while` |\n" +
+                    "| Executar pelo menos uma vez, depois verificar | `do-while` |"
             },
 
             new Licao
@@ -148,6 +174,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 Descricao = "Modificadores de acesso, parâmetros, sobrecarga e métodos expressão",
                 ConteudoTeoricoMarkdown =
                     "## Métodos em C#\n\n" +
+                    "> 💡 **Analogia**: Um método é como uma receita de cozinha — você define os ingredientes " +
+                    "(parâmetros), as instruções (corpo do método) e o prato pronto (valor de retorno). " +
+                    "A diferença é que no código você escreve a receita **uma vez** e pode usá-la infinitas vezes, " +
+                    "de qualquer lugar da aplicação, sem repetir código.\n\n" +
                     "Métodos encapsulam um bloco de lógica reutilizável. São a unidade básica de comportamento em C#.\n\n" +
                     "### Anatomia de um método\n\n" +
                     "```csharp\n//  modificador  retorno  nome     parâmetros\n    public       int      Somar   (int a, int b)\n    {\n        return a + b;\n    }\n\n" +
@@ -165,7 +195,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                     "Dois métodos com o **mesmo nome** mas **assinaturas diferentes** (tipos ou quantidade de parâmetros):\n\n" +
                     "```csharp\npublic int    Calcular(int a, int b)       => a + b;\npublic double Calcular(double a, double b) => a + b;\npublic int    Calcular(int a, int b, int c) => a + b + c;\n\n// O compilador escolhe a versão correta pelo tipo dos argumentos\nCalcular(1, 2);        // chama versão int\nCalcular(1.5, 2.5);    // chama versão double\n```\n\n" +
                     "### params — número variável de argumentos\n\n" +
-                    "```csharp\npublic int Somar(params int[] numeros) => numeros.Sum();\n\nSomar(1, 2, 3);      // 6\nSomar(10, 20);       // 30\nSomar();             // 0\n```"
+                    "```csharp\npublic int Somar(params int[] numeros) => numeros.Sum();\n\nSomar(1, 2, 3);      // 6\nSomar(10, 20);       // 30\nSomar();             // 0\n```\n\n" +
+                    "### Boas práticas de nomenclatura\n\n" +
+                    "```csharp\n// ✅ Verbos descritivos — métodos fazem algo\npublic void EnviarEmail(string destinatario) { }\npublic decimal CalcularDesconto(decimal preco) { }\npublic bool ValidarCpf(string cpf) { }\npublic Usuario ObterPorId(int id) { }\n\n" +
+                    "// ❌ Evite nomes vagos\npublic void Fazer() { }      // fazer o quê?\npublic int Processar() { }   // processar o quê?\npublic bool Check() { }      // verificar o quê?\n```\n\n" +
+                    "> **Regra**: Se você precisa comentar o que um método faz, é sinal de que o nome não está claro o suficiente. " +
+                    "Um bom nome **documenta sozinho**: `CalcularImpostoNFe()` é melhor do que `Calcular()` com um comentário explicando."
             },
 
             // ── Módulo 2: Orientação a Objetos ───────────────────────────────────────
@@ -176,6 +211,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 Descricao = "Propriedades, construtores múltiplos, new e inicializadores de objeto",
                 ConteudoTeoricoMarkdown =
                     "## Classes e Objetos em C#\n\n" +
+                    "> 💡 **Analogia**: A ficha cadastral de produto de um e-commerce é a *classe* — " +
+                    "ela define que todo produto tem nome, preço e estoque. " +
+                    "Cada produto específico (`\"Notebook Dell\"`, `\"Mouse Logitech\"`) é um *objeto* — " +
+                    "uma instância concreta com seus próprios valores. " +
+                    "Você pode criar milhares de objetos a partir de uma única classe, assim como " +
+                    "uma fábrica produz milhares de carros a partir de um mesmo projeto.\n\n" +
                     "Uma **classe** é um molde (blueprint). Um **objeto** é uma instância concreta desse molde, criada com `new`.\n\n" +
                     "### Declaração de classe\n\n" +
                     "```csharp\npublic class Produto\n{\n    // Propriedades (preferidas a campos públicos)\n    public int    Id    { get; set; }\n    public string Nome  { get; set; } = string.Empty;\n    public decimal Preco { get; set; }\n\n    // Método de instância\n    public string Descricao() => $\"{Nome} — R$ {Preco:F2}\";\n}\n```\n\n" +
@@ -192,7 +233,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                     "```csharp\nvar p = new Produto { Id = 1, Nome = \"Teclado\", Preco = 150m };\n\n// Equivalente a:\nvar p = new Produto();\np.Id    = 1;\np.Nome  = \"Teclado\";\np.Preco = 150m;\n```\n\n" +
                     "### Membros estáticos\n\n" +
                     "Membros estáticos pertencem à **classe**, não a instâncias individuais:\n\n" +
-                    "```csharp\npublic class Contador\n{\n    public static int Total { get; private set; } = 0;\n\n    public Contador() { Total++; } // cada new incrementa o contador estático\n}\n\nvar a = new Contador();\nvar b = new Contador();\nConsole.WriteLine(Contador.Total); // 2 — acesso via nome da classe\n```"
+                    "```csharp\npublic class Contador\n{\n    public static int Total { get; private set; } = 0;\n\n    public Contador() { Total++; } // cada new incrementa o contador estático\n}\n\nvar a = new Contador();\nvar b = new Contador();\nConsole.WriteLine(Contador.Total); // 2 — acesso via nome da classe\n```\n\n" +
+                    "### Classes vs Structs — uma distinção importante\n\n" +
+                    "```csharp\n// Classe — TIPO DE REFERÊNCIA\n// Armazenada no heap; variáveis guardam referência (ponteiro)\nvar p1 = new Produto { Nome = \"Teclado\" };\nvar p2 = p1;          // p2 aponta para O MESMO objeto!\np2.Nome = \"Mouse\";    // p1.Nome também vira \"Mouse\"!\n\n// Struct — TIPO DE VALOR (ex: int, DateTime, decimal)\n// Armazenada no stack; variáveis guardam o valor diretamente\nint a = 5;\nint b = a;  // b é uma CÓPIA independente\nb = 10;     // a continua sendo 5\n```\n\n" +
+                    "> **Regra prática**: use **classes** para entidades de negócio (Produto, Usuario, Pedido). " +
+                    "Use **structs** para dados pequenos e imutáveis (coordenadas, cores, ranges). " +
+                    "Na dúvida, use classe."
             },
 
             new Licao
@@ -202,6 +248,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 Descricao = "Herança com :, virtual/override, classes abstratas e interfaces",
                 ConteudoTeoricoMarkdown =
                     "## Herança e Polimorfismo\n\n" +
+                    "> 💡 **Cenário real**: Em um banco, toda conta tem titular, saldo e operações de " +
+                    "depósito/saque. Mas `ContaCorrente` tem limite de cheque especial, e `ContaPoupanca` " +
+                    "rende juros mensalmente. Com herança, ambas reutilizam a lógica comum de `Conta` " +
+                    "e adicionam apenas o que é específico — sem duplicar código.\n\n" +
                     "**Herança** permite que uma classe reutilize e estenda o comportamento de outra. " +
                     "**Polimorfismo** permite tratar objetos de subclasses de forma uniforme.\n\n" +
                     "### Herança com `:`\n\n" +
@@ -217,7 +267,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                     "Não podem ser instanciadas diretamente. Forçam subclasses a implementar métodos:\n\n" +
                     "```csharp\npublic abstract class Relatorio\n{\n    public abstract string GerarConteudo(); // subclasses DEVEM implementar\n    public void Imprimir() => Console.WriteLine(GerarConteudo()); // método concreto\n}\n\n// var r = new Relatorio(); // ERRO — classe abstrata não pode ser instanciada\n```\n\n" +
                     "### base — acessando a classe pai\n\n" +
-                    "```csharp\npublic class ContaPremium : Conta\n{\n    public ContaPremium(string titular) : base(titular) { } // chama construtor da base\n    public override string Descricao() => base.Descricao() + \" [PREMIUM]\";\n}\n```"
+                    "```csharp\npublic class ContaPremium : Conta\n{\n    public ContaPremium(string titular) : base(titular) { } // chama construtor da base\n    public override string Descricao() => base.Descricao() + \" [PREMIUM]\";\n}\n```\n\n" +
+                    "### Herança vs Composição — quando usar cada uma\n\n" +
+                    "```csharp\n// ✅ USE HERANÇA quando há uma relação \"É UM\":\n// Cachorro É UM Animal ✅\n// ContaCorrente É UMA Conta ✅\n\n" +
+                    "// ✅ USE COMPOSIÇÃO quando há uma relação \"TEM UM\":\n// Pedido TEM UM Cliente ✅ (não: Pedido É UM Cliente ❌)\n// Carro TEM UM Motor ✅\npublic class Pedido\n{\n    public Cliente Cliente { get; set; } // composição\n    public List<Item> Itens { get; set; } = new();\n}\n```\n\n" +
+                    "> **Regra de ouro**: prefira composição à herança quando em dúvida. " +
+                    "Herança cria acoplamento forte entre classes. Composição é mais flexível e testável. " +
+                    "Use herança somente quando a relação \"É UM\" for genuína e estável."
             },
 
             new Licao
@@ -227,6 +283,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 Descricao = "Modificadores de acesso, propriedades com validação e acessor init",
                 ConteudoTeoricoMarkdown =
                     "## Encapsulamento\n\n" +
+                    "> 💡 **Analogia**: Pense no painel do seu carro — você vê a velocidade, aperta o freio, " +
+                    "gira o volante. Mas você **não tem acesso direto** ao motor para ajustar a injeção de combustível. " +
+                    "O motor está *encapsulado*: expõe apenas o que é seguro usar e protege o que poderia ser danificado " +
+                    "por uso incorreto. Seus objetos C# devem funcionar da mesma forma.\n\n" +
                     "Encapsulamento significa **esconder os detalhes internos** e expor apenas o que é necessário. " +
                     "É um dos pilares da OOP e evita que código externo coloque objetos em estados inválidos.\n\n" +
                     "### Modificadores de acesso\n\n" +
@@ -253,6 +313,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 Descricao = "Array (tamanho fixo), List<T> (dinâmico) e Dictionary<TKey, TValue>",
                 ConteudoTeoricoMarkdown =
                     "## Coleções em C#\n\n" +
+                    "> 💡 **Cenário real**: Um carrinho de compras é uma lista de itens que cresce e encolhe — " +
+                    "o cliente adiciona e remove produtos livremente. Um cardápio de restaurante é um array " +
+                    "fixo de pratos. Um dicionário de CEPs mapeia cada código a uma cidade — busca instantânea " +
+                    "por qualquer CEP sem percorrer todos. Cada estrutura tem seu caso de uso ideal.\n\n" +
                     "C# oferece diversas estruturas de coleção. As mais usadas no dia a dia são `Array`, `List<T>` e `Dictionary<TKey, TValue>`.\n\n" +
                     "### Array — tamanho fixo\n\n" +
                     "```csharp\n// Declaração e inicialização\nint[]    numeros  = { 1, 2, 3, 4, 5 };\nstring[] nomes    = new string[3]; // array de 3 posições, todas null\n\n" +
@@ -268,7 +332,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                     "### IEnumerable<T> — a abstração base\n\n" +
                     "Array, List, Dictionary e outras coleções implementam `IEnumerable<T>`, " +
                     "que é o tipo aceito pelo `foreach` e pelo LINQ:\n\n" +
-                    "```csharp\n// Preferir IEnumerable<T> em parâmetros — mais flexível\npublic void Imprimir(IEnumerable<string> itens)\n{\n    foreach (var item in itens)\n        Console.WriteLine(item);\n}\n\nImprimir(nomes);     // List<string>\nImprimir(outroArray); // string[]\n```"
+                    "```csharp\n// Preferir IEnumerable<T> em parâmetros — mais flexível\npublic void Imprimir(IEnumerable<string> itens)\n{\n    foreach (var item in itens)\n        Console.WriteLine(item);\n}\n\nImprimir(nomes);     // List<string>\nImprimir(outroArray); // string[]\n```\n\n" +
+                    "### Guia rápido: qual coleção usar?\n\n" +
+                    "| Necessidade | Use |\n|---|---|\n" +
+                    "| Tamanho fixo, acesso por índice | `T[]` (array) |\n" +
+                    "| Lista que cresce e encolhe | `List<T>` |\n" +
+                    "| Busca rápida por chave | `Dictionary<TKey, TValue>` |\n" +
+                    "| Sem duplicatas, ordem não importa | `HashSet<T>` |\n" +
+                    "| Fila FIFO (primeiro a entrar, primeiro a sair) | `Queue<T>` |\n" +
+                    "| Pilha LIFO (último a entrar, primeiro a sair) | `Stack<T>` |\n" +
+                    "| Leitura concorrente de múltiplas threads | `ConcurrentDictionary<K,V>` |"
             },
 
             new Licao
@@ -278,6 +351,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 Descricao = "Where, Select, OrderBy, First vs FirstOrDefault, Any/All e uso com EF Core",
                 ConteudoTeoricoMarkdown =
                     "## LINQ — Language Integrated Query\n\n" +
+                    "> 💡 **Cenário real**: Imagine um catálogo de produtos. Você quer mostrar apenas os " +
+                    "produtos disponíveis, em ordem de preço, mostrando só nome e preço. " +
+                    "Sem LINQ: 3 loops, 2 listas auxiliares, muito código repetitivo. " +
+                    "Com LINQ: `produtos.Where(p => p.Disponivel).OrderBy(p => p.Preco).Select(p => new { p.Nome, p.Preco })` — " +
+                    "uma linha legível que qualquer dev entende imediatamente.\n\n" +
                     "LINQ é um conjunto de **métodos de extensão** sobre `IEnumerable<T>` (e `IQueryable<T>`) " +
                     "que permite consultar coleções com sintaxe fluente e expressiva.\n\n" +
                     "### Filtragem com Where\n\n" +
@@ -332,6 +410,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 Descricao = "Programação assíncrona, Task<T>, thread liberada e async Task vs async void",
                 ConteudoTeoricoMarkdown =
                     "## Programação Assíncrona com async/await\n\n" +
+                    "> 💡 **Analogia**: Imagine um garçom em um restaurante. Ele anota o pedido da mesa 1 " +
+                    "e leva para a cozinha. Se ele ficasse parado esperando o prato ficar pronto (*síncrono*), " +
+                    "nenhuma outra mesa seria atendida. Em vez disso, ele vai atender a mesa 2, 3, 4... " +
+                    "e quando a cozinha avisa que o prato ficou pronto, ele busca e entrega (*assíncrono*). " +
+                    "Seu servidor web funciona exatamente assim com `async/await`.\n\n" +
                     "Em aplicações modernas (APIs, apps, games), bloquear uma thread esperando I/O é um desperdício. " +
                     "O modelo `async/await` permite que uma thread seja **liberada** enquanto espera por operações lentas.\n\n" +
                     "### O problema do código síncrono\n\n" +
@@ -408,6 +491,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 Descricao = "Abstraindo acesso a dados com interfaces, DI e testabilidade",
                 ConteudoTeoricoMarkdown =
                     "## Repository Pattern\n\n" +
+                    "> 💡 **Analogia**: Pense em uma biblioteca. Você pede ao bibliotecário um livro pelo título " +
+                    "— você não sabe se ele está na prateleira A, no depósito ou digitalizado. " +
+                    "O bibliotecário (*repository*) sabe onde buscar. " +
+                    "Você (*controller/service*) só se importa em receber o livro — " +
+                    "os detalhes de onde está armazenado não são problema seu.\n\n" +
                     "O Repository Pattern isola a **lógica de acesso a dados** da lógica de negócio. " +
                     "Controllers e Services não sabem se os dados vêm de SQLite, SQL Server, uma API ou memória.\n\n" +
                     "### O problema sem Repository\n\n" +
