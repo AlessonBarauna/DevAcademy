@@ -241,6 +241,49 @@
   font-style: italic;
 }
 
+/* Dica voluntária */
+.dica-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.btn-dica {
+  background: none;
+  border: 1px dashed var(--border);
+  color: var(--text-muted);
+  padding: 6px 14px;
+  border-radius: var(--radius);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  align-self: flex-start;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-dica:hover, .btn-dica.ativa {
+  border-color: var(--yellow);
+  color: var(--yellow);
+  border-style: solid;
+}
+
+.dica-texto {
+  background: rgba(220, 220, 170, 0.06);
+  border: 1px solid rgba(220, 220, 170, 0.2);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  line-height: 1.6;
+  animation: fadeInDown 0.2s ease;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .acoes { display: flex; justify-content: flex-end; }
 
 .btn-responder, .btn-proximo {

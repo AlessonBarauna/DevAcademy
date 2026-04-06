@@ -156,9 +156,14 @@
       <div class="feedback-resposta-correta" *ngIf="!resultado.correta && resultado.respostaCorreta">
         Resposta correta: <strong>{{ resultado.respostaCorreta }}</strong>
       </div>
-      <div class="feedback-dica" *ngIf="!resultado.correta && exercicioAtual.dicaTexto">
-        💡 {{ exercicioAtual.dicaTexto }}
-      </div>
+    </div>
+
+    <!-- Dica voluntária -->
+    <div class="dica-wrap" *ngIf="!resultado && exercicioAtual.dicaTexto">
+      <button class="btn-dica" (click)="dicaVisivel = !dicaVisivel" [class.ativa]="dicaVisivel">
+        💡 {{ dicaVisivel ? 'Ocultar dica' : 'Ver dica' }}
+      </button>
+      <div class="dica-texto" *ngIf="dicaVisivel">{{ exercicioAtual.dicaTexto }}</div>
     </div>
 
     <div class="acoes">

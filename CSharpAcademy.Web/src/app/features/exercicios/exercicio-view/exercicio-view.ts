@@ -33,6 +33,7 @@ export class ExercicioView implements OnInit, OnDestroy {
   private xpFloatId = 0;
   historico: { exercicio: Exercicio; correta: boolean; tempoGasto: number; respostaCorreta: string; explicacao: string }[] = [];
   private tempoInicio = 0;
+  dicaVisivel = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -211,6 +212,7 @@ export class ExercicioView implements OnInit, OnDestroy {
       this.resultado = null;
       this.respostaSelecionada = '';
       this.respostaTexto = '';
+      this.dicaVisivel = false;
       this.iniciarTimer();
     } else {
       this.pararTimer();
