@@ -2,11 +2,18 @@
   position: fixed;
   bottom: 24px;
   left: 24px;
-  z-index: 300;
+  z-index: var(--z-sticky, 300);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+}
+
+/* Em mobile o toast ocupa a largura toda na parte de baixo —
+   sobe o pomodoro para não colidir */
+@media (max-width: 480px) {
+  .pomo-wrap { bottom: 80px; left: 16px; }
+  .pomo-card { width: calc(100vw - 32px); max-width: 300px; }
 }
 
 /* FAB */

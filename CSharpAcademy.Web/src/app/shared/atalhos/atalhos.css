@@ -3,7 +3,7 @@
   inset: 0;
   background: rgba(0,0,0,0.5);
   backdrop-filter: blur(2px);
-  z-index: 800;
+  z-index: var(--z-overlay, 800);
   animation: fadeIn 0.15s ease;
 }
 
@@ -14,7 +14,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 801;
+  z-index: calc(var(--z-overlay, 800) + 1);
   background: var(--bg-panel);
   border: 1px solid var(--border);
   border-radius: 14px;

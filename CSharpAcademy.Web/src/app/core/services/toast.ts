@@ -7,6 +7,7 @@ export interface Toast {
   id: number;
   mensagem: string;
   tipo: ToastTipo;
+  saindo?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -29,6 +30,12 @@ export class ToastService {
   info(mensagem: string): void    { this.mostrar(mensagem, 'info', 4000); }
 
   remover(id: number): void {
-    this._toasts.next(this._toasts.value.filter(t => t.id !== id));
+    // Marca como saindo para disparar a animação de saída
+    const lista = this._toasts.value.map(t => t.id === id ? { ...t, saindo: true } : t);
+    this._toasts.next(lista);
+    // Remove após a animação terminar (250ms = duração do slideOut)
+    setTimeout(() => {
+      this._toasts.next(this._toasts.value.filter(t => t.id !== id));
+    }, 260);
   }
 }
