@@ -2,12 +2,16 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
+import { EsqueciSenha } from './features/auth/esqueci-senha/esqueci-senha';
+import { RedefinirSenha } from './features/auth/redefinir-senha/redefinir-senha';
 import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'login',     component: Login },
-  { path: 'registrar', component: Register },
+  { path: 'login',           component: Login },
+  { path: 'registrar',       component: Register },
+  { path: 'esqueci-senha',   component: EsqueciSenha },
+  { path: 'redefinir-senha', component: RedefinirSenha },
 
   { path: 'onboarding', loadChildren: () => import('./features/auth/auth-module').then(m => m.AuthModule), canActivate: [AuthGuard] },
   { path: 'dashboard',  loadChildren: () => import('./features/dashboard/dashboard-module').then(m => m.DashboardModule) },
