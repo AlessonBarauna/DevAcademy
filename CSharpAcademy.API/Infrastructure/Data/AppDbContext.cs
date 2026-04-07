@@ -1261,7 +1261,132 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                     "```csharp\n// API sabe de tudo (apenas para registrar)\nbuilder.Services.AddScoped<IPedidoRepository, EfPedidoRepository>();\nbuilder.Services.AddScoped<IEmailService, SmtpEmailService>();\nbuilder.Services.AddScoped<ConfirmarPedidoUseCase>();\n```\n\n" +
                     "### Controller delegando para Use Case\n\n" +
                     "```csharp\n[HttpPost(\"{id}/confirmar\")]\npublic async Task<IActionResult> Confirmar(\n    int id,\n    [FromServices] ConfirmarPedidoUseCase useCase)\n{\n    await useCase.ExecutarAsync(id);\n    return NoContent();\n}\n// Controller tem zero lógica de negócio\n```\n\n" +
-                    "> **Clean Architecture vs camadas tradicionais**: a diferença chave é que as interfaces ficam no **Domain** (centro), não na Infrastructure. Isso inverte a dependência e protege o núcleo do negócio." }
+                    "> **Clean Architecture vs camadas tradicionais**: a diferença chave é que as interfaces ficam no **Domain** (centro), não na Infrastructure. Isso inverte a dependência e protege o núcleo do negócio." },
+
+            // ── Módulo 1: Fundamentos C# — Lições adicionais ────────────────────────
+            new Licao
+            {
+                Id = 40, ModuloId = 1, Ordem = 4, XPRecompensa = 15, Ativo = true,
+                Titulo = "Strings em Profundidade",
+                Descricao = "Interpolação, verbatim, métodos úteis, StringBuilder e comparação",
+                ConteudoTeoricoMarkdown =
+                    "## Strings em Profundidade\n\n" +
+                    "> 💡 **Cenário real**: Em uma API, você formata mensagens de log, valida e-mails, " +
+                    "constrói queries dinâmicas e serializa nomes de usuário. " +
+                    "Saber manipular strings com eficiência é uma das habilidades mais usadas no dia a dia.\n\n" +
+                    "Em C#, `string` é **imutável** — toda operação que \"modifica\" uma string na verdade cria uma nova. " +
+                    "Entender isso explica por que concatenar strings em loop é ineficiente.\n\n" +
+                    "### Interpolação de strings com `$`\n\n" +
+                    "```csharp\nstring nome  = \"Maria\";\nint    idade = 30;\n\n" +
+                    "// Interpolação — legível e segura\nstring msg = $\"Olá, {nome}! Você tem {idade} anos.\";\n\n" +
+                    "// Expressões completas dentro de {}\nstring status = $\"Maior de idade: {(idade >= 18 ? \"sim\" : \"não\")}\";\n\n" +
+                    "// Formatação numérica\ndecimal preco = 1999.9m;\nstring fmt = $\"Preço: {preco:C2}\"; // R$ 1.999,90 (depende da cultura)\nstring pad = $\"{42:D6}\";           // 000042\n```\n\n" +
+                    "### Strings verbatim com `@`\n\n" +
+                    "Evita a necessidade de escapar barras e permite múltiplas linhas:\n\n" +
+                    "```csharp\n// Sem @ — precisa escapar cada \\\nstring caminho1 = \"C:\\\\Users\\\\Maria\\\\Docs\";\n\n" +
+                    "// Com @ — barras literais, sem escape\nstring caminho2 = @\"C:\\Users\\Maria\\Docs\";\n\n" +
+                    "// Múltiplas linhas (inclui as quebras de linha)\nstring sql = @\"\n    SELECT *\n    FROM Produtos\n    WHERE Ativo = 1\";\n\n" +
+                    "// Combinação $@ — interpolação + verbatim\nstring pasta = \"Downloads\";\nstring path  = $@\"C:\\Users\\Maria\\{pasta}\";\n```\n\n" +
+                    "### Métodos essenciais de string\n\n" +
+                    "```csharp\nstring s = \"  Olá, Mundo!  \";\n\n" +
+                    "s.Length                         // 15 — número de caracteres\ns.Trim()                         // \"Olá, Mundo!\" — remove espaços das bordas\ns.TrimStart() / s.TrimEnd()      // remove só da esquerda / direita\ns.ToUpper()                      // \"  OLÁ, MUNDO!  \"\ns.ToLower()                      // \"  olá, mundo!  \"\ns.Contains(\"Mundo\")              // true\ns.StartsWith(\"  Olá\")           // true\ns.EndsWith(\"!  \")               // true\ns.Replace(\"Mundo\", \"C#\")        // \"  Olá, C#!  \"\ns.Split(',')                     // [\"  Olá\", \" Mundo!  \"]\ns.Substring(6, 5)                // \"Mundo\" — a partir do índice 6, 5 chars\ns.IndexOf(\"Mundo\")              // 7 — posição da primeira ocorrência\nstring.IsNullOrEmpty(s)          // false — tem conteúdo\nstring.IsNullOrWhiteSpace(\"  \") // true — só espaços\n```\n\n" +
+                    "### StringBuilder — concatenação eficiente\n\n" +
+                    "Concatenar strings com `+` em um loop cria N objetos intermediários no heap:\n\n" +
+                    "```csharp\n// ❌ Ineficiente — cria uma nova string a cada iteração\nstring resultado = \"\";\nfor (int i = 0; i < 1000; i++)\n    resultado += i.ToString(); // 1000 alocações!\n\n" +
+                    "// ✅ Eficiente — StringBuilder acumula internamente, uma alocação final\nvar sb = new System.Text.StringBuilder();\nfor (int i = 0; i < 1000; i++)\n    sb.Append(i);\nstring resultado = sb.ToString(); // converte no final\n\n" +
+                    "sb.AppendLine(\"nova linha\");\nsb.Insert(0, \"início \");\nsb.Replace(\"0\", \"zero\");\n```\n\n" +
+                    "> **Regra prática**: use `+` ou `$` para 2–5 concatenações. Use `StringBuilder` em loops ou quando o número de concatenações for dinâmico.\n\n" +
+                    "### Comparação de strings\n\n" +
+                    "```csharp\n// Igualdade simples (case-sensitive)\nbool igual = \"abc\" == \"ABC\"; // false\n\n" +
+                    "// Ignorar maiúsculas/minúsculas — forma correta\nbool iguali = string.Equals(\"abc\", \"ABC\", StringComparison.OrdinalIgnoreCase); // true\n\n" +
+                    "// Nunca use .ToLower() == .ToLower() para comparar — cria strings desnecessárias\n// string.Equals com StringComparison é mais legível e performático\n\n" +
+                    "// Ordenação e busca em texto (respeita locale)\nint cmp = string.Compare(\"café\", \"cafe\", StringComparison.CurrentCultureIgnoreCase);\n```"
+            },
+
+            new Licao
+            {
+                Id = 41, ModuloId = 1, Ordem = 5, XPRecompensa = 20, Ativo = true,
+                Titulo = "Tratamento de Exceções",
+                Descricao = "try/catch/finally, tipos de exceção, throw e criando exceções customizadas",
+                ConteudoTeoricoMarkdown =
+                    "## Tratamento de Exceções em C#\n\n" +
+                    "> 💡 **Cenário real**: Sua API recebe uma requisição para buscar um produto por ID. " +
+                    "O banco pode estar offline, o ID pode não existir, a conexão pode cair no meio. " +
+                    "Tratamento de exceções é o que separa um sistema que *trava* de um que *responde adequadamente* " +
+                    "a cada situação de erro.\n\n" +
+                    "### try / catch / finally\n\n" +
+                    "```csharp\ntry\n{\n    // Código que pode lançar exceção\n    int resultado = int.Parse(entrada); // FormatException se entrada não for número\n    int divisao   = 10 / resultado;     // DivideByZeroException se resultado == 0\n}\ncatch (FormatException ex)\n{\n    Console.WriteLine($\"Entrada inválida: {ex.Message}\");\n}\ncatch (DivideByZeroException)\n{\n    Console.WriteLine(\"Divisão por zero!\");\n}\ncatch (Exception ex) // captura qualquer outra exceção\n{\n    Console.WriteLine($\"Erro inesperado: {ex.Message}\");\n}\nfinally\n{\n    // Executado SEMPRE — com ou sem exceção — ideal para liberar recursos\n    Console.WriteLine(\"Operação finalizada.\");\n}\n```\n\n" +
+                    "> **Ordem importa**: coloque catches mais **específicos** antes dos mais **genéricos**. " +
+                    "`Exception` deve ser sempre o último catch.\n\n" +
+                    "### Hierarquia de exceções\n\n" +
+                    "```\nSystem.Exception\n├── System.SystemException\n│   ├── ArgumentException\n│   │   └── ArgumentNullException\n│   │   └── ArgumentOutOfRangeException\n│   ├── InvalidOperationException\n│   ├── NullReferenceException\n│   ├── IndexOutOfRangeException\n│   ├── DivideByZeroException\n│   └── FormatException\n└── System.ApplicationException (raramente usada)\n```\n\n" +
+                    "### throw e relançando exceções\n\n" +
+                    "```csharp\n// Lançar uma nova exceção\nif (valor < 0)\n    throw new ArgumentException(\"Valor não pode ser negativo.\", nameof(valor));\n\n// ❌ ERRADO — perde o stack trace original\ncatch (Exception ex)\n{\n    throw ex; // o stack trace aponta para esta linha, não para a origem do erro\n}\n\n// ✅ CORRETO — preserva o stack trace completo\ncatch (Exception)\n{\n    throw; // relança a exceção exatamente como veio\n}\n\n// Encapsular em outra exceção (com InnerException)\ncatch (Exception ex)\n{\n    throw new InvalidOperationException(\"Falha ao processar pedido.\", ex);\n}\n```\n\n" +
+                    "### Criando exceções customizadas\n\n" +
+                    "```csharp\n// Crie exceções customizadas para erros de domínio específicos\npublic class ProdutoNaoEncontradoException : Exception\n{\n    public int ProdutoId { get; }\n\n    public ProdutoNaoEncontradoException(int id)\n        : base($\"Produto {id} não encontrado.\")\n    {\n        ProdutoId = id;\n    }\n}\n\n// Uso\nvar produto = await repo.ObterPorIdAsync(id)\n    ?? throw new ProdutoNaoEncontradoException(id);\n```\n\n" +
+                    "### using — liberação automática de recursos\n\n" +
+                    "```csharp\n// Qualquer objeto que implementa IDisposable pode usar 'using'\n// Dispose() é chamado automaticamente ao sair do bloco — mesmo com exceção\nusing var conexao = new SqlConnection(connStr);\nusing var reader  = await cmd.ExecuteReaderAsync();\n// sem finally manual para fechar conexão\n```\n\n" +
+                    "### Quando NÃO usar exceções\n\n" +
+                    "```csharp\n// ❌ Controle de fluxo com exceção — antipadrão\ntry { var n = int.Parse(entrada); }\ncatch { /* entrada não é número */ }\n\n// ✅ Preferir TryParse para casos esperados\nif (!int.TryParse(entrada, out int n))\n    Console.WriteLine(\"Entrada inválida\");\n```\n\n" +
+                    "> **Regra**: exceções são para situações **excepcionais** — erros que não deveriam acontecer " +
+                    "no fluxo normal. Para validações de entrada do usuário, prefira retornar resultados de erro em vez de lançar."
+            },
+
+            // ── Módulo 2: Orientação a Objetos — Lições adicionais ──────────────────
+            new Licao
+            {
+                Id = 42, ModuloId = 2, Ordem = 4, XPRecompensa = 20, Ativo = true,
+                Titulo = "Interfaces",
+                Descricao = "Definindo contratos, implementando múltiplas interfaces, interface vs classe abstrata",
+                ConteudoTeoricoMarkdown =
+                    "## Interfaces em C#\n\n" +
+                    "> 💡 **Cenário real**: Sua aplicação precisa enviar notificações — ora por e-mail, " +
+                    "ora por SMS, ora por push notification. Em vez de acoplar o código ao canal específico, " +
+                    "você define uma interface `INotificador` com o método `EnviarAsync()`. " +
+                    "Qualquer implementação concreta pode ser plugada sem alterar o código que usa a interface. " +
+                    "Isso é o poder dos contratos.\n\n" +
+                    "Uma **interface** define um **contrato** — o que uma classe deve fazer — sem ditar como ela faz. " +
+                    "É a base do princípio de inversão de dependência (o D do SOLID).\n\n" +
+                    "### Declarando e implementando interfaces\n\n" +
+                    "```csharp\n// Por convenção, interfaces começam com I maiúsculo\npublic interface INotificador\n{\n    Task EnviarAsync(string destinatario, string mensagem);\n    bool Disponivel { get; } // propriedades também são permitidas\n}\n\n// Implementação concreta\npublic class NotificadorEmail : INotificador\n{\n    public bool Disponivel => true;\n\n    public async Task EnviarAsync(string destinatario, string mensagem)\n    {\n        // lógica de envio de e-mail\n        await smtp.SendAsync(destinatario, mensagem);\n    }\n}\n\n// Outra implementação — mesmo contrato, comportamento diferente\npublic class NotificadorSms : INotificador\n{\n    public bool Disponivel => smsGateway.Online;\n\n    public async Task EnviarAsync(string destinatario, string mensagem)\n    {\n        await smsGateway.SendAsync(destinatario, mensagem);\n    }\n}\n```\n\n" +
+                    "### Múltiplas interfaces\n\n" +
+                    "Uma classe pode herdar de **uma** classe mas implementar **N** interfaces:\n\n" +
+                    "```csharp\npublic interface IExportavel  { byte[] Exportar(); }\npublic interface IImprimivel  { void Imprimir(); }\npublic interface IArquivavel  { Task ArquivarAsync(); }\n\npublic class Relatorio : DocumentoBase, IExportavel, IImprimivel, IArquivavel\n{\n    public byte[] Exportar()       => PdfGenerator.Gerar(this);\n    public void   Imprimir()       => Impressora.Enviar(this);\n    public async Task ArquivarAsync() => await Storage.SalvarAsync(this);\n}\n```\n\n" +
+                    "### Interface vs Classe Abstrata\n\n" +
+                    "| | Interface | Classe Abstrata |\n|---|---|---|\n| Estado (campos) | ❌ Não pode ter | ✅ Pode ter |\n| Implementação | Apenas default methods (C# 8+) | ✅ Pode ter métodos concretos |\n| Herança | Uma classe implementa N interfaces | Uma classe herda de apenas 1 |\n| Quando usar | Contrato entre hierarquias diferentes | Compartilhar lógica + forçar override |\n\n" +
+                    "```csharp\n// Use interface quando classes de hierarquias diferentes precisam do mesmo contrato\n// Ex: Produto, Pedido e Usuario podem ser IExportavel — sem relação de herança\n\n// Use classe abstrata quando há lógica comum + pontos de extensão\npublic abstract class RelatorioBase\n{\n    protected abstract string GerarCorpo(); // subclasses DEVEM implementar\n\n    public void Imprimir() // lógica comum para todos\n    {\n        var cabecalho = \"=== RELATÓRIO ===\";\n        Console.WriteLine(cabecalho);\n        Console.WriteLine(GerarCorpo());\n    }\n}\n```\n\n" +
+                    "### IDisposable — liberando recursos\n\n" +
+                    "```csharp\npublic class ConexaoBanco : IDisposable\n{\n    private readonly SqlConnection _conn;\n    private bool _disposed = false;\n\n    public ConexaoBanco(string connStr)\n        => _conn = new SqlConnection(connStr);\n\n    public void Dispose()\n    {\n        if (!_disposed)\n        {\n            _conn.Dispose();\n            _disposed = true;\n        }\n    }\n}\n\n// 'using' chama Dispose() automaticamente\nusing var db = new ConexaoBanco(connStr);\n// ... operações ...\n// Dispose() é chamado aqui, mesmo se lançar exceção\n```\n\n" +
+                    "> **Regra de ouro**: dependa de abstrações (interfaces), não de implementações concretas. " +
+                    "Isso torna o código testável (fácil de mockar) e flexível (fácil de trocar implementações)."
+            },
+
+            new Licao
+            {
+                Id = 43, ModuloId = 2, Ordem = 5, XPRecompensa = 20, Ativo = true,
+                Titulo = "Records e Imutabilidade",
+                Descricao = "Record types, igualdade por valor, with expressions e quando usar records",
+                ConteudoTeoricoMarkdown =
+                    "## Records em C#\n\n" +
+                    "> 💡 **Cenário real**: Sua API retorna dados de um produto — Id, Nome, Preço. " +
+                    "Esse dado é transferido pela rede, nunca deveria ser modificado após criado, " +
+                    "e dois objetos com os mesmos valores devem ser considerados iguais. " +
+                    "Antes dos records, você precisaria de boilerplate enorme. Com records, é uma linha.\n\n" +
+                    "**Records** (C# 9+) são tipos com **igualdade por valor** e **imutabilidade** embutidos. " +
+                    "Ideais para DTOs, Value Objects e dados de configuração.\n\n" +
+                    "### Record posicional — a forma mais concisa\n\n" +
+                    "```csharp\n// Uma única linha declara propriedades, construtor, igualdade e ToString()\npublic record Produto(int Id, string Nome, decimal Preco);\n\nvar p1 = new Produto(1, \"Teclado\", 150m);\nvar p2 = new Produto(1, \"Teclado\", 150m);\n\nConsole.WriteLine(p1 == p2);     // True — igualdade por VALOR\nConsole.WriteLine(p1.Equals(p2)); // True\nConsole.WriteLine(p1);           // Produto { Id = 1, Nome = Teclado, Preco = 150 }\n\n// Desestruturação (posicional records)\nvar (id, nome, preco) = p1;\n```\n\n" +
+                    "### Imutabilidade e a expressão `with`\n\n" +
+                    "As propriedades de um record posicional são `init` — só podem ser definidas na criação:\n\n" +
+                    "```csharp\nvar original = new Produto(1, \"Teclado\", 150m);\n\n// ❌ Não é possível modificar diretamente\n// original.Preco = 200m; // ERRO de compilação\n\n// ✅ Cria uma CÓPIA com os valores alterados — o original não muda\nvar comDesconto = original with { Preco = 120m };\n\nConsole.WriteLine(original.Preco);    // 150 — não foi alterado\nConsole.WriteLine(comDesconto.Preco); // 120\n\n// 'with' pode alterar múltiplas propriedades\nvar novo = original with { Id = 2, Nome = \"Mouse\" };\n```\n\n" +
+                    "### Record class vs record struct\n\n" +
+                    "```csharp\n// record (ou record class) — tipo de referência, imutável por padrão\npublic record Endereco(string Rua, string Cidade);\n\n// record struct — tipo de VALOR (stack), melhor performance para structs pequenas\npublic record struct Coordenada(double Lat, double Lng);\n\n// Record com corpo — para adicionar métodos ou validações\npublic record Dinheiro(decimal Valor, string Moeda)\n{\n    // Validação no construtor\n    public Dinheiro : this(Valor, Moeda) // chama o gerado\n    {\n        if (Valor < 0) throw new ArgumentException(\"Valor não pode ser negativo\");\n    }\n\n    public Dinheiro Somar(Dinheiro outro)\n    {\n        if (Moeda != outro.Moeda) throw new InvalidOperationException(\"Moedas diferentes\");\n        return this with { Valor = Valor + outro.Valor };\n    }\n}\n```\n\n" +
+                    "### Records vs Classes\n\n" +
+                    "| | Record | Class |\n|---|---|---|\n| Igualdade | Por **valor** | Por **referência** |\n| Imutabilidade | Padrão (init) | Não — precisa configurar |\n| `ToString()` | Gerado automaticamente | Precisa sobrescrever |\n| Herança | Suportada entre records | Suportada |\n| Quando usar | DTOs, Value Objects, configs | Entidades com estado mutável |\n\n" +
+                    "```csharp\n// ✅ Records são ideais para:\npublic record ProdutoDto(int Id, string Nome, decimal Preco);    // DTO de resposta da API\npublic record Dinheiro(decimal Valor, string Moeda);              // Value Object\npublic record ConfiguracaoEmail(string Smtp, int Porta);          // config imutável\n\n// ✅ Classes são ideais para:\npublic class Pedido { /* estado muda: itens adicionados, status atualizado */ }\npublic class ContaBancaria { /* saldo muda com depósitos e saques */ }\n```\n\n" +
+                    "> **Regra prática**: se o objeto representa um **dado imutável** que você quer comparar pelos seus valores (não pela identidade), use record. " +
+                    "Se ele representa uma **entidade com ciclo de vida e estado mutável**, use classe."
+            }
         );
 
         // Novos Exercícios — Módulos 6–13
@@ -1769,7 +1894,609 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 Enunciado = "Qual a diferença principal entre Clean Architecture e arquitetura em camadas tradicional?",
                 OpcoesJson = "[\"As interfaces ficam no Domain (centro), invertendo a dependência em vez de apontar para Infrastructure\",\"Clean Architecture tem mais camadas\",\"Clean Architecture não usa banco de dados\",\"Não há diferença — são a mesma coisa\"]",
                 RespostaCorreta = "As interfaces ficam no Domain (centro), invertendo a dependência em vez de apontar para Infrastructure",
-                Explicacao = "Na arquitetura tradicional, o domínio depende da infraestrutura (Domain → Infrastructure). Na Clean, é o contrário: Infrastructure implementa interfaces do Domain, protegendo o núcleo." }
+                Explicacao = "Na arquitetura tradicional, o domínio depende da infraestrutura (Domain → Infrastructure). Na Clean, é o contrário: Infrastructure implementa interfaces do Domain, protegendo o núcleo." },
+
+            // ── Exercícios adicionais — Lição 1: Variáveis e Tipos ──────────────────
+            new Exercicio { Id = 122, LicaoId = 1, Ordem = 4, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Qual tipo de dado deve ser usado para armazenar valores monetários em C#?",
+                OpcoesJson = "[\"decimal\",\"double\",\"float\",\"long\"]",
+                RespostaCorreta = "decimal",
+                Explicacao = "'decimal' usa aritmética de base 10, eliminando erros de arredondamento binário. 1.10 + 2.20 com double dá 3.3000000000000003; com decimal, 3.30 exato. Sempre use decimal para dinheiro.",
+                DicaTexto = "Qual tipo foi criado especificamente para evitar erros de arredondamento em valores financeiros?" },
+
+            new Exercicio { Id = 123, LicaoId = 1, Ordem = 5, XPRecompensa = 5,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "Em C#, uma variável declarada com 'var' pode mudar de tipo após a declaração.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Falso",
+                Explicacao = "'var' é inferência de tipo em TEMPO DE COMPILAÇÃO — o tipo é fixado pelo valor inicial e não pode mudar. 'var x = 5;' cria um int permanente. Só 'dynamic' adia a verificação para runtime.",
+                DicaTexto = "var é resolvido em tempo de compilação ou de execução?" },
+
+            new Exercicio { Id = 124, LicaoId = 1, Ordem = 6, XPRecompensa = 5,
+                Tipo = TipoExercicio.PreencherEspacos,
+                Enunciado = "Para converter uma string para int sem lançar exceção em caso de falha, usa-se int.____(entrada, out int valor)",
+                OpcoesJson = "[]",
+                RespostaCorreta = "TryParse",
+                Explicacao = "int.TryParse() retorna bool e nunca lança exceção — ideal para validar entrada do usuário. int.Parse() lança FormatException se a string não for um número válido.",
+                DicaTexto = "O método começa com 'Try' e retorna bool..." },
+
+            new Exercicio { Id = 125, LicaoId = 1, Ordem = 7, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Qual operador atribui um valor padrão quando a variável é null?",
+                OpcoesJson = "[\"??\",\"?.\",\"!.\",\"&&\"]",
+                RespostaCorreta = "??",
+                Explicacao = "O operador ?? é o 'null-coalescing operator': 'valor ?? padrão' retorna 'valor' se não for null, ou 'padrão' caso contrário. Ex: int resultado = idade ?? 0;",
+                DicaTexto = "Esse operador é formado por dois pontos de interrogação..." },
+
+            new Exercicio { Id = 126, LicaoId = 1, Ordem = 8, XPRecompensa = 5,
+                Tipo = TipoExercicio.CorrigirCodigo,
+                Enunciado = "O código abaixo tem um erro. Corrija-o:\ndecimal preco = 19.99;",
+                OpcoesJson = "[\"decimal preco = 19.99m;\",\"decimal preco = (decimal)19.99;\",\"double preco = 19.99;\",\"float preco = 19.99f;\"]",
+                RespostaCorreta = "decimal preco = 19.99m;",
+                Explicacao = "Literais de ponto flutuante sem sufixo são 'double' por padrão. Para atribuir a uma variável decimal, use o sufixo 'm': 19.99m. Sem o sufixo, o compilador tenta converter double→decimal implicitamente, o que não é permitido.",
+                DicaTexto = "Literais decimais precisam de um sufixo específico..." },
+
+            new Exercicio { Id = 127, LicaoId = 1, Ordem = 9, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Qual é o range (intervalo) de valores do tipo 'byte' em C#?",
+                OpcoesJson = "[\"0 a 255\",\"-128 a 127\",\"0 a 65535\",\"-32768 a 32767\"]",
+                RespostaCorreta = "0 a 255",
+                Explicacao = "'byte' é um inteiro sem sinal de 8 bits: armazena de 0 a 255 (2⁸ - 1). Para valores negativos, use 'sbyte' (-128 a 127). 'short' vai de -32.768 a 32.767 (16 bits).",
+                DicaTexto = "byte tem 8 bits e é sem sinal (unsigned)..." },
+
+            new Exercicio { Id = 128, LicaoId = 1, Ordem = 10, XPRecompensa = 5,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "O tipo int? (nullable int) pode armazenar o valor null.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "Adicionando '?' ao tipo de valor, tornamos ele nullable. 'int?' é equivalente a 'Nullable<int>' e pode ser null, 0, 1, ou qualquer int. Use .HasValue para verificar e .Value para acessar.",
+                DicaTexto = "O '?' após o tipo transforma um value type em nullable..." },
+
+            // ── Exercícios adicionais — Lição 2: Controle de Fluxo ──────────────────
+            new Exercicio { Id = 129, LicaoId = 2, Ordem = 4, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "O que a instrução 'break' faz dentro de um loop?",
+                OpcoesJson = "[\"Encerra o loop imediatamente\",\"Pula para a próxima iteração\",\"Reinicia o loop do início\",\"Não faz nada\"]",
+                RespostaCorreta = "Encerra o loop imediatamente",
+                Explicacao = "'break' encerra o loop completamente — nenhuma iteração adicional ocorre. 'continue' pula apenas a iteração atual e vai para a próxima. Conhecer a diferença evita bugs sutis em loops.",
+                DicaTexto = "Qual instrução 'quebra' o loop e qual apenas 'continua' para a próxima?" },
+
+            new Exercicio { Id = 130, LicaoId = 2, Ordem = 5, XPRecompensa = 5,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "O loop 'do-while' garante que o bloco de código seja executado pelo menos uma vez.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "Em 'do-while', o bloco é executado ANTES da verificação da condição. Isso garante ao menos uma execução mesmo que a condição seja falsa desde o início. Use quando precisa executar ao menos uma vez (ex: menu de opções).",
+                DicaTexto = "Em do-while, a condição é verificada antes ou depois do bloco?" },
+
+            new Exercicio { Id = 131, LicaoId = 2, Ordem = 6, XPRecompensa = 5,
+                Tipo = TipoExercicio.PreencherEspacos,
+                Enunciado = "Para pular para a próxima iteração de um loop sem encerrar o loop, usa-se a instrução: ____",
+                OpcoesJson = "[]",
+                RespostaCorreta = "continue",
+                Explicacao = "'continue' interrompe a iteração ATUAL e passa para a PRÓXIMA. O loop continua normalmente. Diferente de 'break', que encerra o loop por completo.",
+                DicaTexto = "É o oposto de break — não encerra, apenas avança..." },
+
+            new Exercicio { Id = 132, LicaoId = 2, Ordem = 7, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Na switch expression moderna de C#, qual símbolo representa o caso padrão (default)?",
+                OpcoesJson = "[\"_\",\"*\",\"default\",\"else\"]",
+                RespostaCorreta = "_",
+                Explicacao = "Na switch expression (C# 8+), o underscore '_' é o discard pattern e funciona como o 'default' do switch clássico — captura qualquer valor não coberto pelos outros casos.",
+                DicaTexto = "É um símbolo de descarte, usado como padrão em pattern matching..." },
+
+            new Exercicio { Id = 133, LicaoId = 2, Ordem = 8, XPRecompensa = 5,
+                Tipo = TipoExercicio.CorrigirCodigo,
+                Enunciado = "O código itera mais vezes do que o esperado. Corrija para percorrer exatamente os índices 0, 1, 2, 3, 4:\nfor (int i = 0; i <= 5; i++)",
+                OpcoesJson = "[\"for (int i = 0; i < 5; i++)\",\"for (int i = 1; i <= 5; i++)\",\"for (int i = 0; i <= 4; i++)\",\"for (int i = 0; i < 6; i++)\"]",
+                RespostaCorreta = "for (int i = 0; i < 5; i++)",
+                Explicacao = "Com 'i <= 5' o loop executa com i = 0, 1, 2, 3, 4, 5 — 6 iterações. Para 5 iterações (índices 0–4), use 'i < 5'. Esse é um dos bugs mais comuns em loops — o famoso 'off by one error'.",
+                DicaTexto = "Conte quantas vezes o loop executa com <= vs <..." },
+
+            new Exercicio { Id = 134, LicaoId = 2, Ordem = 9, XPRecompensa = 5,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "Um loop 'while' pode nunca executar seu bloco de código se a condição inicial for falsa.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "'while' verifica a condição ANTES de executar o bloco. Se a condição já for falsa na primeira verificação, o bloco nunca executa (0 iterações). É o que o diferencia do 'do-while'.",
+                DicaTexto = "while verifica antes ou depois de executar?" },
+
+            new Exercicio { Id = 135, LicaoId = 2, Ordem = 10, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Por que 'foreach' é preferido a 'for' para percorrer coleções quando o índice não é necessário?",
+                OpcoesJson = "[\"Mais legível e elimina erros de índice\",\"foreach é mais rápido que for\",\"foreach funciona com mais tipos\",\"for pode modificar a coleção, foreach não\"]",
+                RespostaCorreta = "Mais legível e elimina erros de índice",
+                Explicacao = "'foreach' é mais expressivo ('para cada item em coleção') e elimina erros como índice errado ou off-by-one. Quanto à performance, são equivalentes para arrays. Use 'for' quando precisar do índice ou modificar elementos por posição.",
+                DicaTexto = "Pense na legibilidade e nos tipos de erro que cada um evita..." },
+
+            // ── Exercícios adicionais — Lição 3: Métodos ────────────────────────────
+            new Exercicio { Id = 136, LicaoId = 3, Ordem = 4, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "O que um método declarado como 'void' retorna?",
+                OpcoesJson = "[\"Nada (sem valor de retorno)\",\"null\",\"0\",\"false\"]",
+                RespostaCorreta = "Nada (sem valor de retorno)",
+                Explicacao = "'void' significa ausência de retorno. O método executa sua lógica mas não produz valor. Diferente de retornar null (que é um valor). Um 'return;' vazio pode ser usado para sair antecipadamente de um void.",
+                DicaTexto = "void vem do latim e significa 'vazio'..." },
+
+            new Exercicio { Id = 137, LicaoId = 3, Ordem = 5, XPRecompensa = 5,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "Em C#, dois métodos podem ter o mesmo nome se tiverem parâmetros diferentes (tipos ou quantidade). Esse conceito se chama sobrecarga.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "Sobrecarga (overloading) permite múltiplos métodos com o mesmo nome e assinaturas diferentes. O compilador escolhe qual versão chamar pelos argumentos. Ex: Calcular(int a, int b) e Calcular(double a, double b) coexistem.",
+                DicaTexto = "O que diferencia dois métodos sobrecarregados?" },
+
+            new Exercicio { Id = 138, LicaoId = 3, Ordem = 6, XPRecompensa = 5,
+                Tipo = TipoExercicio.PreencherEspacos,
+                Enunciado = "Parâmetros com valor padrão definido na assinatura do método são chamados parâmetros ____.",
+                OpcoesJson = "[]",
+                RespostaCorreta = "opcionais",
+                Explicacao = "Parâmetros opcionais têm um valor padrão na assinatura: 'void Formatar(string texto, bool maiusculo = false)'. Se o chamador não fornecer o argumento, o valor padrão é usado. Devem vir APÓS os parâmetros obrigatórios.",
+                DicaTexto = "Se o chamador não precisar fornecê-los, são..." },
+
+            new Exercicio { Id = 139, LicaoId = 3, Ordem = 7, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "O que é um expression-bodied method (usando =>)?",
+                OpcoesJson = "[\"Método de uma linha que retorna uma expressão sem 'return' explícito\",\"Método assíncrono\",\"Método estático\",\"Método sem parâmetros\"]",
+                RespostaCorreta = "Método de uma linha que retorna uma expressão sem 'return' explícito",
+                Explicacao = "'public int Dobro(int x) => x * 2;' é equivalente a '{ return x * 2; }'. O => elimina as chaves e o return para métodos simples de uma expressão, tornando o código mais conciso.",
+                DicaTexto = "É uma forma mais curta de escrever métodos simples com =>" },
+
+            new Exercicio { Id = 140, LicaoId = 3, Ordem = 8, XPRecompensa = 5,
+                Tipo = TipoExercicio.CorrigirCodigo,
+                Enunciado = "O método abaixo tem um erro de tipo de retorno. Corrija-o:\npublic void Somar(int a, int b) { return a + b; }",
+                OpcoesJson = "[\"public int Somar(int a, int b) { return a + b; }\",\"public void Somar(int a, int b) { return; }\",\"public string Somar(int a, int b) { return a + b; }\",\"public Somar(int a, int b) { return a + b; }\"]",
+                RespostaCorreta = "public int Somar(int a, int b) { return a + b; }",
+                Explicacao = "Um método declarado como 'void' não pode retornar valores. Como queremos retornar a soma (um int), o tipo de retorno deve ser 'int'. O compilador detecta isso em tempo de compilação.",
+                DicaTexto = "void significa sem retorno. Se o método retorna algo, qual tipo deveria ser?" },
+
+            new Exercicio { Id = 141, LicaoId = 3, Ordem = 9, XPRecompensa = 5,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "A palavra-chave 'params' permite que um método receba um número variável de argumentos do mesmo tipo.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "'public int Somar(params int[] nums)' pode ser chamado com Somar(1,2), Somar(1,2,3,4) ou Somar(). O 'params' converte os argumentos em um array automaticamente. Deve ser o último parâmetro da assinatura.",
+                DicaTexto = "params vem de 'parameters' e aceita quantidade variável..." },
+
+            new Exercicio { Id = 142, LicaoId = 3, Ordem = 10, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Qual modificador de acesso é o mais restritivo em C#?",
+                OpcoesJson = "[\"private\",\"protected\",\"internal\",\"public\"]",
+                RespostaCorreta = "private",
+                Explicacao = "'private' restringe o acesso apenas à própria classe. É o mais restritivo — nem subclasses nem outras classes do mesmo assembly podem acessar. A regra de ouro é: use o modificador mais restritivo possível.",
+                DicaTexto = "Qual modificador só permite acesso de dentro da própria classe?" },
+
+            // ── Exercícios adicionais — Lição 4: Classes e Objetos ──────────────────
+            new Exercicio { Id = 143, LicaoId = 4, Ordem = 4, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "O que o operador 'new' faz ao criar um objeto em C#?",
+                OpcoesJson = "[\"Aloca memória no heap e chama o construtor\",\"Copia um objeto existente\",\"Aloca memória no stack\",\"Apenas chama o construtor sem alocar memória\"]",
+                RespostaCorreta = "Aloca memória no heap e chama o construtor",
+                Explicacao = "'new' realiza três ações: (1) aloca memória no heap para o objeto, (2) inicializa campos com valores padrão, (3) chama o construtor especificado. Retorna uma referência ao objeto criado.",
+                DicaTexto = "Classes são tipos de referência — onde ficam armazenadas?" },
+
+            new Exercicio { Id = 144, LicaoId = 4, Ordem = 5, XPRecompensa = 5,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "Uma classe em C# pode ter múltiplos construtores com parâmetros diferentes.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "Sobrecarga de construtores permite criar objetos de formas diferentes: 'new Produto()' sem parâmetros, 'new Produto(\"Teclado\", 150m)' com parâmetros. O compilador escolhe o correto pelos argumentos passados.",
+                DicaTexto = "É o mesmo conceito de sobrecarga aplicado ao construtor..." },
+
+            new Exercicio { Id = 145, LicaoId = 4, Ordem = 6, XPRecompensa = 5,
+                Tipo = TipoExercicio.PreencherEspacos,
+                Enunciado = "Membros que pertencem à classe (e não às instâncias individuais) são declarados com o modificador ____.",
+                OpcoesJson = "[]",
+                RespostaCorreta = "static",
+                Explicacao = "Membros 'static' existem uma única vez na classe, compartilhados por todas as instâncias. São acessados pelo nome da classe: 'Contador.Total', não por instância. Use para contadores globais, constantes e métodos utilitários.",
+                DicaTexto = "Esse modificador faz o membro pertencer à classe, não ao objeto..." },
+
+            new Exercicio { Id = 146, LicaoId = 4, Ordem = 7, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Dado: 'var p1 = new Produto { Nome = \"Teclado\" }; var p2 = p1; p2.Nome = \"Mouse\";'. Qual é o valor de p1.Nome?",
+                OpcoesJson = "[\"Mouse\",\"Teclado\",\"null\",\"Erro de compilação\"]",
+                RespostaCorreta = "Mouse",
+                Explicacao = "Classes são tipos de referência. 'var p2 = p1' NÃO cria uma cópia — p2 aponta para o MESMO objeto no heap. Qualquer alteração via p2 afeta p1 também. Para cópia independente, implemente ICloneable ou use 'with' (records).",
+                DicaTexto = "Classes são tipos de referência — p2 é uma cópia ou outra referência ao mesmo objeto?" },
+
+            new Exercicio { Id = 147, LicaoId = 4, Ordem = 8, XPRecompensa = 5,
+                Tipo = TipoExercicio.CorrigirCodigo,
+                Enunciado = "O código abaixo tem um erro de nomenclatura. Corrija para seguir as convenções C#:\nvar p = new Produto { nome = \"Teclado\", preco = 150m };",
+                OpcoesJson = "[\"var p = new Produto { Nome = \\\"Teclado\\\", Preco = 150m };\",\"var p = new produto { Nome = \\\"Teclado\\\", Preco = 150m };\",\"var p = Produto.New { Nome = \\\"Teclado\\\" };\",\"var p = new Produto(\\\"Teclado\\\", 150m);\"]",
+                RespostaCorreta = "var p = new Produto { Nome = \"Teclado\", Preco = 150m };",
+                Explicacao = "Em C#, propriedades públicas seguem PascalCase (primeira letra maiúscula). 'nome' e 'preco' devem ser 'Nome' e 'Preco'. O compilador não encontraria os membros com minúscula — seria um erro de compilação.",
+                DicaTexto = "Propriedades em C# seguem PascalCase..." },
+
+            new Exercicio { Id = 148, LicaoId = 4, Ordem = 9, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Inicializadores de objeto '{ }' permitem definir propriedades públicas sem necessidade de:",
+                OpcoesJson = "[\"Um construtor específico para cada combinação\",\"O operador new\",\"O tipo da variável\",\"Propriedades públicas\"]",
+                RespostaCorreta = "Um construtor específico para cada combinação",
+                Explicacao = "Com inicializadores, 'new Produto { Nome = \"X\", Preco = 10m }' funciona mesmo sem um construtor Produto(string, decimal). Isso reduz o número de construtores necessários e torna a criação de objetos mais expressiva.",
+                DicaTexto = "O que você não precisa escrever quando usa inicializadores?" },
+
+            new Exercicio { Id = 149, LicaoId = 4, Ordem = 10, XPRecompensa = 5,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "O encadeamento de construtores com ':this(...)' permite que um construtor chame outro construtor da mesma classe.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "': this(args)' chama outro construtor da mesma classe antes de executar o corpo do atual. Evita duplicação de lógica de inicialização. Para chamar o construtor da classe PAI, usa-se ':base(args)'.",
+                DicaTexto = "this() chama construtor da mesma classe, base() chama da classe pai..." },
+
+            // ── Exercícios adicionais — Lição 5: Herança e Polimorfismo ─────────────
+            new Exercicio { Id = 150, LicaoId = 5, Ordem = 4, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Em C#, de quantas classes uma classe pode herdar diretamente?",
+                OpcoesJson = "[\"Apenas uma\",\"Até duas\",\"Ilimitado\",\"Até três\"]",
+                RespostaCorreta = "Apenas uma",
+                Explicacao = "C# não suporta herança múltipla de classes — uma classe herda de exatamente uma classe (ou de Object implicitamente). Para comportamento múltiplo, use interfaces. Isso evita o 'diamond problem' e simplifica o modelo.",
+                DicaTexto = "C# optou por simplicidade — sem herança múltipla de classes..." },
+
+            new Exercicio { Id = 151, LicaoId = 5, Ordem = 5, XPRecompensa = 5,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "Uma classe abstrata pode conter métodos com implementação (métodos concretos).",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "Classe abstrata pode ter: métodos abstratos (sem implementação, subclasses devem implementar) E métodos concretos (com implementação, subclasses podem usar ou sobrescrever). É o que a diferencia de uma interface.",
+                DicaTexto = "Abstrata ≠ sem implementação. Pode misturar os dois tipos..." },
+
+            new Exercicio { Id = 152, LicaoId = 5, Ordem = 6, XPRecompensa = 5,
+                Tipo = TipoExercicio.PreencherEspacos,
+                Enunciado = "Para substituir um método virtual da classe pai na subclasse, usa-se a palavra-chave ____.",
+                OpcoesJson = "[]",
+                RespostaCorreta = "override",
+                Explicacao = "'override' indica que a subclasse está substituindo a implementação herdada. O método na classe pai deve ser marcado como 'virtual' ou 'abstract'. Sem 'override', você oculta o método pai (comportamento diferente e perigoso).",
+                DicaTexto = "Começa com 'over' — você está 'escrevendo por cima' do método pai..." },
+
+            new Exercicio { Id = 153, LicaoId = 5, Ordem = 7, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Para chamar o construtor da classe pai dentro do construtor da subclasse, usa-se:",
+                OpcoesJson = "[\"base(...)\",\"parent(...)\",\"super(...)\",\"this(...)\"]",
+                RespostaCorreta = "base(...)",
+                Explicacao = "':base(args)' na assinatura do construtor chama o construtor da classe pai. Ex: 'public ContaPremium(string titular) : base(titular) {}'. 'this(args)' chama outro construtor da MESMA classe. 'super' não existe em C#.",
+                DicaTexto = "Em C#, 'base' refere-se à classe pai; 'this' refere-se à própria classe..." },
+
+            new Exercicio { Id = 154, LicaoId = 5, Ordem = 8, XPRecompensa = 5,
+                Tipo = TipoExercicio.CorrigirCodigo,
+                Enunciado = "O método abaixo não substitui corretamente o método virtual da classe pai. Corrija:\npublic class Cachorro : Animal { public string EmitirSom() => \"Au au!\"; }",
+                OpcoesJson = "[\"public class Cachorro : Animal { public override string EmitirSom() => \\\"Au au!\\\"; }\",\"public class Cachorro : Animal { public virtual string EmitirSom() => \\\"Au au!\\\"; }\",\"public class Cachorro : Animal { public new string EmitirSom() => \\\"Au au!\\\"; }\",\"public class Cachorro(Animal) { public string EmitirSom() => \\\"Au au!\\\"; }\"]",
+                RespostaCorreta = "public class Cachorro : Animal { public override string EmitirSom() => \"Au au!\"; }",
+                Explicacao = "Sem 'override', EmitirSom() na subclasse apenas OCULTA o método da classe pai (diferente de sobrescrever). O polimorfismo não funcionaria: '(Animal)cachorro.EmitirSom()' chamaria o método do Animal, não do Cachorro.",
+                DicaTexto = "Qual palavra-chave indica que estamos substituindo o método da classe pai?" },
+
+            new Exercicio { Id = 155, LicaoId = 5, Ordem = 9, XPRecompensa = 5,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "Uma interface pode ser implementada por múltiplas classes sem relação de herança entre elas.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "Produto, Usuario e Pedido podem todos implementar IExportavel mesmo sem herdar uns dos outros. É o poder das interfaces: definem contratos transversais a qualquer hierarquia de classes.",
+                DicaTexto = "Interface é um contrato — qualquer classe pode assinar..." },
+
+            new Exercicio { Id = 156, LicaoId = 5, Ordem = 10, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Polimorfismo permite que referências do tipo base chamem métodos da subclasse. Qual pré-requisito é necessário?",
+                OpcoesJson = "[\"O método deve ser virtual na base e override na subclasse\",\"Os métodos devem ter nomes diferentes\",\"A subclasse deve ser static\",\"Não é possível em C#\"]",
+                RespostaCorreta = "O método deve ser virtual na base e override na subclasse",
+                Explicacao = "Para polimorfismo funcionar, o método na classe pai deve ser 'virtual' (ou 'abstract') e a subclasse deve usar 'override'. Assim, 'Animal a = new Cachorro(); a.EmitirSom()' chama o método do Cachorro, não do Animal.",
+                DicaTexto = "Quais palavras-chave habilitam o polimorfismo em C#?" },
+
+            // ── Exercícios adicionais — Lição 10: Encapsulamento ────────────────────
+            new Exercicio { Id = 157, LicaoId = 10, Ordem = 4, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Qual modificador de acesso permite que apenas a própria classe e suas subclasses acessem um membro?",
+                OpcoesJson = "[\"protected\",\"private\",\"internal\",\"public\"]",
+                RespostaCorreta = "protected",
+                Explicacao = "'protected' é mais restritivo que public/internal mas menos que private: a própria classe + qualquer subclasse pode acessar, independente do assembly. Ideal para membros que subclasses precisam acessar mas código externo não.",
+                DicaTexto = "É o intermediário entre private e public, pensado para herança..." },
+
+            new Exercicio { Id = 158, LicaoId = 10, Ordem = 5, XPRecompensa = 5,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "Uma propriedade declarada como '{ get; private set; }' permite leitura pública mas escrita apenas dentro da classe.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "'public string Nome { get; private set; }' é um padrão de encapsulamento muito comum: qualquer código pode ler Nome, mas apenas a própria classe pode alterar. Garante que o estado só mude por lógica controlada.",
+                DicaTexto = "get público + set privado = leitura pública, escrita controlada..." },
+
+            new Exercicio { Id = 159, LicaoId = 10, Ordem = 6, XPRecompensa = 5,
+                Tipo = TipoExercicio.PreencherEspacos,
+                Enunciado = "O modificador ____ (C# 9+) permite definir uma propriedade apenas durante a inicialização do objeto, não após.",
+                OpcoesJson = "[]",
+                RespostaCorreta = "init",
+                Explicacao = "'init' é um setter especial: só pode ser chamado em inicializadores de objeto ('new Pedido { Id = 1 }') ou no construtor. Após a construção, a propriedade é efetivamente imutável. Ideal para objetos imutáveis.",
+                DicaTexto = "É um tipo especial de setter introduzido no C# 9..." },
+
+            new Exercicio { Id = 160, LicaoId = 10, Ordem = 7, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Qual é o principal benefício de encapsular o estado de um objeto?",
+                OpcoesJson = "[\"Garantir que o objeto nunca fique em estado inválido\",\"Tornar o código mais rápido\",\"Reduzir o número de classes\",\"Permitir herança múltipla\"]",
+                RespostaCorreta = "Garantir que o objeto nunca fique em estado inválido",
+                Explicacao = "Encapsulamento protege invariantes: um ContaBancaria com _saldo privado e método Sacar() com validação nunca terá saldo negativo por acidente. Isso torna o sistema mais robusto e os bugs mais fáceis de encontrar.",
+                DicaTexto = "O encapsulamento é sobre controle — quem pode mudar o estado e como..." },
+
+            new Exercicio { Id = 161, LicaoId = 10, Ordem = 8, XPRecompensa = 5,
+                Tipo = TipoExercicio.CorrigirCodigo,
+                Enunciado = "O campo abaixo expõe o saldo diretamente. Corrija para encapsulá-lo corretamente:\npublic class Conta { public decimal Saldo; }",
+                OpcoesJson = "[\"public class Conta { public decimal Saldo { get; private set; } }\",\"public class Conta { private decimal Saldo; }\",\"public class Conta { protected decimal Saldo { get; set; } }\",\"public class Conta { internal decimal Saldo { get; } }\"]",
+                RespostaCorreta = "public class Conta { public decimal Saldo { get; private set; } }",
+                Explicacao = "Um campo público permite que qualquer código altere o saldo diretamente: 'conta.Saldo = -999'. Com '{ get; private set; }', a leitura é pública mas a escrita é controlada pelos métodos Depositar() e Sacar().",
+                DicaTexto = "Troque o campo público por uma propriedade com set restrito..." },
+
+            new Exercicio { Id = 162, LicaoId = 10, Ordem = 9, XPRecompensa = 5,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "O modificador 'internal' torna um membro acessível apenas dentro do mesmo assembly (projeto).",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "'internal' é visível para qualquer classe do mesmo projeto (.dll/.exe), mas não para projetos externos. É útil para implementações que não fazem parte da API pública da biblioteca.",
+                DicaTexto = "internal = interno ao assembly (projeto)..." },
+
+            new Exercicio { Id = 163, LicaoId = 10, Ordem = 10, XPRecompensa = 5,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Uma propriedade com validação no setter que lança exceção se o valor for inválido é um exemplo de:",
+                OpcoesJson = "[\"Encapsulamento com invariante\",\"Herança\",\"Polimorfismo\",\"Sobrecarga\"]",
+                RespostaCorreta = "Encapsulamento com invariante",
+                Explicacao = "Uma invariante é uma regra que o objeto SEMPRE deve satisfazer. Ex: Preco >= 0. O setter que valida e lança ArgumentException é o mecanismo que garante a invariante — ninguém pode colocar o objeto em estado inválido.",
+                DicaTexto = "Invariante = regra que o objeto deve sempre satisfazer..." },
+
+            // ── Exercícios — Lição 40: Strings em Profundidade ──────────────────────
+            new Exercicio { Id = 164, LicaoId = 40, Ordem = 1, XPRecompensa = 10,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Qual prefixo cria uma string interpolada em C#, permitindo embutir expressões com {}?",
+                OpcoesJson = "[\"$\",\"@\",\"#\",\"%\"]",
+                RespostaCorreta = "$",
+                Explicacao = "O prefixo '$' antes das aspas cria uma string interpolada: $\"Olá, {nome}!\". Qualquer expressão C# pode ficar dentro de {}. É preferível à concatenação com + por ser mais legível e segura.",
+                DicaTexto = "É um símbolo de cifrão que precede as aspas..." },
+
+            new Exercicio { Id = 165, LicaoId = 40, Ordem = 2, XPRecompensa = 10,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "Em C#, concatenar strings com '+' em um loop cria uma nova string a cada iteração, o que é ineficiente.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "Strings são imutáveis em C#. Cada '+' cria um novo objeto string no heap. Em 1000 iterações, isso gera ~1000 alocações. StringBuilder resolve isso acumulando internamente e criando uma única string no final com ToString().",
+                DicaTexto = "Strings são imutáveis — o que acontece a cada operação de +?" },
+
+            new Exercicio { Id = 166, LicaoId = 40, Ordem = 3, XPRecompensa = 10,
+                Tipo = TipoExercicio.PreencherEspacos,
+                Enunciado = "Para declarar a string C:\\Users\\Maria sem precisar escapar as barras, usa-se o prefixo ____\"C:\\Users\\Maria\"",
+                OpcoesJson = "[]",
+                RespostaCorreta = "@",
+                Explicacao = "O prefixo '@' cria uma string verbatim: as barras são literais, sem necessidade de escape. @\"C:\\Users\\Maria\" é equivalente a \"C:\\\\Users\\\\Maria\". Também suporta strings de múltiplas linhas.",
+                DicaTexto = "É um símbolo de arroba que indica string literal..." },
+
+            new Exercicio { Id = 167, LicaoId = 40, Ordem = 4, XPRecompensa = 10,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Qual método de string divide uma string em partes com base em um separador?",
+                OpcoesJson = "[\"Split()\",\"Slice()\",\"Divide()\",\"Cut()\"]",
+                RespostaCorreta = "Split()",
+                Explicacao = "\"a,b,c\".Split(',') retorna string[] { \"a\", \"b\", \"c\" }. É o método correto para dividir strings por separador. 'Slice' não existe em string C# (existe em Span<T>). Slice/Divide/Cut são de outras linguagens.",
+                DicaTexto = "Lembre do nome em inglês — 'dividir' em inglês é..." },
+
+            new Exercicio { Id = 168, LicaoId = 40, Ordem = 5, XPRecompensa = 10,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Qual classe usar para construir strings eficientemente em um loop?",
+                OpcoesJson = "[\"StringBuilder\",\"StringHelper\",\"StringBuffer\",\"StringWriter\"]",
+                RespostaCorreta = "StringBuilder",
+                Explicacao = "System.Text.StringBuilder acumula texto internamente e realiza apenas uma alocação final no ToString(). Use quando concatenar muitas strings (em loops ou com contagem dinâmica). Para 2-3 concatenações, '+' ou '$' são suficientes.",
+                DicaTexto = "O nome diz tudo — é um 'construtor' de strings..." },
+
+            new Exercicio { Id = 169, LicaoId = 40, Ordem = 6, XPRecompensa = 10,
+                Tipo = TipoExercicio.CorrigirCodigo,
+                Enunciado = "O código abaixo compara strings de forma case-sensitive. Corrija para ignorar maiúsculas/minúsculas:\nbool igual = \"abc\" == \"ABC\";",
+                OpcoesJson = "[\"bool igual = string.Equals(\\\"abc\\\", \\\"ABC\\\", StringComparison.OrdinalIgnoreCase);\",\"bool igual = \\\"abc\\\".ToLower() == \\\"ABC\\\".ToLower();\",\"bool igual = \\\"abc\\\".Equals(\\\"ABC\\\");\",\"bool igual = string.Compare(\\\"abc\\\", \\\"ABC\\\") == 0;\"]",
+                RespostaCorreta = "bool igual = string.Equals(\"abc\", \"ABC\", StringComparison.OrdinalIgnoreCase);",
+                Explicacao = "string.Equals com StringComparison.OrdinalIgnoreCase é a forma correta e eficiente. Usar .ToLower() == .ToLower() cria duas strings intermediárias desnecessárias. StringComparison deixa a intenção explícita no código.",
+                DicaTexto = "Use o método estático string.Equals com um terceiro parâmetro de comparação..." },
+
+            new Exercicio { Id = 170, LicaoId = 40, Ordem = 7, XPRecompensa = 10,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "string.IsNullOrWhiteSpace(\"   \") retorna true.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "IsNullOrWhiteSpace() retorna true se a string for null, vazia (\"\") OU contiver apenas espaços em branco. É mais abrangente que IsNullOrEmpty() — use quando uma string de só espaços também deve ser tratada como inválida.",
+                DicaTexto = "WhiteSpace inclui espaços, tabs e quebras de linha..." },
+
+            new Exercicio { Id = 171, LicaoId = 40, Ordem = 8, XPRecompensa = 10,
+                Tipo = TipoExercicio.PreencherEspacos,
+                Enunciado = "Para remover espaços em branco do início e do fim de uma string, usa-se o método .____().",
+                OpcoesJson = "[]",
+                RespostaCorreta = "Trim",
+                Explicacao = "\"  olá  \".Trim() retorna \"olá\". TrimStart() remove apenas do início, TrimEnd() apenas do fim. É essencial ao processar entrada do usuário ou dados vindos de arquivos.",
+                DicaTexto = "Em inglês, 'aparar' ou 'cortar as bordas' é..." },
+
+            // ── Exercícios — Lição 41: Tratamento de Exceções ───────────────────────
+            new Exercicio { Id = 172, LicaoId = 41, Ordem = 1, XPRecompensa = 10,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "O bloco 'finally' é executado:",
+                OpcoesJson = "[\"Sempre, com ou sem exceção\",\"Apenas quando há exceção\",\"Apenas quando não há exceção\",\"Apenas em modo debug\"]",
+                RespostaCorreta = "Sempre, com ou sem exceção",
+                Explicacao = "'finally' executa SEMPRE: após o try normal, após um catch, mesmo após um return. É ideal para liberar recursos (fechar arquivos, conexões) independentemente do que aconteça. O 'using' statement é uma alternativa moderna.",
+                DicaTexto = "O nome 'finally' sugere 'por fim, sempre acontece'..." },
+
+            new Exercicio { Id = 173, LicaoId = 41, Ordem = 2, XPRecompensa = 10,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "'throw;' (sem argumentos) relança a exceção atual preservando o stack trace original.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "'throw;' relança a exceção exatamente como recebida — o stack trace aponta para onde o erro realmente aconteceu. 'throw ex;' redefine o stack trace para a linha do catch, dificultando o diagnóstico. Sempre prefira 'throw;'.",
+                DicaTexto = "Qual preserva o stack trace original — throw ou throw ex?" },
+
+            new Exercicio { Id = 174, LicaoId = 41, Ordem = 3, XPRecompensa = 10,
+                Tipo = TipoExercicio.PreencherEspacos,
+                Enunciado = "Para criar uma exceção customizada em C#, herde da classe ____.",
+                OpcoesJson = "[]",
+                RespostaCorreta = "Exception",
+                Explicacao = "Todas as exceções em C# derivam de System.Exception. Para criar a sua: 'public class ProdutoNaoEncontradoException : Exception'. Adicione propriedades extras para contexto e chame o construtor base com a mensagem.",
+                DicaTexto = "É a classe raiz de todas as exceções em .NET..." },
+
+            new Exercicio { Id = 175, LicaoId = 41, Ordem = 4, XPRecompensa = 10,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Qual exceção é lançada ao acessar um índice inválido em um array?",
+                OpcoesJson = "[\"IndexOutOfRangeException\",\"ArgumentException\",\"NullReferenceException\",\"InvalidOperationException\"]",
+                RespostaCorreta = "IndexOutOfRangeException",
+                Explicacao = "Acessar 'array[array.Length]' ou índice negativo lança IndexOutOfRangeException. NullReferenceException ocorre ao acessar membro de objeto null. ArgumentException é para argumentos inválidos passados a métodos.",
+                DicaTexto = "O índice saiu do intervalo válido — qual exceção descreve isso?" },
+
+            new Exercicio { Id = 176, LicaoId = 41, Ordem = 5, XPRecompensa = 10,
+                Tipo = TipoExercicio.CorrigirCodigo,
+                Enunciado = "O código abaixo perde o stack trace original. Corrija-o:\ncatch (Exception ex) { throw ex; }",
+                OpcoesJson = "[\"catch (Exception) { throw; }\",\"catch (Exception ex) { throw new Exception(ex.Message); }\",\"catch { throw new Exception(); }\",\"catch (Exception ex) { return; }\"]",
+                RespostaCorreta = "catch (Exception) { throw; }",
+                Explicacao = "'throw ex' reescreve o stack trace — a linha do catch vira a origem do erro. 'throw;' relança preservando toda a pilha de chamadas original, essencial para diagnosticar onde o erro realmente aconteceu.",
+                DicaTexto = "Use throw sem parâmetros para preservar o stack trace..." },
+
+            new Exercicio { Id = 177, LicaoId = 41, Ordem = 6, XPRecompensa = 10,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "Exceções mais específicas devem ser capturadas ANTES das mais genéricas no bloco catch.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "Se 'catch (Exception)' vier antes de 'catch (FormatException)', o FormatException nunca será alcançado — Exception captura tudo. O compilador inclusive gera um warning/erro. Sempre do mais específico ao mais genérico.",
+                DicaTexto = "O compilador processa os catches em ordem — qual deve vir primeiro?" },
+
+            new Exercicio { Id = 178, LicaoId = 41, Ordem = 7, XPRecompensa = 10,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Por que NÃO se deve usar exceções para controle de fluxo normal (ex: validar entrada do usuário)?",
+                OpcoesJson = "[\"Criar exceções é caro — gera stack trace e alocações no heap\",\"Exceções não funcionam em produção\",\"O compilador não permite\",\"Exceções só funcionam em métodos async\"]",
+                RespostaCorreta = "Criar exceções é caro — gera stack trace e alocações no heap",
+                Explicacao = "Lançar uma exceção captura o stack trace completo, o que é custoso em performance. Para fluxos esperados (usuário digitou texto em campo numérico), use int.TryParse(), retorno de bool/Result, ou validação explícita. Exceções para situações verdadeiramente excepcionais.",
+                DicaTexto = "O que acontece internamente quando uma exceção é lançada?" },
+
+            new Exercicio { Id = 179, LicaoId = 41, Ordem = 8, XPRecompensa = 10,
+                Tipo = TipoExercicio.PreencherEspacos,
+                Enunciado = "Para garantir que um recurso seja liberado mesmo se uma exceção for lançada, use a instrução ____ ao declarar o objeto.",
+                OpcoesJson = "[]",
+                RespostaCorreta = "using",
+                Explicacao = "'using var conn = new SqlConnection(str);' chama conn.Dispose() automaticamente ao sair do escopo — mesmo com exceção. Funciona com qualquer objeto que implemente IDisposable. É mais seguro que try/finally manual.",
+                DicaTexto = "É uma instrução que garante a liberação automática de recursos..." },
+
+            // ── Exercícios — Lição 42: Interfaces ───────────────────────────────────
+            new Exercicio { Id = 180, LicaoId = 42, Ordem = 1, XPRecompensa = 10,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "O que uma interface define em C#?",
+                OpcoesJson = "[\"Um contrato (o que fazer), sem implementação (como fazer)\",\"Uma classe que não pode ser instanciada\",\"Uma classe com todos os métodos abstratos\",\"Um tipo de dado primitivo\"]",
+                RespostaCorreta = "Um contrato (o que fazer), sem implementação (como fazer)",
+                Explicacao = "Interface é um contrato puro: define quais membros uma classe deve ter, sem dizer como implementá-los. Isso permite que classes completamente diferentes compartilhem o mesmo contrato e sejam usadas de forma intercambiável.",
+                DicaTexto = "Interface define o 'o quê', não o 'como'..." },
+
+            new Exercicio { Id = 181, LicaoId = 42, Ordem = 2, XPRecompensa = 10,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "Uma classe C# pode implementar múltiplas interfaces ao mesmo tempo.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "Uma classe herda de UMA classe mas pode implementar N interfaces: 'class Relatorio : DocumentoBase, IExportavel, IImprimivel, IArquivavel'. Isso resolve o problema de comportamento múltiplo sem herança múltipla de classes.",
+                DicaTexto = "Classes: herança única. Interfaces: ilimitadas..." },
+
+            new Exercicio { Id = 182, LicaoId = 42, Ordem = 3, XPRecompensa = 10,
+                Tipo = TipoExercicio.PreencherEspacos,
+                Enunciado = "Por convenção em C#, nomes de interfaces começam com a letra ____.",
+                OpcoesJson = "[]",
+                RespostaCorreta = "I",
+                Explicacao = "A convenção da Microsoft é prefixar interfaces com 'I' maiúsculo: IDisposable, IEnumerable, IRepository, INotificador. Isso torna imediatamente claro que é uma interface no código.",
+                DicaTexto = "É a inicial de 'Interface'..." },
+
+            new Exercicio { Id = 183, LicaoId = 42, Ordem = 4, XPRecompensa = 10,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Qual a diferença principal entre interface e classe abstrata?",
+                OpcoesJson = "[\"Interface não pode ter estado (campos); abstrata pode ter lógica e campos\",\"Interface pode ser instanciada; abstrata não\",\"Classe abstrata suporta múltipla herança\",\"Não há diferença — são a mesma coisa\"]",
+                RespostaCorreta = "Interface não pode ter estado (campos); abstrata pode ter lógica e campos",
+                Explicacao = "Interface: contrato puro, sem estado, sem lógica (antes C# 8). Classe abstrata: pode ter campos, lógica concreta E métodos abstratos. Use interface para contratos transversais; abstrata para compartilhar implementação entre classes relacionadas.",
+                DicaTexto = "Interface é puro contrato; abstrata pode misturar contrato e implementação..." },
+
+            new Exercicio { Id = 184, LicaoId = 42, Ordem = 5, XPRecompensa = 10,
+                Tipo = TipoExercicio.CorrigirCodigo,
+                Enunciado = "A classe abaixo implementa INotificador mas não implementa o membro obrigatório. Corrija:\npublic interface INotificador { Task EnviarAsync(string dest, string msg); }\npublic class NotificadorEmail : INotificador { }",
+                OpcoesJson = "[\"public class NotificadorEmail : INotificador { public async Task EnviarAsync(string dest, string msg) => await smtp.SendAsync(dest, msg); }\",\"public class NotificadorEmail { public Task EnviarAsync(string dest, string msg) => Task.CompletedTask; }\",\"public abstract class NotificadorEmail : INotificador { }\",\"public class NotificadorEmail : INotificador { private Task EnviarAsync(string dest, string msg) => Task.CompletedTask; }\"]",
+                RespostaCorreta = "public class NotificadorEmail : INotificador { public async Task EnviarAsync(string dest, string msg) => await smtp.SendAsync(dest, msg); }",
+                Explicacao = "Implementar uma interface é obrigatório — todos os membros devem ser implementados como public. O compilador gera erro CS0535 se algum membro faltar. Apenas classes abstratas podem deixar membros sem implementar.",
+                DicaTexto = "Toda classe que implementa uma interface deve implementar todos os seus membros como public..." },
+
+            new Exercicio { Id = 185, LicaoId = 42, Ordem = 6, XPRecompensa = 10,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "IDisposable é uma interface do .NET que define o método Dispose() para liberar recursos não gerenciados.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "IDisposable tem um único método: void Dispose(). Objetos que usam recursos externos (arquivos, conexões, handles) devem implementá-la. O 'using' statement chama Dispose() automaticamente ao sair do escopo.",
+                DicaTexto = "É a interface que habilita o uso do 'using' statement..." },
+
+            new Exercicio { Id = 186, LicaoId = 42, Ordem = 7, XPRecompensa = 10,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Quando é preferível usar uma interface em vez de uma classe abstrata?",
+                OpcoesJson = "[\"Quando classes de hierarquias diferentes precisam do mesmo contrato\",\"Quando há lógica comum para compartilhar\",\"Quando a performance é crítica\",\"Quando a classe tem muitos campos\"]",
+                RespostaCorreta = "Quando classes de hierarquias diferentes precisam do mesmo contrato",
+                Explicacao = "Produto, Usuario e Pedido podem implementar IExportavel sem relação entre si. Interface é o mecanismo para comportamento transversal. Se há lógica comum para compartilhar, considere classe abstrata ou composição.",
+                DicaTexto = "Interface une classes sem relação de herança pelo contrato..." },
+
+            new Exercicio { Id = 187, LicaoId = 42, Ordem = 8, XPRecompensa = 10,
+                Tipo = TipoExercicio.PreencherEspacos,
+                Enunciado = "O princípio de inversão de dependência (D do SOLID) diz: dependa de ____, não de implementações concretas.",
+                OpcoesJson = "[]",
+                RespostaCorreta = "abstrações",
+                Explicacao = "Interfaces são o mecanismo de abstração em C#. Em vez de 'EmailService emailService', declare 'INotificador notificador'. Isso torna o código testável (mock fácil) e flexível (trocar implementação sem mudar quem usa).",
+                DicaTexto = "Interfaces e classes abstratas são exemplos de..." },
+
+            // ── Exercícios — Lição 43: Records e Imutabilidade ──────────────────────
+            new Exercicio { Id = 188, LicaoId = 43, Ordem = 1, XPRecompensa = 10,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Como dois records são comparados por padrão em C#?",
+                OpcoesJson = "[\"Pelos valores das propriedades (igualdade por valor)\",\"Pela referência de memória (igualdade por referência)\",\"Pelo hash code\",\"Records não suportam comparação\"]",
+                RespostaCorreta = "Pelos valores das propriedades (igualdade por valor)",
+                Explicacao = "Records implementam igualdade por valor automaticamente. 'new Produto(1, \"X\") == new Produto(1, \"X\")' retorna true, mesmo sendo objetos diferentes na memória. Isso é oposto às classes, onde == compara referências.",
+                DicaTexto = "Records foram criados para ter semântica de valor — como int e decimal..." },
+
+            new Exercicio { Id = 189, LicaoId = 43, Ordem = 2, XPRecompensa = 10,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "A expressão 'with' modifica o record original, retornando void.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Falso",
+                Explicacao = "'with' cria uma CÓPIA do record com os valores especificados alterados. O record original permanece inalterado. Ex: 'var desconto = produto with { Preco = produto.Preco * 0.9m }' — produto continua com o preço original.",
+                DicaTexto = "Records são imutáveis — 'with' cria uma nova instância ou modifica a existente?" },
+
+            new Exercicio { Id = 190, LicaoId = 43, Ordem = 3, XPRecompensa = 10,
+                Tipo = TipoExercicio.PreencherEspacos,
+                Enunciado = "Para criar uma cópia de um record com alguns valores alterados, usa-se a expressão ____.",
+                OpcoesJson = "[]",
+                RespostaCorreta = "with",
+                Explicacao = "'var novo = original with { Preco = 200m };' cria um novo record com todas as propriedades de 'original', exceto Preco que recebe 200m. É a forma idiomática de \"modificar\" records imutáveis.",
+                DicaTexto = "É uma palavra em inglês que significa 'com'..." },
+
+            new Exercicio { Id = 191, LicaoId = 43, Ordem = 4, XPRecompensa = 10,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Qual a sintaxe correta para um record posicional em C#?",
+                OpcoesJson = "[\"public record Ponto(int X, int Y);\",\"public record class Ponto { int X; int Y; }\",\"public record Ponto : (int X, int Y);\",\"record<int, int> Ponto;\"]",
+                RespostaCorreta = "public record Ponto(int X, int Y);",
+                Explicacao = "O record posicional declara propriedades, construtor, igualdade e ToString() em uma única linha. As propriedades são geradas como 'init', tornando o record imutável por padrão. Por convenção, usam PascalCase.",
+                DicaTexto = "Os parâmetros vão entre parênteses logo após o nome do record..." },
+
+            new Exercicio { Id = 192, LicaoId = 43, Ordem = 5, XPRecompensa = 10,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Quando é mais adequado usar um record em vez de uma classe?",
+                OpcoesJson = "[\"Para objetos imutáveis com igualdade por valor (DTOs, Value Objects)\",\"Para entidades com ciclo de vida e estado mutável\",\"Para objetos que precisam de herança complexa\",\"Para objetos que compartilham estado global\"]",
+                RespostaCorreta = "Para objetos imutáveis com igualdade por valor (DTOs, Value Objects)",
+                Explicacao = "Records são ideais para: DTOs de API (ProdutoResponseDto), Value Objects (Dinheiro, Endereco), configurações imutáveis. Classes são melhores para: entidades de domínio (Pedido com estado mutável), objetos com ciclo de vida.",
+                DicaTexto = "Pense em quais objetos nunca deveriam mudar após criados..." },
+
+            new Exercicio { Id = 193, LicaoId = 43, Ordem = 6, XPRecompensa = 10,
+                Tipo = TipoExercicio.CorrigirCodigo,
+                Enunciado = "O código tenta modificar um record diretamente. Corrija usando a abordagem correta:\nvar produto = new Produto(1, \"Teclado\", 150m);\nproduto.Preco = 120m;",
+                OpcoesJson = "[\"var produto = new Produto(1, \\\"Teclado\\\", 150m); var comDesconto = produto with { Preco = 120m };\",\"var produto = new Produto(1, \\\"Teclado\\\", 150m); produto = new Produto(1, \\\"Teclado\\\", 120m);\",\"var produto = new Produto(1, \\\"Teclado\\\", 150m); produto.Preco = 120m;\",\"Produto.Preco = 120m;\"]",
+                RespostaCorreta = "var produto = new Produto(1, \"Teclado\", 150m); var comDesconto = produto with { Preco = 120m };",
+                Explicacao = "Propriedades de records posicionais são 'init' — imutáveis após criação. A forma correta é usar 'with' para criar uma nova instância com o valor alterado. 'produto.Preco = 120m' seria erro de compilação.",
+                DicaTexto = "Records são imutáveis — use 'with' para criar uma variação..." },
+
+            new Exercicio { Id = 194, LicaoId = 43, Ordem = 7, XPRecompensa = 10,
+                Tipo = TipoExercicio.VerdadeiroFalso,
+                Enunciado = "Records geram automaticamente uma implementação de ToString() que exibe o nome do tipo e os valores das propriedades.",
+                OpcoesJson = "[\"Verdadeiro\",\"Falso\"]",
+                RespostaCorreta = "Verdadeiro",
+                Explicacao = "'Console.WriteLine(new Produto(1, \"Teclado\", 150m))' imprime: 'Produto { Id = 1, Nome = Teclado, Preco = 150 }'. Isso é gerado automaticamente — com classes, ToString() retornaria apenas o nome do tipo sem os valores.",
+                DicaTexto = "O compilador gera ToString() automaticamente para records..." },
+
+            new Exercicio { Id = 195, LicaoId = 43, Ordem = 8, XPRecompensa = 10,
+                Tipo = TipoExercicio.MultiplaEscolha,
+                Enunciado = "Qual a diferença entre 'record' e 'record struct' em C#?",
+                OpcoesJson = "[\"record é tipo de referência (heap); record struct é tipo de valor (stack)\",\"record struct é imutável; record não é\",\"record struct suporta herança; record não\",\"Não há diferença — são sinônimos\"]",
+                RespostaCorreta = "record é tipo de referência (heap); record struct é tipo de valor (stack)",
+                Explicacao = "'record' (ou 'record class') é armazenado no heap como classes. 'record struct' é armazenado no stack como structs, com melhor performance para dados pequenos e frequentes. Ambos têm igualdade por valor, mas record struct não suporta herança.",
+                DicaTexto = "A diferença é onde o objeto vive na memória — heap ou stack..." }
         );
     }
 }
